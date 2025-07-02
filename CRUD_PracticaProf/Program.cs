@@ -18,6 +18,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
+Console.WriteLine("Orígenes permitidos: " + string.Join(", ", origenesPermitidos));
+
 
 builder.Services.AddControllers();
 
