@@ -74,15 +74,15 @@ namespace CRUD_PracticaProf.Controllers
 
             await _clienteRepositorio.Update(cliente);
 
-            return Ok("Cliente actualizado con exito");
+            return Ok(new { mensaje = "Cliente actualizado con exito" });
+
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        { 
+        {
             await _clienteRepositorio.Delete(new Cliente { Id = id });
-
-            return Ok("Cliente eliminado con exito");
+            return Ok(new { mensaje = "Cliente eliminado con éxito" });
         }
 
     }
