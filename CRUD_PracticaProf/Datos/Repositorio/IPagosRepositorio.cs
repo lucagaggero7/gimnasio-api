@@ -1,0 +1,22 @@
+﻿using CRUD_PracticaProf.Modelos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CRUD_PracticaProf.Datos.Repositorio
+{
+    public interface IPagosRepositorio
+    {
+        Task<IEnumerable<Pago>> GetAll();
+
+        Task<Pago> GetById(int id);
+
+        Task<bool> Create(Pago pago);
+
+        Task<bool> Update(Pago pago);
+
+        Task<bool> Delete(int id);
+    }
+}
