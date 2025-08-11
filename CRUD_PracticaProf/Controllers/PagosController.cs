@@ -80,7 +80,7 @@ namespace CRUD_PracticaProf.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            // Opcional pero recomendado: Verificar que el pago existe antes de eliminar
+           
             var existingPago = await _pagosRepositorio.GetById(id);
             if (existingPago == null)
             {
