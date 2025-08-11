@@ -39,6 +39,7 @@ builder.Services.AddSingleton(MySQLConfig);
 //));
 
 builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
+builder.Services.AddScoped<IEjercicioRepositorio, EjercicioRepositorio>();
 
 var app = builder.Build();
 
