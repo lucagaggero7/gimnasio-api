@@ -40,10 +40,10 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<bool> Create(Pago pago)
         {
             using var db = dbConnection();
-            var sql = @"INSERT INTO Pagos (Monto, Fecha, Formas_pago_idFormas_pago, Membresia_idMembresia, Membresia_Clientes_idClientes)
-                        VALUES (@Monto, @Fecha, @Formas_pago_idFormas_pago, @Membresia_idMembresia, @Membresia_Clientes_idClientes)";
+            var sql = @"INSERT INTO Pagos (Monto, Fecha, fk_idFormasPago, fk_idMembresia, fk_idClientes)
+                        VALUES (@Monto, @Fecha, @fk_idFormasPago, @fk_idMembresia, @fk_idClientes)";
 
-            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.Formas_pago_idFormas_pago, pago.Membresia_idMembresia, pago.Membresia_Clientes_idClientes });
+            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresia, pago.fk_idClientes });
             return result > 0;
         }
 
@@ -53,12 +53,12 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             var sql = @"UPDATE Pagos SET
                         Monto = @Monto,
                         Fecha = @Fecha,
-                        Formas_pago_idFormas_pago = @Formas_pago_idFormas_pago,
-                        Membresia_idMembresia = @Membresia_idMembresia,
-                        Membresia_Clientes_idClientes = @Membresia_Clientes_idClientes
+                        fk_idFormasPago = @fk_idFormasPago,
+                        fk_idMembresia = @fk_idMembresia,
+                        fk_idClientes = @fk_idClientes
                         WHERE idPagos = @idPagos";
 
-            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.Formas_pago_idFormas_pago, pago.Membresia_idMembresia, pago.Membresia_Clientes_idClientes, pago.idPagos });
+            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresia, pago.fk_idClientes, pago.idPagos });
             return result > 0;
         }
 

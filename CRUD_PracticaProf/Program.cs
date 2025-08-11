@@ -39,13 +39,22 @@ builder.Services.AddSingleton(MySQLConfig);
 //));
 
 builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
+builder.Services.AddScoped<IPagosRepositorio, PagosRepositorio>();
+builder.Services.AddScoped<IFormasPagoRepositorio, FormasPagoRepositorio>();
+builder.Services.AddScoped<IMembresiaRepositorio, MembresiaRepositorio>();
+builder.Services.AddScoped<ITiposMembresiaRepositorio, TiposMembresiaRepositorio>();
+builder.Services.AddScoped<IEjercicioRepositorio, EjercicioRepositorio>();
+builder.Services.AddScoped<IRutinasRepositorio, RutinasRepositorio>();
+builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
+builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>(); 
+
 
 var app = builder.Build();
 
 
 
 // Configure the HTTP request pipeline.
-    //app.MapOpenApi();
+//app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -58,3 +67,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
