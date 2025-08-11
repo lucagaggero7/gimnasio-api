@@ -39,19 +39,15 @@ builder.Services.AddSingleton(MySQLConfig);
 //));
 
 builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IEjercicioRepositorio, EjercicioRepositorio>();
-=======
 builder.Services.AddScoped<IPagosRepositorio, PagosRepositorio>();
 builder.Services.AddScoped<IFormasPagoRepositorio, FormasPagoRepositorio>();
 builder.Services.AddScoped<IMembresiaRepositorio, MembresiaRepositorio>();
 builder.Services.AddScoped<ITiposMembresiaRepositorio, TiposMembresiaRepositorio>();
-builder.Services.AddScoped<IEjercicioRepositorio, EjercicioRepositorio>();
 builder.Services.AddScoped<IRutinasRepositorio, RutinasRepositorio>();
 builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
 builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>(); 
 
->>>>>>> 6959d4913ba7e333d784f684ff672bdd73136aa3
 
 var app = builder.Build();
 
