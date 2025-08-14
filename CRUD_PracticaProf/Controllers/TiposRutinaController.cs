@@ -43,16 +43,16 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] TiposRutina tipoRutina)
         {
             if (tipoRutina == null) return BadRequest("El tipo de rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var existing = await _tiposRutinaRepositorio.GetById(tipoRutina.idTipos_Rutina);
+            var existing = await _tiposRutinaRepositorio.GetById(tipoRutina.Id);
             if (existing == null)
             {
-                return NotFound($"No se encontró el tipo de rutina con ID {tipoRutina.idTipos_Rutina} para actualizar.");
+                return NotFound($"No se encontró el tipo de rutina con ID {tipoRutina.Id} para actualizar.");
             }
 
             await _tiposRutinaRepositorio.Update(tipoRutina);

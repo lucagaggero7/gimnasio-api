@@ -53,7 +53,7 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] Pago pago)
         {
             if (pago == null)
@@ -66,10 +66,10 @@ namespace CRUD_PracticaProf.Controllers
                 return BadRequest(ModelState);
             }
 
-            var existingPago = await _pagosRepositorio.GetById(pago.idPagos);
+            var existingPago = await _pagosRepositorio.GetById(pago.Id);
             if (existingPago == null)
             {
-                return NotFound($"No se encontró el pago con ID {pago.idPagos} para actualizar.");
+                return NotFound($"No se encontró el pago con ID {pago.Id} para actualizar.");
             }
 
             await _pagosRepositorio.Update(pago);

@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Modelos
     public class TiposRutina
     {
         [Key]
-        public int idTipos_Rutina { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre del tipo de rutina es obligatorio")]
         public string Nombre { get; set; } = string.Empty;

@@ -43,14 +43,14 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] Membresia membresia)
         {
             if (membresia == null) return BadRequest("La membresía no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var existing = await _membresiaRepositorio.GetById(membresia.idMembresia);
-            if (existing == null) return NotFound($"No se encontró la membresía con ID {membresia.idMembresia} para actualizar.");
+            var existing = await _membresiaRepositorio.GetById(membresia.Id);
+            if (existing == null) return NotFound($"No se encontró la membresía con ID {membresia.Id} para actualizar.");
 
             await _membresiaRepositorio.Update(membresia);
             return Ok(new { mensaje = "Membresía actualizada con éxito" });

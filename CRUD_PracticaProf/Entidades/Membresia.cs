@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Modelos
     public class Membresia
     {
         [Key]
-        public int idMembresia { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El estado es obligatorio")]
         [StringLength(10, ErrorMessage = "El estado no puede exceder los 10 caracteres")]
@@ -35,6 +35,6 @@ namespace CRUD_PracticaProf.Modelos
         public int fk_idTiposMembresia { get; set; }
 
         [Required(ErrorMessage = "El ID de la rutina es obligatorio")]
-        public int fk_idRutina { get; set; }
+        public int fk_idRutinas { get; set; }
     }
 }

@@ -76,14 +76,17 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                         Nombre = @Nombre,
                         Series = @Series,
                         Repeticiones = @Repeticiones,
-                        Notas = @Notas";
+                        Notas = @Notas,
+                        WHERE Id = @Id";
+
 
                 var result = await db.ExecuteAsync(sql, new
                 {
                     ejercicio.Nombre,
                     ejercicio.Series,
                     ejercicio.Repeticiones,
-                    ejercicio.Notas
+                    ejercicio.Notas,
+                    ejercicio.Id
                 });
 
                 return result > 0; // Returns true if one or more rows were affected

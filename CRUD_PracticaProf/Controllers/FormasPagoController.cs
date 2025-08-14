@@ -43,14 +43,14 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] FormasPago formaPago)
         {
             if (formaPago == null) return BadRequest("La forma de pago no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var existing = await _formasPagoRepositorio.GetById(formaPago.idFormas_pago);
-            if (existing == null) return NotFound($"No se encontró la forma de pago con ID {formaPago.idFormas_pago}.");
+            var existing = await _formasPagoRepositorio.GetById(formaPago.Id);
+            if (existing == null) return NotFound($"No se encontró la forma de pago con ID {formaPago.Id}.");
 
             await _formasPagoRepositorio.Update(formaPago);
             return Ok(new { mensaje = "Forma de pago actualizada con éxito" });

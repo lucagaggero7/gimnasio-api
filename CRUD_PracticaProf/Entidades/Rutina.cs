@@ -13,7 +13,7 @@ namespace CRUD_PracticaProf.Modelos
         public class Rutina
         {
             [Key]
-            public int idRutina { get; set; }
+            public int Id { get; set; }
 
             [Required(ErrorMessage = "El nombre de la rutina es obligatorio")]
             [StringLength(45, ErrorMessage = "El nombre no puede exceder los 45 caracteres")]

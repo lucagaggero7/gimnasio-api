@@ -64,7 +64,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] Ejercicio ejercicio)
         {
             if (ejercicio == null)

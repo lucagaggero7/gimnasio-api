@@ -9,14 +9,14 @@ namespace CRUD_PracticaProf.Modelos
 {
     public class Pago
     {
-        public int idPagos { get; set; }
+        public int Id { get; set; }
         public long Monto { get; set; }
 
         public DateTime Fecha { get; set; }
 
         public int fk_idFormasPago { get; set; }
-        public int fk_idMembresia { get; set; }
-        public long fk_idClientes { get; set; }
+        public int fk_idMembresias { get; set; }
+        public int fk_idClientes { get; set; }
 
     }
 }

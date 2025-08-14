@@ -25,21 +25,21 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<Rutina>> GetAll()
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM Rutinas";
+            var sql = "SELECT * FROM rutinas";
             return await db.QueryAsync<Rutina>(sql);
         }
 
         public async Task<Rutina?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM Rutinas WHERE idRutinas = @Id";
+            var sql = "SELECT * FROM rutinas WHERE Id = @Id";
             return await db.QueryFirstOrDefaultAsync<Rutina>(sql, new { Id = id });
         }
 
         public async Task<bool> Create(Rutina rutina)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO Rutinas (Nombre, Fecha_inicio, Duracion, Frecuencia_sem, Objetivo, fk_idTiposRutina)
+            var sql = @"INSERT INTO rutinas (Nombre, Fecha_inicio, Duracion, Frecuencia_sem, Objetivo, fk_idTiposRutina)
                         VALUES (@Nombre, @Fecha_inicio, @Duracion, @Frecuencia_sem, @Objetivo, @fk_idTiposRutina)";
 
             var result = await db.ExecuteAsync(sql, rutina);
@@ -49,14 +49,14 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<bool> Update(Rutina rutina)
         {
             using var db = DbConnection();
-            var sql = @"UPDATE Rutinas SET
+            var sql = @"UPDATE rutinas SET
                         Nombre = @Nombre,
                         Fecha_inicio = @Fecha_inicio,
                         Duracion = @Duracion,
                         Frecuencia_sem = @Frecuencia_sem,
                         Objetivo = @Objetivo,
                         fk_idTiposRutina = @fk_idTiposRutina
-                        WHERE idRutinas = @idRutinas";
+                        WHERE Id = @Id";
 
             var result = await db.ExecuteAsync(sql, rutina);
             return result > 0;
@@ -65,7 +65,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<bool> Delete(int id)
         {
             using var db = DbConnection();
-            var sql = "DELETE FROM Rutinas WHERE idRutinas = @Id";
+            var sql = "DELETE FROM rutinas WHERE Id = @Id";
             var result = await db.ExecuteAsync(sql, new { Id = id });
             return result > 0;
         }

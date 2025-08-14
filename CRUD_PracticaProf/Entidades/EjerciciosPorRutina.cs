@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Modelos
     public class EjerciciosPorRutina
     {
         [Key]
-        public int idEjercicios_por_rutina { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El ID de la rutina es obligatorio")]
         public int fk_idRutinas { get; set; }

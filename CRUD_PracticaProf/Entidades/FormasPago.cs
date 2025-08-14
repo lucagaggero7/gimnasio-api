@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Modelos
     public class FormasPago
     {
         [Key]
-        public int idFormas_pago { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre de la forma de pago es obligatorio")]
         public string Nombre { get; set; } = string.Empty; 

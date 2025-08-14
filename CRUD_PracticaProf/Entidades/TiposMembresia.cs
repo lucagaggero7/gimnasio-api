@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Modelos
     public class TiposMembresia
     {
         [Key]
-        public int idTipos_Membresia { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre del tipo de membresía es obligatorio")]
         [StringLength(20, ErrorMessage = "El nombre no puede exceder los 20 caracteres")]

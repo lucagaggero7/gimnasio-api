@@ -43,16 +43,16 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] EjerciciosPorRutina ejercicioPorRutina)
         {
             if (ejercicioPorRutina == null) return BadRequest("El objeto de ejercicio por rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var existing = await _ejerciciosPorRutinaRepositorio.GetById(ejercicioPorRutina.idEjercicios_por_rutina);
+            var existing = await _ejerciciosPorRutinaRepositorio.GetById(ejercicioPorRutina.Id);
             if (existing == null)
             {
-                return NotFound($"No se encontró el registro con ID {ejercicioPorRutina.idEjercicios_por_rutina} para actualizar.");
+                return NotFound($"No se encontró el registro con ID {ejercicioPorRutina.Id} para actualizar.");
             }
 
             await _ejerciciosPorRutinaRepositorio.Update(ejercicioPorRutina);

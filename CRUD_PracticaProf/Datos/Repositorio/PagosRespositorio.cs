@@ -26,46 +26,46 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<Pago>> GetAll()
         {
             using var db = dbConnection();
-            var sql = "SELECT * FROM Pagos";
+            var sql = "SELECT * FROM pagos";
             return await db.QueryAsync<Pago>(sql);
         }
 
         public async Task<Pago?> GetById(int id)
         {
             using var db = dbConnection();
-            var sql = "SELECT * FROM Pagos WHERE idPagos = @Id";
+            var sql = "SELECT * FROM pagos WHERE Id = @Id";
             return await db.QueryFirstOrDefaultAsync<Pago>(sql, new { Id = id });
         }
 
         public async Task<bool> Create(Pago pago)
         {
             using var db = dbConnection();
-            var sql = @"INSERT INTO Pagos (Monto, Fecha, fk_idFormasPago, fk_idMembresia, fk_idClientes)
-                        VALUES (@Monto, @Fecha, @fk_idFormasPago, @fk_idMembresia, @fk_idClientes)";
+            var sql = @"INSERT INTO pagos (Monto, Fecha, fk_idFormasPago, fk_idMembresias, fk_idClientes)
+                        VALUES (@Monto, @Fecha, @fk_idFormasPago, @fk_idMembresias, @fk_idClientes)";
 
-            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresia, pago.fk_idClientes });
+            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresias, pago.fk_idClientes });
             return result > 0;
         }
 
         public async Task<bool> Update(Pago pago)
         {
             using var db = dbConnection();
-            var sql = @"UPDATE Pagos SET
+            var sql = @"UPDATE pagos SET
                         Monto = @Monto,
                         Fecha = @Fecha,
                         fk_idFormasPago = @fk_idFormasPago,
-                        fk_idMembresia = @fk_idMembresia,
+                        fk_idMembresias = @fk_idMembresias,
                         fk_idClientes = @fk_idClientes
-                        WHERE idPagos = @idPagos";
+                        WHERE Id = @idPagos";
 
-            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresia, pago.fk_idClientes, pago.idPagos });
+            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresias, pago.fk_idClientes, pago.Id });
             return result > 0;
         }
 
         public async Task<bool> Delete(int id)
         {
             using var db = dbConnection();
-            var sql = "DELETE FROM Pagos WHERE idPagos = @Id";
+            var sql = "DELETE FROM pagos WHERE Id = @Id";
             var result = await db.ExecuteAsync(sql, new { Id = id });
             return result > 0;
         }
