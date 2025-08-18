@@ -45,6 +45,7 @@ builder.Services.AddScoped<IFormasPagoRepositorio, FormasPagoRepositorio>();
 builder.Services.AddScoped<IMembresiaRepositorio, MembresiaRepositorio>();
 builder.Services.AddScoped<ITiposMembresiaRepositorio, TiposMembresiaRepositorio>();
 builder.Services.AddScoped<IRutinasRepositorio, RutinasRepositorio>();
+builder.Services.AddScoped<IEvaluacionRepositorio, EvaluacionRepositorio>();
 builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
 builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>(); 
 
