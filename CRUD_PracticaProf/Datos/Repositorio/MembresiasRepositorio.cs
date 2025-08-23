@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public class MembresiaRepositorio : IMembresiaRepositorio
+    public class MembresiasRepositorio : IMembresiasRepositorio
     {
         private readonly MySQLConfig _connectionString;
 
-        public MembresiaRepositorio(MySQLConfig connectionString)
+        public MembresiasRepositorio(MySQLConfig connectionString)
         {
             _connectionString = connectionString;
         }

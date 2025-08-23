@@ -9,9 +9,9 @@ namespace CRUD_PracticaProf.Controllers
     [ApiController]
     public class MembresiaController : ControllerBase
     {
-        private readonly IMembresiaRepositorio _membresiaRepositorio;
+        private readonly IMembresiasRepositorio _membresiaRepositorio;
 
-        public MembresiaController(IMembresiaRepositorio membresiaRepositorio)
+        public MembresiaController(IMembresiasRepositorio membresiaRepositorio)
         {
             _membresiaRepositorio = membresiaRepositorio;
         }

@@ -3,7 +3,7 @@
 using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
-using static CRUD_PracticaProf.Datos.Repositorio.EjercicioRepositorio;
+using static CRUD_PracticaProf.Datos.Repositorio.EjerciciosRepositorio;
 ﻿using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public class EjercicioRepositorio : IEjercicioRepositorio
+    public class EjerciciosRepositorio : IEjerciciosRepositorio
     {
 
             private readonly MySQLConfig _connectionString;
 
-            public EjercicioRepositorio(MySQLConfig connectionString)
+            public EjerciciosRepositorio(MySQLConfig connectionString)
             {
                 _connectionString = connectionString;
             }

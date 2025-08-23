@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public interface IMembresiaRepositorio
+    public interface IMembresiasRepositorio
     {
         Task<IEnumerable<Membresia>> GetAll();
         Task<Membresia?> GetById(int id);

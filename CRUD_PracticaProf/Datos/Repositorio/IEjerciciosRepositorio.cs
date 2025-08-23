@@ -4,7 +4,7 @@ using CRUD_PracticaProf.Modelos;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public interface IEjercicioRepositorio
+    public interface IEjerciciosRepositorio
     {
         Task<IEnumerable<Ejercicio>> GetAll();
 

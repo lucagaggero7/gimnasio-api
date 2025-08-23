@@ -13,9 +13,9 @@ namespace CRUD_PracticaProf.Controllers
         ////////////////////
         ///
 
-        private readonly IEjercicioRepositorio _ejercicioRepositorio;
+        private readonly IEjerciciosRepositorio _ejercicioRepositorio;
 
-        public EjercicioController(IEjercicioRepositorio ejercicioRepositorio)
+        public EjercicioController(IEjerciciosRepositorio ejercicioRepositorio)
         {
 
             _ejercicioRepositorio = ejercicioRepositorio;

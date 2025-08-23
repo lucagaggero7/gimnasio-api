@@ -8,11 +8,11 @@ using System.Data;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public class EvaluacionRepositorio : IEvaluacionRepositorio
+    public class EvaluacionesRepositorio : IEvaluacionesRepositorio
     {
         private readonly MySQLConfig _connectionString;
 
-        public EvaluacionRepositorio(MySQLConfig connectionString)
+        public EvaluacionesRepositorio(MySQLConfig connectionString)
         {
             _connectionString = connectionString;
         }

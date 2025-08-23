@@ -9,9 +9,9 @@ namespace CRUD_PracticaProf.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly IClienteRepositorio _clienteRepositorio;
+        private readonly IClientesRepositorio _clienteRepositorio;
 
-        public ClienteController(IClienteRepositorio clienteRepositorio)
+        public ClienteController(IClientesRepositorio clienteRepositorio)
         {
 
             _clienteRepositorio = clienteRepositorio;

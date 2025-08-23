@@ -9,9 +9,9 @@ namespace CRUD_PracticaProf.Controllers
     [ApiController]
     public class EvaluacionController : ControllerBase
     {
-        private readonly IEvaluacionRepositorio _evaluacionesRepositorio;
+        private readonly IEvaluacionesRepositorio _evaluacionesRepositorio;
 
-        public EvaluacionController(IEvaluacionRepositorio evaluacionesRepositorio)
+        public EvaluacionController(IEvaluacionesRepositorio evaluacionesRepositorio)
         {
             _evaluacionesRepositorio = evaluacionesRepositorio;
         }

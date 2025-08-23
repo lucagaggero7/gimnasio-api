@@ -38,14 +38,14 @@ builder.Services.AddSingleton(MySQLConfig);
 //builder.Services.AddSingleton(new MySqlConnection(builder.Configuration.GetConnectionString("MYSqlConnection")
 //));
 
-builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
-builder.Services.AddScoped<IEjercicioRepositorio, EjercicioRepositorio>();
+builder.Services.AddScoped<IClientesRepositorio, ClientesRepositorio>();
+builder.Services.AddScoped<IEjerciciosRepositorio, EjerciciosRepositorio>();
 builder.Services.AddScoped<IPagosRepositorio, PagosRepositorio>();
 builder.Services.AddScoped<IFormasPagoRepositorio, FormasPagoRepositorio>();
-builder.Services.AddScoped<IMembresiaRepositorio, MembresiaRepositorio>();
+builder.Services.AddScoped<IMembresiasRepositorio, MembresiasRepositorio>();
 builder.Services.AddScoped<ITiposMembresiaRepositorio, TiposMembresiaRepositorio>();
 builder.Services.AddScoped<IRutinasRepositorio, RutinasRepositorio>();
-builder.Services.AddScoped<IEvaluacionRepositorio, EvaluacionRepositorio>();
+builder.Services.AddScoped<IEvaluacionesRepositorio, EvaluacionesRepositorio>();
 builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
 builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>(); 
 

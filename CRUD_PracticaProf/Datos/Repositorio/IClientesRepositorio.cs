@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public interface IClienteRepositorio
+    public interface IClientesRepositorio
     {
         Task<IEnumerable<Cliente>> GetAll();
 

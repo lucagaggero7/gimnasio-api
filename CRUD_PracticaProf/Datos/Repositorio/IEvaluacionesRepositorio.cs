@@ -3,7 +3,7 @@ using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
-    public interface IEvaluacionRepositorio
+    public interface IEvaluacionesRepositorio
     {
         Task<IEnumerable<Evaluacion>> GetAll();
         Task<Evaluacion?> GetById(int id);
