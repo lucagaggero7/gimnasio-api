@@ -7,11 +7,11 @@ namespace CRUD_PracticaProf.Controllers
 {
     [Route("membresia")]
     [ApiController]
-    public class MembresiaController : ControllerBase
+    public class MembresiasController : ControllerBase
     {
         private readonly IMembresiasRepositorio _membresiaRepositorio;
 
-        public MembresiaController(IMembresiasRepositorio membresiaRepositorio)
+        public MembresiasController(IMembresiasRepositorio membresiaRepositorio)
         {
             _membresiaRepositorio = membresiaRepositorio;
         }

@@ -8,14 +8,14 @@ namespace CRUD_PracticaProf.Controllers
 {
     [Route("ejercicios")]
     [ApiController]
-    public class EjercicioController : ControllerBase
+    public class EjerciciosController : ControllerBase
     {
         ////////////////////
         ///
 
         private readonly IEjerciciosRepositorio _ejercicioRepositorio;
 
-        public EjercicioController(IEjerciciosRepositorio ejercicioRepositorio)
+        public EjerciciosController(IEjerciciosRepositorio ejercicioRepositorio)
         {
 
             _ejercicioRepositorio = ejercicioRepositorio;

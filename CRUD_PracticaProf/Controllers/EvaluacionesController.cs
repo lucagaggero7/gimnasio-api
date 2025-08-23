@@ -7,11 +7,11 @@ namespace CRUD_PracticaProf.Controllers
 {
     [Route("evaluacion")]
     [ApiController]
-    public class EvaluacionController : ControllerBase
+    public class EvaluacionesController : ControllerBase
     {
         private readonly IEvaluacionesRepositorio _evaluacionesRepositorio;
 
-        public EvaluacionController(IEvaluacionesRepositorio evaluacionesRepositorio)
+        public EvaluacionesController(IEvaluacionesRepositorio evaluacionesRepositorio)
         {
             _evaluacionesRepositorio = evaluacionesRepositorio;
         }
