@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CRUD_PracticaProf.DTO;
+using CRUD_PracticaProf.Modelos;
+using System.ComponentModel.DataAnnotations;
 
 namespace CRUD_PracticaProf.Entidades
 {
@@ -21,5 +23,7 @@ namespace CRUD_PracticaProf.Entidades
         // Llave foránea a Clientes
         [Required(ErrorMessage = "El ID del cliente es obligatorio")]
         public int fk_idClientes { get; set; }
+
+        public ClienteMostrarDTO Cliente { get; set; }
     }
 }

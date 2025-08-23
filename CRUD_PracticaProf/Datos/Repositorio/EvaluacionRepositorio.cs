@@ -1,4 +1,6 @@
-﻿using CRUD_PracticaProf.Entidades;
+﻿using CRUD_PracticaProf.DTO;
+using CRUD_PracticaProf.Entidades;
+using CRUD_PracticaProf.Modelos;
 using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -20,8 +22,26 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<Evaluacion>> GetAll()
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM evaluaciones";
-            return await db.QueryAsync<Evaluacion>(sql);
+
+            var sql = @"
+        SELECT 
+            e.Id, e.Fecha, e.fk_idClientes,
+            c.Id, c.Nombre
+        FROM Evaluaciones e
+        INNER JOIN Clientes c ON e.fk_idClientes = c.Id;
+    ";
+
+            var evaluaciones = await db.QueryAsync<Evaluacion, ClienteMostrarDTO, Evaluacion>(
+                sql,
+                (evaluacion, cliente) =>
+                {
+                    evaluacion.Cliente = cliente;
+                    return evaluacion;
+                },
+                splitOn: "Id" 
+            );
+
+            return evaluaciones;
         }
 
         public async Task<Evaluacion?> GetById(int id)

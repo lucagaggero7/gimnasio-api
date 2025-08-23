@@ -1,4 +1,5 @@
-﻿using CRUD_PracticaProf.Modelos;
+﻿using CRUD_PracticaProf.DTO;
+using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using System;
@@ -31,6 +32,14 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             var sql = @"SELECT * FROM clientes";
 
             return await  db.QueryAsync<Cliente>(sql, new { });
+        }
+
+        public async Task<IEnumerable<ClienteMostrarDTO>> GetAllDTO()
+        {
+            using var db = dbConnection();
+            var sql = "SELECT Id, Nombre, Apellido FROM Clientes";
+
+            return await db.QueryAsync<ClienteMostrarDTO>(sql, new { });
         }
 
         public async Task<Cliente> GetById(int id)

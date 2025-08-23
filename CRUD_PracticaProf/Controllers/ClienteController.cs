@@ -25,6 +25,13 @@ namespace CRUD_PracticaProf.Controllers
 
         }
 
+        [HttpGet("mostrar")]
+        public async Task<IActionResult> GetAllDTO()
+        {
+            var clientes = await _clienteRepositorio.GetAllDTO();
+            return Ok(clientes);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
