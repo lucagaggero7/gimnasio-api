@@ -11,7 +11,7 @@
 
         public string Repeticiones { get; set; }
 
-        public string? Notas { get; set; }
+        public string Notas { get; set; }
 
     }
 }

@@ -20,12 +20,12 @@ namespace CRUD_PracticaProf.Modelos
         [Required(ErrorMessage = "La fecha de inicio es obligatoria")]
         public DateTime Fecha_inicio { get; set; }
 
-        public DateTime? Fecha_vencimiento { get; set; } // Puede ser nulo
+        public DateTime Fecha_vencimiento { get; set; } // Puede ser nulo
 
-        public long? Contacto_emergencia { get; set; } // Puede ser nulo
+        public long Contacto_emergencia { get; set; } // Puede ser nulo
 
         [StringLength(30, ErrorMessage = "El nombre del contacto no puede exceder los 30 caracteres")]
-        public string? Nombre_contacto { get; set; } // Puede ser nulo
+        public string Nombre_contacto { get; set; } // Puede ser nulo
 
         // Foráneas
         [Required(ErrorMessage = "El ID del cliente es obligatorio")]
