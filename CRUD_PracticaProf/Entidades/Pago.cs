@@ -14,9 +14,9 @@ namespace CRUD_PracticaProf.Modelos
 
         public DateTime Fecha { get; set; }
 
-        public int fk_idFormasPago { get; set; }
-        public int fk_idMembresias { get; set; }
-        public int fk_idClientes { get; set; }
+        public int FkIdFormaPago { get; set; }
+        public int FkIdMembresia { get; set; }
+        public int FkIdCliente { get; set; }
 
     }
 }

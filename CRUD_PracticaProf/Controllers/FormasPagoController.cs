@@ -34,7 +34,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FormasPago formaPago)
+        public async Task<IActionResult> Create([FromBody] FormaPago formaPago)
         {
             if (formaPago == null) return BadRequest("La forma de pago no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -44,7 +44,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] FormasPago formaPago)
+        public async Task<IActionResult> Update([FromBody] FormaPago formaPago)
         {
             if (formaPago == null) return BadRequest("La forma de pago no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);

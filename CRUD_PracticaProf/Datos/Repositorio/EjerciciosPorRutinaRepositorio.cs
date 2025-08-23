@@ -18,21 +18,21 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
-        public async Task<IEnumerable<EjerciciosPorRutina>> GetAll()
+        public async Task<IEnumerable<EjercicioPorRutina>> GetAll()
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM ejerciciosporrutina";
-            return await db.QueryAsync<EjerciciosPorRutina>(sql);
+            return await db.QueryAsync<EjercicioPorRutina>(sql);
         }
 
-        public async Task<EjerciciosPorRutina?> GetById(int id)
+        public async Task<EjercicioPorRutina?> GetById(int id)
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM ejerciciosporrutina WHERE Id = @Id";
-            return await db.QueryFirstOrDefaultAsync<EjerciciosPorRutina>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<EjercicioPorRutina>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(EjerciciosPorRutina ejercicioPorRutina)
+        public async Task<bool> Create(EjercicioPorRutina ejercicioPorRutina)
         {
             using var db = DbConnection();
             var sql = @"INSERT INTO ejerciciosporrutina (fk_idRutinas, fk_idEjercicios)
@@ -41,7 +41,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return result > 0;
         }
 
-        public async Task<bool> Update(EjerciciosPorRutina ejercicioPorRutina)
+        public async Task<bool> Update(EjercicioPorRutina ejercicioPorRutina)
         {
             using var db = DbConnection();
             var sql = @"UPDATE ejerciciosporrutina SET

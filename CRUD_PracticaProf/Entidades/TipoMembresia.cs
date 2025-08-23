@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Modelos
 {
-    public class EjerciciosPorRutina
+    public class TipoMembresia
     {
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El ID de la rutina es obligatorio")]
-        public int fk_idRutinas { get; set; }
-
-        [Required(ErrorMessage = "El ID del ejercicio es obligatorio")]
-        public int fk_idEjercicios { get; set; }
+        [Required(ErrorMessage = "El nombre del tipo de membresía es obligatorio")]
+        [StringLength(20, ErrorMessage = "El nombre no puede exceder los 20 caracteres")]
+        public string Nombre { get; set; } = string.Empty;
     }
 }
+

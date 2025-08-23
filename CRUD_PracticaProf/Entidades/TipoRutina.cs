@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Modelos
 {
-    public class FormasPago
+    public class TipoRutina
     {
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El nombre de la forma de pago es obligatorio")]
-        public string Nombre { get; set; } = string.Empty; 
-
+        [Required(ErrorMessage = "El nombre del tipo de rutina es obligatorio")]
+        public string Nombre { get; set; } = string.Empty;
     }
 }
-

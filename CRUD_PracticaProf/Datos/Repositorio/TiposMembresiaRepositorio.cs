@@ -20,21 +20,21 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
-        public async Task<IEnumerable<TiposMembresia>> GetAll()
+        public async Task<IEnumerable<TipoMembresia>> GetAll()
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM tiposmembresia";
-            return await db.QueryAsync<TiposMembresia>(sql);
+            return await db.QueryAsync<TipoMembresia>(sql);
         }
 
-        public async Task<TiposMembresia?> GetById(int id)
+        public async Task<TipoMembresia?> GetById(int id)
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM tiposmembresia WHERE Id = @Id";
-            return await db.QueryFirstOrDefaultAsync<TiposMembresia>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<TipoMembresia>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(TiposMembresia tipoMembresia)
+        public async Task<bool> Create(TipoMembresia tipoMembresia)
         {
             using var db = DbConnection();
             var sql = "INSERT INTO tiposmembresia (Nombre) VALUES (@Nombre)";
@@ -42,7 +42,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return result > 0;
         }
 
-        public async Task<bool> Update(TiposMembresia tipoMembresia)
+        public async Task<bool> Update(TipoMembresia tipoMembresia)
         {
             using var db = DbConnection();
             var sql = "UPDATE tiposmembresia SET Nombre = @Nombre WHERE Id = @Id";

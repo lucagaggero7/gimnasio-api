@@ -9,10 +9,10 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 {
     public interface ITiposRutinaRepositorio
     {
-        Task<IEnumerable<TiposRutina>> GetAll();
-        Task<TiposRutina?> GetById(int id);
-        Task<bool> Create(TiposRutina tipoRutina);
-        Task<bool> Update(TiposRutina tipoRutina);
+        Task<IEnumerable<TipoRutina>> GetAll();
+        Task<TipoRutina?> GetById(int id);
+        Task<bool> Create(TipoRutina tipoRutina);
+        Task<bool> Update(TipoRutina tipoRutina);
         Task<bool> Delete(int id);
     }
 }

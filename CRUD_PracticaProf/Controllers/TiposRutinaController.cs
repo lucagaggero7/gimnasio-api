@@ -34,7 +34,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TiposRutina tipoRutina)
+        public async Task<IActionResult> Create([FromBody] TipoRutina tipoRutina)
         {
             if (tipoRutina == null) return BadRequest("El tipo de rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -44,7 +44,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] TiposRutina tipoRutina)
+        public async Task<IActionResult> Update([FromBody] TipoRutina tipoRutina)
         {
             if (tipoRutina == null) return BadRequest("El tipo de rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);

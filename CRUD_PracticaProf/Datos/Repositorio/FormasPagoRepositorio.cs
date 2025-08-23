@@ -18,21 +18,21 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
-        public async Task<IEnumerable<FormasPago>> GetAll()
+        public async Task<IEnumerable<FormaPago>> GetAll()
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM formaspago";
-            return await db.QueryAsync<FormasPago>(sql);
+            return await db.QueryAsync<FormaPago>(sql);
         }
 
-        public async Task<FormasPago?> GetById(int id)
+        public async Task<FormaPago?> GetById(int id)
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM formaspago WHERE Id = @Id";
-            return await db.QueryFirstOrDefaultAsync<FormasPago>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<FormaPago>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(FormasPago formaPago)
+        public async Task<bool> Create(FormaPago formaPago)
         {
             using var db = DbConnection();
             var sql = "INSERT INTO formaspago (Nombre) VALUES (@Nombre)";
@@ -40,7 +40,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return result > 0;
         }
 
-        public async Task<bool> Update(FormasPago formaPago)
+        public async Task<bool> Update(FormaPago formaPago)
         {
             using var db = DbConnection();
             var sql = "UPDATE formaspago SET Nombre = @Nombre WHERE Id = @Id";

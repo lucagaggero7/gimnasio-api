@@ -22,7 +22,7 @@ namespace CRUD_PracticaProf.Entidades
 
         // Llave foránea a Clientes
         [Required(ErrorMessage = "El ID del cliente es obligatorio")]
-        public int fk_idClientes { get; set; }
+        public int FkIdCliente { get; set; }
 
         public ClienteMostrarDTO Cliente { get; set; }
     }

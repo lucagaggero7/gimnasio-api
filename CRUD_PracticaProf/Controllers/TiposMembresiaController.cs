@@ -34,7 +34,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TiposMembresia tipoMembresia)
+        public async Task<IActionResult> Create([FromBody] TipoMembresia tipoMembresia)
         {
             if (tipoMembresia == null) return BadRequest("El tipo de membresía no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -44,7 +44,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] TiposMembresia tipoMembresia)
+        public async Task<IActionResult> Update([FromBody] TipoMembresia tipoMembresia)
         {
             if (tipoMembresia == null) return BadRequest("El tipo de membresía no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);

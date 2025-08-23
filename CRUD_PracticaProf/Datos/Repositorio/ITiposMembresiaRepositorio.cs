@@ -9,10 +9,10 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 {
     public interface ITiposMembresiaRepositorio
     {
-        Task<IEnumerable<TiposMembresia>> GetAll();
-        Task<TiposMembresia?> GetById(int id);
-        Task<bool> Create(TiposMembresia tipoMembresia);
-        Task<bool> Update(TiposMembresia tipoMembresia);
+        Task<IEnumerable<TipoMembresia>> GetAll();
+        Task<TipoMembresia?> GetById(int id);
+        Task<bool> Create(TipoMembresia tipoMembresia);
+        Task<bool> Update(TipoMembresia tipoMembresia);
         Task<bool> Delete(int id);
     }
 }

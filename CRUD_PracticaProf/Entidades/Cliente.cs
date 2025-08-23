@@ -23,7 +23,7 @@ namespace CRUD_PracticaProf.Modelos
 
         public string Direccion { get; set; }
 
-        public DateTime Fecha_nacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; }
 
     }
 }

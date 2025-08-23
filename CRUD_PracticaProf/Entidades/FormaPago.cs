@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Modelos
 {
-    public class TiposMembresia
+    public class FormaPago
     {
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El nombre del tipo de membresía es obligatorio")]
-        [StringLength(20, ErrorMessage = "El nombre no puede exceder los 20 caracteres")]
-        public string Nombre { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El nombre de la forma de pago es obligatorio")]
+        public string Nombre { get; set; } = string.Empty; 
+
     }
 }
 

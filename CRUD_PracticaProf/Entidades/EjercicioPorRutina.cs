@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Modelos
 {
-    public class TiposRutina
+    public class EjercicioPorRutina
     {
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El nombre del tipo de rutina es obligatorio")]
-        public string Nombre { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El ID de la rutina es obligatorio")]
+        public int FkIdRutina { get; set; }
+
+        [Required(ErrorMessage = "El ID del ejercicio es obligatorio")]
+        public int FkIdEjercicio { get; set; }
     }
 }

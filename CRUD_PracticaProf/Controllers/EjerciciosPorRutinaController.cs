@@ -34,7 +34,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] EjerciciosPorRutina ejercicioPorRutina)
+        public async Task<IActionResult> Create([FromBody] EjercicioPorRutina ejercicioPorRutina)
         {
             if (ejercicioPorRutina == null) return BadRequest("El objeto de ejercicio por rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -44,7 +44,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] EjerciciosPorRutina ejercicioPorRutina)
+        public async Task<IActionResult> Update([FromBody] EjercicioPorRutina ejercicioPorRutina)
         {
             if (ejercicioPorRutina == null) return BadRequest("El objeto de ejercicio por rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
