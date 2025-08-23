@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Controllers
 {
-    [Route("Formas_pago")]
+    [Route("formas-pago")]
     [ApiController]
     public class FormasPagoController : ControllerBase
     {

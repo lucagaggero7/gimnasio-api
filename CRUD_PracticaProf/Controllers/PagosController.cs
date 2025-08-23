@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRUD_PracticaProf.Controllers
 {
-    [Route("Pagos")] // La ruta se ajusta para ser específica y no "api/[controller]"
+    [Route("pagos")] 
     [ApiController]
     public class PagosController : ControllerBase
     {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRUD_PracticaProf.Controllers
 {
-    [Route("EjerciciosPorRutina")]
+    [Route("ejercicios-por-rutina")]
     [ApiController]
     public class EjerciciosPorRutinaController : ControllerBase
     {

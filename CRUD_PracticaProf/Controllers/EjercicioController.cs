@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRUD_PracticaProf.Controllers
 {
-    [Route("Ejercicios")]
+    [Route("ejercicios")]
     [ApiController]
     public class EjercicioController : ControllerBase
     {
