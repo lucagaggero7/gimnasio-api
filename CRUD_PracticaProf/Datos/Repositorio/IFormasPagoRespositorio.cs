@@ -10,7 +10,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     public interface IFormasPagoRepositorio
     {
         Task<IEnumerable<FormaPago>> GetAll();
-        Task<FormaPago?> GetById(int id);
+        Task<FormaPago> GetById(int id);
         Task<bool> Create(FormaPago formaPago);
         Task<bool> Update(FormaPago formaPago);
         Task<bool> Delete(int id);

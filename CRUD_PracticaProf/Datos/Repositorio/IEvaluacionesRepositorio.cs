@@ -6,7 +6,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     public interface IEvaluacionesRepositorio
     {
         Task<IEnumerable<Evaluacion>> GetAll();
-        Task<Evaluacion?> GetById(int id);
+        Task<Evaluacion> GetById(int id);
         Task<bool> Create(Evaluacion evaluacion);
         Task<bool> Update(Evaluacion evaluacion);
         Task<bool> Delete(int id);

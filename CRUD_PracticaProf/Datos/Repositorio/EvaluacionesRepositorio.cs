@@ -45,7 +45,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return evaluaciones;
         }
 
-        public async Task<Evaluacion?> GetById(int id)
+        public async Task<Evaluacion> GetById(int id)
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM evaluaciones WHERE id = @id";

@@ -26,7 +26,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryAsync<EjercicioPorRutina>(sql);
         }
 
-        public async Task<EjercicioPorRutina?> GetById(int id)
+        public async Task<EjercicioPorRutina> GetById(int id)
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM ejercicios_por_rutina WHERE id = @id";

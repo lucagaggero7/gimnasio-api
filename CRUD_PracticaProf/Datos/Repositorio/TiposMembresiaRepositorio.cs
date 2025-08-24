@@ -28,7 +28,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryAsync<TipoMembresia>(sql);
         }
 
-        public async Task<TipoMembresia?> GetById(int id)
+        public async Task<TipoMembresia> GetById(int id)
         {
             using var db = DbConnection();
             var sql = "SELECT * FROM tipos_membresia WHERE id = @id";
