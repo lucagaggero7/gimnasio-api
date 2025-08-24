@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRUD_PracticaProf.Controllers
 {
-    [Route("membresia")]
+    [Route("membresias")]
     [ApiController]
     public class MembresiasController : ControllerBase
     {

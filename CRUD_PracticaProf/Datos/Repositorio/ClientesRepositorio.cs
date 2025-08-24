@@ -66,7 +66,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 cliente.Email,
                 cliente.Telefono,
                 cliente.Direccion,
-                cliente.Fecha_nacimiento
+                cliente.FechaNacimiento
             });
 
             return result > 0; // Returns true if one or more rows were affected
@@ -94,7 +94,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 cliente.Email,
                 cliente.Telefono,
                 cliente.Direccion,
-                cliente.Fecha_nacimiento,
+                cliente.FechaNacimiento,
                 cliente.Id
             });
 

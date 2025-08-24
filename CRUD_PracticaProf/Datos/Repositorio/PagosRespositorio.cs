@@ -43,7 +43,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             var sql = @"INSERT INTO pagos (Monto, Fecha, fk_idFormasPago, fk_idMembresias, fk_idClientes)
                         VALUES (@Monto, @Fecha, @fk_idFormasPago, @fk_idMembresias, @fk_idClientes)";
 
-            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresias, pago.fk_idClientes });
+            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.FkIdFormaPago, pago.FkIdMembresia, pago.FkIdCliente });
             return result > 0;
         }
 
@@ -58,7 +58,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                         fk_idClientes = @fk_idClientes
                         WHERE Id = @idPagos";
 
-            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.fk_idFormasPago, pago.fk_idMembresias, pago.fk_idClientes, pago.Id });
+            var result = await db.ExecuteAsync(sql, new { pago.Monto, pago.Fecha, pago.FkIdFormaPago, pago.FkIdMembresia, pago.FkIdCliente, pago.Id });
             return result > 0;
         }
 
