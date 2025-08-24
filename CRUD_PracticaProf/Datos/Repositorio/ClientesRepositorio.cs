@@ -37,7 +37,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<ClienteMostrarDTO>> GetAllDTO()
         {
             using var db = dbConnection();
-            var sql = "SELECT Id, Nombre, Apellido FROM Clientes";
+            var sql = "SELECT id, nombre, apellido FROM clientes";
 
             return await db.QueryAsync<ClienteMostrarDTO>(sql, new { });
         }
@@ -46,7 +46,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM clientes WHERE Id = @Id";
+            var sql = @"SELECT * FROM clientes WHERE id = @id";
 
             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
         }
@@ -55,18 +55,18 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"INSERT INTO clientes (Nombre, Apellido, Dni, Email, Telefono, Direccion, Fecha_nacimiento)
-                        VALUES (@Nombre, @Apellido, @Dni, @Email, @Telefono, @Direccion, @Fecha_nacimiento) ";
+            var sql = @"INSERT INTO clientes (nombre, apellido, dni, email, telefono, direccion, fecha_nacimiento)
+                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento) ";
 
             var result = await db.ExecuteAsync(sql, new
             {
-                cliente.Nombre,
-                cliente.Apellido,
-                cliente.Dni,
-                cliente.Email,
-                cliente.Telefono,
-                cliente.Direccion,
-                cliente.FechaNacimiento
+                nombre = cliente.Nombre,
+                apellido = cliente.Apellido,
+                dni = cliente.Dni,
+                email = cliente.Email,
+                telefono = cliente.Telefono,
+                direccion = cliente.Direccion,
+                fecha_nacimiento = cliente.FechaNacimiento
             });
 
             return result > 0; // Returns true if one or more rows were affected
@@ -77,25 +77,25 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             var db = dbConnection();
 
             var sql = @"UPDATE clientes SET 
-                        Nombre = @Nombre,
-                        Apellido = @Apellido,
-                        Dni = @Dni,
-                        Email = @Email,
-                        Telefono = @Telefono,
-                        Direccion = @Direccion,
-                        Fecha_nacimiento = @Fecha_nacimiento
-                        WHERE Id = @Id";
+                        nombre = @nombre,
+                        apellido = @apellido,
+                        dni = @dni,
+                        email = @email,
+                        telefono = @telefono,
+                        direccion = @direccion,
+                        fecha_nacimiento = @fecha_nacimiento
+                        WHERE id = @id";
 
             var result = await db.ExecuteAsync(sql, new
             {
-                cliente.Nombre,
-                cliente.Apellido,
-                cliente.Dni,
-                cliente.Email,
-                cliente.Telefono,
-                cliente.Direccion,
-                cliente.FechaNacimiento,
-                cliente.Id
+                nombre = cliente.Nombre,
+                apellido = cliente.Apellido,
+                dni = cliente.Dni,
+                email = cliente.Email,
+                telefono = cliente.Telefono,
+                direccion = cliente.Direccion,
+                fecha_nacimiento = cliente.FechaNacimiento,
+                id = cliente.Id
             });
 
             return result > 0; // Returns true if one or more rows were affected
@@ -105,7 +105,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"DELETE FROM clientes WHERE Id = @Id";
+            var sql = @"DELETE FROM clientes WHERE id = @id";
 
             var result = await db.ExecuteAsync(sql, new { Id = cliente.Id });
 

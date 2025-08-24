@@ -67,23 +67,28 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Cliente cliente)
+        public async Task<IActionResult> Update(int id, [FromBody] Cliente cliente)
         {
             if (cliente == null)
-            {
                 return BadRequest("El cliente no puede ser nulo.");
-            }
 
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            await _clienteRepositorio.Update(cliente);
+            if (cliente.Id == 0)
+                return BadRequest("El Id del cliente es obligatorio.");
 
-            return Ok(new { mensaje = "Cliente actualizado con exito" });
+            if (cliente.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
 
+            var filasAfectadas = await _clienteRepositorio.Update(cliente);
+
+            if (filasAfectadas == false)
+                return NotFound("Cliente no encontrado.");
+
+            return Ok(new { mensaje = "Cliente actualizado con éxito" });
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
