@@ -93,7 +93,11 @@ namespace CRUD_PracticaProf.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _clienteRepositorio.Delete(new Cliente { Id = id });
+            var filasAfectadas = await _clienteRepositorio.Delete(new Cliente { Id = id });
+
+            if (filasAfectadas == false)
+                return NotFound("Cliente no encontrado.");
+
             return Ok(new { mensaje = "Cliente eliminado con éxito" });
         }
 

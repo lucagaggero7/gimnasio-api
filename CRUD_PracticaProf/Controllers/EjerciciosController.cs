@@ -3,6 +3,7 @@ using CRUD_PracticaProf.Entidades;
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -65,7 +66,7 @@ namespace CRUD_PracticaProf.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Ejercicio ejercicio)
+        public async Task<IActionResult> Update(int id, [FromBody] Ejercicio ejercicio)
         {
             if (ejercicio == null)
             {
@@ -77,7 +78,16 @@ namespace CRUD_PracticaProf.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _ejercicioRepositorio.Update(ejercicio);
+            if (ejercicio.Id == 0)
+                return BadRequest("El Id del ejercicio es obligatorio.");
+
+            if (ejercicio.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+
+            var filasAfectadas = await _ejercicioRepositorio.Update(ejercicio);
+
+            if (filasAfectadas == false)
+                return NotFound("Ejercicio no encontrado.");
 
             return Ok(new { mensaje = "Ejercicio actualizado con exito" });
         }
@@ -85,7 +95,11 @@ namespace CRUD_PracticaProf.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _ejercicioRepositorio.Delete(new Ejercicio { Id = id });
+            var filasAfectadas = await _ejercicioRepositorio.Delete(new Ejercicio { Id = id });
+
+            if (filasAfectadas == false)
+                return NotFound("Ejercicio no encontrado.");
+
             return Ok(new { mensaje = "Ejercicio eliminado con éxito" });
         }
 

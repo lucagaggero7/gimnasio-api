@@ -45,7 +45,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             {
                 var db = dbConnection();
 
-                var sql = @"SELECT * FROM ejercicios WHERE Id = @Id";
+                var sql = @"SELECT * FROM ejercicios WHERE id = @id";
 
                 return await db.QueryFirstOrDefaultAsync<Ejercicio>(sql, new { Id = id });
             }
@@ -54,15 +54,15 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             {
                 var db = dbConnection();
 
-                var sql = @"INSERT INTO ejercicios (Nombre, Series, Repeticiones, Notas)
-                        VALUES (@Nombre, @Series, @Repeticiones, @Notas) ";
+                var sql = @"INSERT INTO ejercicios (nombre, series, repeticiones, notas)
+                        VALUES (@nombre, @series, @repeticiones, @notas) ";
 
                 var result = await db.ExecuteAsync(sql, new
                 {
-                    ejercicio.Nombre,
-                    ejercicio.Series,
-                    ejercicio.Repeticiones,
-                    ejercicio.Notas
+                    nombre = ejercicio.Nombre,
+                    series = ejercicio.Series,
+                    repeticiones = ejercicio.Repeticiones,
+                    notas = ejercicio.Notas
                 });
 
                 return result > 0; // Returns true if one or more rows were affected
@@ -73,21 +73,21 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 var db = dbConnection();
 
                 var sql = @"UPDATE ejercicios SET 
-                        Nombre = @Nombre,
-                        Series = @Series,
-                        Repeticiones = @Repeticiones,
-                        Notas = @Notas,
-                        WHERE Id = @Id";
+                        nombre = @nombre,
+                        series = @series,
+                        repeticiones = @repeticiones,
+                        notas = @notas
+                        WHERE id = @id";
 
 
-                var result = await db.ExecuteAsync(sql, new
-                {
-                    ejercicio.Nombre,
-                    ejercicio.Series,
-                    ejercicio.Repeticiones,
-                    ejercicio.Notas,
-                    ejercicio.Id
-                });
+            var result = await db.ExecuteAsync(sql, new
+            {
+                nombre = ejercicio.Nombre,
+                series = ejercicio.Series,
+                repeticiones = ejercicio.Repeticiones,
+                notas = ejercicio.Notas,
+                id = ejercicio.Id
+            });
 
                 return result > 0; // Returns true if one or more rows were affected
             }
@@ -96,7 +96,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             {
                 var db = dbConnection();
 
-                var sql = @"DELETE FROM ejercicios WHERE Id = @Id";
+                var sql = @"DELETE FROM ejercicios WHERE id = @id";
 
                 var result = await db.ExecuteAsync(sql, new { Id = ejercicio.Id });
 
