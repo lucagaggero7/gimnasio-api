@@ -2,6 +2,7 @@
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -44,7 +45,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Membresia membresia)
+        public async Task<IActionResult> Update(int id, [FromBody] Membresia membresia)
         {
             if (membresia == null) return BadRequest("La membresía no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -52,7 +53,17 @@ namespace CRUD_PracticaProf.Controllers
             var existing = await _membresiaRepositorio.GetById(membresia.Id);
             if (existing == null) return NotFound($"No se encontró la membresía con ID {membresia.Id} para actualizar.");
 
-            await _membresiaRepositorio.Update(membresia);
+            if (membresia.Id == 0)
+                return BadRequest("El Id de la membresia es obligatorio.");
+
+            if (membresia.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+
+            var filasAfectadas = await _membresiaRepositorio.Update(membresia);
+
+            if (filasAfectadas == false)
+                return NotFound("Membresía no encontrada.");
+
             return Ok(new { mensaje = "Membresía actualizada con éxito" });
         }
 
@@ -62,7 +73,11 @@ namespace CRUD_PracticaProf.Controllers
             var existing = await _membresiaRepositorio.GetById(id);
             if (existing == null) return NotFound($"No se encontró la membresía con ID {id} para eliminar.");
 
-            await _membresiaRepositorio.Delete(id);
+            var filasAfectadas = await _membresiaRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Membresía no encontrada.");
+
             return Ok(new { mensaje = "Membresía eliminada con éxito" });
         }
     }

@@ -2,6 +2,7 @@
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -54,7 +55,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Pago pago)
+        public async Task<IActionResult> Update(int id, [FromBody] Pago pago)
         {
             if (pago == null)
             {
@@ -66,13 +67,22 @@ namespace CRUD_PracticaProf.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (pago.Id == 0)
+                return BadRequest("El Id del pago es obligatorio.");
+
+            if (pago.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+
             var existingPago = await _pagosRepositorio.GetById(pago.Id);
             if (existingPago == null)
             {
                 return NotFound($"No se encontró el pago con ID {pago.Id} para actualizar.");
             }
 
-            await _pagosRepositorio.Update(pago);
+            var filasAfectadas = await _pagosRepositorio.Update(pago);
+
+            if (filasAfectadas == false)
+                return NotFound("Pago no encontrado.");
 
             return Ok(new { mensaje = "Pago actualizado con exito" });
         }
@@ -87,7 +97,10 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró el pago con ID {id} para eliminar.");
             }
 
-            await _pagosRepositorio.Delete(id);
+            var filasAfectadas = await _pagosRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Pago no encontrado.");
 
             return Ok(new { mensaje = "Pago eliminado con éxito" });
         }

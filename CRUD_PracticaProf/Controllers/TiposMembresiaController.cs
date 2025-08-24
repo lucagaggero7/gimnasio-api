@@ -2,6 +2,7 @@
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -44,15 +45,25 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] TipoMembresia tipoMembresia)
+        public async Task<IActionResult> Update(int id, [FromBody] TipoMembresia tipoMembresia)
         {
             if (tipoMembresia == null) return BadRequest("El tipo de membresía no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            if (tipoMembresia.Id == 0)
+                return BadRequest("El Id del tipo de membresia es obligatorio.");
+
+            if (tipoMembresia.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+
             var existing = await _tiposMembresiaRepositorio.GetById(tipoMembresia.Id);
             if (existing == null) return NotFound($"No se encontró el tipo de membresía con ID {tipoMembresia.Id} para actualizar.");
 
-            await _tiposMembresiaRepositorio.Update(tipoMembresia);
+            var filasAfectadas = await _tiposMembresiaRepositorio.Update(tipoMembresia);
+
+            if (filasAfectadas == false)
+                return NotFound("Tipo de membresia no encontrada.");
+
             return Ok(new { mensaje = "Tipo de membresía actualizado con éxito" });
         }
 
@@ -62,7 +73,11 @@ namespace CRUD_PracticaProf.Controllers
             var existing = await _tiposMembresiaRepositorio.GetById(id);
             if (existing == null) return NotFound($"No se encontró el tipo de membresía con ID {id} para eliminar.");
 
-            await _tiposMembresiaRepositorio.Delete(id);
+            var filasAfectadas = await _tiposMembresiaRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Tipo de membresia no encontrada.");
+
             return Ok(new { mensaje = "Tipo de membresía eliminado con éxito" });
         }
     }

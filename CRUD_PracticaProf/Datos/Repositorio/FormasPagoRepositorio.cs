@@ -1,6 +1,7 @@
 ﻿using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -21,37 +22,44 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<FormaPago>> GetAll()
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM formaspago";
+            var sql = "SELECT * FROM formas_pago";
             return await db.QueryAsync<FormaPago>(sql);
         }
 
         public async Task<FormaPago?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM formaspago WHERE Id = @Id";
+            var sql = "SELECT * FROM formas_pago WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<FormaPago>(sql, new { Id = id });
         }
 
         public async Task<bool> Create(FormaPago formaPago)
         {
             using var db = DbConnection();
-            var sql = "INSERT INTO formaspago (Nombre) VALUES (@Nombre)";
-            var result = await db.ExecuteAsync(sql, formaPago);
+            var sql = "INSERT INTO formas_pago (nombre) VALUES (@nombre)";
+            var result = await db.ExecuteAsync(sql, new
+            {
+                nombre = formaPago.Nombre
+            });
             return result > 0;
         }
 
         public async Task<bool> Update(FormaPago formaPago)
         {
             using var db = DbConnection();
-            var sql = "UPDATE formaspago SET Nombre = @Nombre WHERE Id = @Id";
-            var result = await db.ExecuteAsync(sql, formaPago);
+            var sql = "UPDATE formas_pago SET nombre = @nombre WHERE id = @id";
+            var result = await db.ExecuteAsync(sql, new
+            {
+                nombre = formaPago.Nombre,
+                id = formaPago.Id
+            });
             return result > 0;
         }
 
         public async Task<bool> Delete(int id)
         {
             using var db = DbConnection();
-            var sql = "DELETE FROM formaspago WHERE Id = @Id";
+            var sql = "DELETE FROM formas_pago WHERE id = @id";
             var result = await db.ExecuteAsync(sql, new { Id = id });
             return result > 0;
         }

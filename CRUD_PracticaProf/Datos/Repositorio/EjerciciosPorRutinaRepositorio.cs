@@ -1,6 +1,7 @@
 ﻿using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -21,41 +22,50 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<EjercicioPorRutina>> GetAll()
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM ejerciciosporrutina";
+            var sql = "SELECT * FROM ejercicios_por_rutina";
             return await db.QueryAsync<EjercicioPorRutina>(sql);
         }
 
         public async Task<EjercicioPorRutina?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM ejerciciosporrutina WHERE Id = @Id";
+            var sql = "SELECT * FROM ejercicios_por_rutina WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<EjercicioPorRutina>(sql, new { Id = id });
         }
 
         public async Task<bool> Create(EjercicioPorRutina ejercicioPorRutina)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO ejerciciosporrutina (fk_idRutinas, fk_idEjercicios)
-                        VALUES (@fk_idRutinas, @fk_idEjercicios)";
-            var result = await db.ExecuteAsync(sql, ejercicioPorRutina);
+            var sql = @"INSERT INTO ejercicios_por_rutina (fk_id_rutina, fk_id_ejercicio)
+                        VALUES (@fk_id_rutina, @fk_id_ejercicio)";
+            var result = await db.ExecuteAsync(sql, new
+            {
+                fk_id_rutina = ejercicioPorRutina.FkIdRutina,
+                fk_id_ejercicio = ejercicioPorRutina.FkIdEjercicio
+            });
             return result > 0;
         }
 
         public async Task<bool> Update(EjercicioPorRutina ejercicioPorRutina)
         {
             using var db = DbConnection();
-            var sql = @"UPDATE ejerciciosporrutina SET
-                        fk_idRutinas = @fk_idRutinas,
-                        fk_idEjercicios = @fk_idEjercicios
-                        WHERE Id = @Id";
-            var result = await db.ExecuteAsync(sql, ejercicioPorRutina);
+            var sql = @"UPDATE ejercicios_por_rutina SET
+                        fk_id_rutina = @fk_id_rutina,
+                        fk_id_ejercicio = @fk_id_ejercicio
+                        WHERE id = @id";
+            var result = await db.ExecuteAsync(sql, new
+            {
+                fk_id_rutina = ejercicioPorRutina.FkIdRutina,
+                fk_id_ejercicio = ejercicioPorRutina.FkIdEjercicio,
+                id = ejercicioPorRutina.Id
+            });
             return result > 0;
         }
 
         public async Task<bool> Delete(int id)
         {
             using var db = DbConnection();
-            var sql = "DELETE FROM ejerciciosporrutina WHERE Id = @Id";
+            var sql = "DELETE FROM ejercicios_por_rutina WHERE id = @id";
             var result = await db.ExecuteAsync(sql, new { Id = id });
             return result > 0;
         }

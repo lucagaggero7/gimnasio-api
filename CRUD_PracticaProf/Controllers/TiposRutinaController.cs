@@ -2,6 +2,7 @@
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -44,10 +45,16 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] TipoRutina tipoRutina)
+        public async Task<IActionResult> Update(int id, [FromBody] TipoRutina tipoRutina)
         {
             if (tipoRutina == null) return BadRequest("El tipo de rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (tipoRutina.Id == 0)
+                return BadRequest("El Id del tipo de rutina es obligatorio.");
+
+            if (tipoRutina.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
 
             var existing = await _tiposRutinaRepositorio.GetById(tipoRutina.Id);
             if (existing == null)
@@ -55,7 +62,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró el tipo de rutina con ID {tipoRutina.Id} para actualizar.");
             }
 
-            await _tiposRutinaRepositorio.Update(tipoRutina);
+            var filasAfectadas = await _tiposRutinaRepositorio.Update(tipoRutina);
+
+            if (filasAfectadas == false)
+                return NotFound("Cliente no encontrado.");
+
             return Ok(new { mensaje = "Tipo de rutina actualizado con éxito" });
         }
 
@@ -68,7 +79,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró el tipo de rutina con ID {id} para eliminar.");
             }
 
-            await _tiposRutinaRepositorio.Delete(id);
+            var filasAfectadas = await _tiposRutinaRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Cliente no encontrado.");
+
             return Ok(new { mensaje = "Tipo de rutina eliminado con éxito" });
         }
     }

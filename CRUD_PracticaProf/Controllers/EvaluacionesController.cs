@@ -1,5 +1,6 @@
 ﻿using CRUD_PracticaProf.Datos.Repositorio;
 using CRUD_PracticaProf.Entidades;
+using CRUD_PracticaProf.Modelos;
 using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,10 +45,16 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Evaluacion evaluacion)
+        public async Task<IActionResult> Update(int id, [FromBody] Evaluacion evaluacion)
         {
             if (evaluacion == null) return BadRequest("La evaluacion no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (evaluacion.Id == 0)
+                return BadRequest("El Id de la Evaluacion es obligatorio.");
+
+            if (evaluacion.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
 
             var existing = await _evaluacionesRepositorio.GetById(evaluacion.Id);
             if (existing == null)
@@ -55,7 +62,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró la evaluacion con ID {evaluacion.Id} para actualizar.");
             }
 
-            await _evaluacionesRepositorio.Update(evaluacion);
+            var filasAfectadas = await _evaluacionesRepositorio.Update(evaluacion);
+
+            if (filasAfectadas == false)
+                return NotFound("Evaluacion no encontrada.");
+
             return Ok(new { mensaje = "Evaluacion actualizada con éxito" });
         }
 
@@ -68,7 +79,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró la evaluacion con ID {id} para eliminar.");
             }
 
-            await _evaluacionesRepositorio.Delete(id);
+            var filasAfectadas = await _evaluacionesRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Evaluacion no encontrada.");
+
             return Ok(new { mensaje = "Evaluacion eliminada con éxito" });
         }
     }

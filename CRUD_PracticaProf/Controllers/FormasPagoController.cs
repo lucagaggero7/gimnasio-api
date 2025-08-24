@@ -1,6 +1,7 @@
 ﻿using CRUD_PracticaProf.Datos.Repositorio;
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Controllers
@@ -44,7 +45,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] FormaPago formaPago)
+        public async Task<IActionResult> Update(int id, [FromBody] FormaPago formaPago)
         {
             if (formaPago == null) return BadRequest("La forma de pago no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -52,7 +53,17 @@ namespace CRUD_PracticaProf.Controllers
             var existing = await _formasPagoRepositorio.GetById(formaPago.Id);
             if (existing == null) return NotFound($"No se encontró la forma de pago con ID {formaPago.Id}.");
 
-            await _formasPagoRepositorio.Update(formaPago);
+            if (formaPago.Id == 0)
+                return BadRequest("El Id de la forma de pago es obligatorio.");
+
+            if (formaPago.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+
+            var filasAfectadas = await _formasPagoRepositorio.Update(formaPago);
+
+            if (filasAfectadas == false)
+                return NotFound("Forma de pago no encontrada.");
+
             return Ok(new { mensaje = "Forma de pago actualizada con éxito" });
         }
 
@@ -62,7 +73,11 @@ namespace CRUD_PracticaProf.Controllers
             var existing = await _formasPagoRepositorio.GetById(id);
             if (existing == null) return NotFound($"No se encontró la forma de pago con ID {id}.");
 
-            await _formasPagoRepositorio.Delete(id);
+            var filasAfectadas = await _formasPagoRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Forma de pago no encontrada.");
+
             return Ok(new { mensaje = "Forma de pago eliminada con éxito" });
         }
     }

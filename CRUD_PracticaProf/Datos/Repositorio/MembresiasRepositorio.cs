@@ -1,8 +1,9 @@
-﻿using CRUD_PracticaProf.Modelos; 
+﻿using CRUD_PracticaProf; 
 using CRUD_PracticaProf.Datos.Repositorio; 
-using CRUD_PracticaProf; 
+using CRUD_PracticaProf.Modelos; 
 using Dapper;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -30,17 +31,27 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<Membresia?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM membresias WHERE Id = @Id";
+            var sql = "SELECT * FROM membresias WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<Membresia>(sql, new { Id = id });
         }
 
         public async Task<bool> Create(Membresia membresia)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO membresias (Estado, Fecha_inicio, Fecha_vencimiento, Contacto_emergencia, Nombre_contacto, fk_idClientes, fk_idTiposMembresia, fk_idRutinas)
-                        VALUES (@Estado, @Fecha_inicio, @Fecha_vencimiento, @Contacto_emergencia, @Nombre_contacto, @fk_idClientes, @fk_idTiposMembresia, @fk_idRutinas)";
+            var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, nombre_contacto, fk_id_cliente, fk_id_tipo_membresia, fk_id_rutina)
+                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @nombre_contacto, @fk_id_cliente, @fk_id_tipo_membresia, @fk_id_rutina)";
 
-            var result = await db.ExecuteAsync(sql, membresia);
+            var result = await db.ExecuteAsync(sql, new
+            {
+                estado = membresia.Estado,
+                fecha_inicio = membresia.FechaInicio,
+                fecha_vencimiento = membresia.FechaVencimiento,
+                contacto_emergencia = membresia.ContactoEmergencia,
+                nombre_contacto = membresia.NombreContacto,
+                fk_id_cliente = membresia.FkIdCliente,
+                fk_id_tipo_membresia = membresia.FkIdTipoMembresia,
+                fk_id_rutina = membresia.FkIdRutina
+            });
             return result > 0;
         }
 
@@ -48,24 +59,35 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             using var db = DbConnection();
             var sql = @"UPDATE membresias SET
-                        Estado = @Estado,
-                        Fecha_inicio = @Fecha_inicio,
-                        Fecha_vencimiento = @Fecha_vencimiento,
-                        Contacto_emergencia = @Contacto_emergencia,
-                        Nombre_contacto = @Nombre_contacto,
-                        fk_idClientes = @fk_idClientes,
-                        fk_idTiposMembresia = @fk_idTiposMembresia,
-                        fk_idRutinas = @fk_idRutinas
-                        WHERE Id = @Id";
+                        estado = @estado,
+                        fecha_inicio = @fecha_inicio,
+                        fecha_vencimiento = @fecha_vencimiento,
+                        contacto_emergencia = @contacto_emergencia,
+                        nombre_contacto = @nombre_contacto,
+                        fk_id_cliente = @fk_id_cliente,
+                        fk_id_tipo_membresia = @fk_id_tipo_membresia,
+                        fk_id_rutina = @fk_id_rutina
+                        WHERE id = @id";
 
-            var result = await db.ExecuteAsync(sql, membresia);
+            var result = await db.ExecuteAsync(sql, new
+            {
+                estado = membresia.Estado,
+                fecha_inicio = membresia.FechaInicio,
+                fecha_vencimiento = membresia.FechaVencimiento,
+                contacto_emergencia = membresia.ContactoEmergencia,
+                nombre_contacto = membresia.NombreContacto,
+                fk_id_cliente = membresia.FkIdCliente,
+                fk_id_tipo_membresia = membresia.FkIdTipoMembresia,
+                fk_id_rutina = membresia.FkIdRutina,
+                id = membresia.Id
+            });
             return result > 0;
         }
 
         public async Task<bool> Delete(int id)
         {
             using var db = DbConnection();
-            var sql = "DELETE FROM membresias WHERE Id = @Id";
+            var sql = "DELETE FROM membresias WHERE id = @id";
             var result = await db.ExecuteAsync(sql, new { Id = id });
             return result > 0;
         }

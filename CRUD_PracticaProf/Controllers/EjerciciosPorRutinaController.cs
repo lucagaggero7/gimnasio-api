@@ -2,6 +2,7 @@
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -44,7 +45,7 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] EjercicioPorRutina ejercicioPorRutina)
+        public async Task<IActionResult> Update(int id, [FromBody] EjercicioPorRutina ejercicioPorRutina)
         {
             if (ejercicioPorRutina == null) return BadRequest("El objeto de ejercicio por rutina no puede ser nulo.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -55,7 +56,17 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró el registro con ID {ejercicioPorRutina.Id} para actualizar.");
             }
 
-            await _ejerciciosPorRutinaRepositorio.Update(ejercicioPorRutina);
+            if (ejercicioPorRutina.Id == 0)
+                return BadRequest("El Id del ejercicio por rutina es obligatorio.");
+
+            if (ejercicioPorRutina.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+
+            var filasAfectadas = await _ejerciciosPorRutinaRepositorio.Update(ejercicioPorRutina);
+
+            if (filasAfectadas == false)
+                return NotFound("Ejercicio por rutina no encontrado.");
+
             return Ok(new { mensaje = "Registro de ejercicio por rutina actualizado con éxito" });
         }
 
@@ -68,7 +79,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró el registro con ID {id} para eliminar.");
             }
 
-            await _ejerciciosPorRutinaRepositorio.Delete(id);
+            var filasAfectadas = await _ejerciciosPorRutinaRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Ejercicio por rutina no encontrado.");
+
             return Ok(new { mensaje = "Registro de ejercicio por rutina eliminado con éxito" });
         }
     }

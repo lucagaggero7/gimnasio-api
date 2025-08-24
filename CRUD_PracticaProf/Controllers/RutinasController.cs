@@ -3,6 +3,7 @@ using CRUD_PracticaProf.Modelos;
 using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 
 namespace CRUD_PracticaProf.Controllers
 {
@@ -45,10 +46,16 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Rutina rutina)
+        public async Task<IActionResult> Update(int id,[FromBody] Rutina rutina)
         {
             if (rutina == null) return BadRequest("La rutina no puede ser nula.");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (rutina.Id == 0)
+                return BadRequest("El Id de la rutina es obligatorio.");
+
+            if (rutina.Id != id)
+                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
 
             var existing = await _rutinasRepositorio.GetById(rutina.Id);
             if (existing == null)
@@ -56,7 +63,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró la rutina con ID {rutina.Id} para actualizar.");
             }
 
-            await _rutinasRepositorio.Update(rutina);
+            var filasAfectadas = await _rutinasRepositorio.Update(rutina);
+
+            if (filasAfectadas == false)
+                return NotFound("Rutina no encontrada.");
+
             return Ok(new { mensaje = "Rutina actualizada con éxito" });
         }
 
@@ -69,7 +80,11 @@ namespace CRUD_PracticaProf.Controllers
                 return NotFound($"No se encontró la rutina con ID {id} para eliminar.");
             }
 
-            await _rutinasRepositorio.Delete(id);
+            var filasAfectadas = await _rutinasRepositorio.Delete(id);
+
+            if (filasAfectadas == false)
+                return NotFound("Rutina no encontrada.");
+
             return Ok(new { mensaje = "Rutina eliminada con éxito" });
         }
     }

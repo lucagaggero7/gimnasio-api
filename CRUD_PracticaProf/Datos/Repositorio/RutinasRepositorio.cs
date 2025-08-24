@@ -2,6 +2,7 @@
 using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -32,17 +33,25 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<Rutina?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM rutinas WHERE Id = @Id";
+            var sql = "SELECT * FROM rutinas WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<Rutina>(sql, new { Id = id });
         }
 
         public async Task<bool> Create(Rutina rutina)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO rutinas (Nombre, Fecha_inicio, Duracion, Frecuencia_sem, Objetivo, fk_idTiposRutina)
-                        VALUES (@Nombre, @Fecha_inicio, @Duracion, @Frecuencia_sem, @Objetivo, @fk_idTiposRutina)";
+            var sql = @"INSERT INTO rutinas (nombre, fecha_inicio, duracion, frecuencia_sem, objetivo, fk_id_tipo_rutina)
+                        VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_tipo_rutina)";
 
-            var result = await db.ExecuteAsync(sql, rutina);
+            var result = await db.ExecuteAsync(sql, new
+            {
+                nombre = rutina.Nombre,
+                fecha_inicio = rutina.FechaInicio,
+                duracion = rutina.Duracion,
+                frecuencia_sem = rutina.FrecuenciaSem,
+                objetivo = rutina.Objetivo,
+                fk_id_tipo_rutina = rutina.FkIdTipoRutina
+            });
             return result > 0;
         }
 
@@ -50,22 +59,31 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             using var db = DbConnection();
             var sql = @"UPDATE rutinas SET
-                        Nombre = @Nombre,
-                        Fecha_inicio = @Fecha_inicio,
-                        Duracion = @Duracion,
-                        Frecuencia_sem = @Frecuencia_sem,
-                        Objetivo = @Objetivo,
-                        fk_idTiposRutina = @fk_idTiposRutina
-                        WHERE Id = @Id";
+                        nombre = @nombre,
+                        fecha_inicio = @fecha_inicio,
+                        duracion = @duracion,
+                        frecuencia_sem = @frecuencia_sem,
+                        objetivo = @objetivo,
+                        fk_id_tipo_rutina = @fk_id_tipo_rutina
+                        WHERE id = @id";
 
-            var result = await db.ExecuteAsync(sql, rutina);
+            var result = await db.ExecuteAsync(sql, new
+            {
+                nombre = rutina.Nombre,
+                fecha_inicio = rutina.FechaInicio,
+                duracion = rutina.Duracion,
+                frecuencia_sem = rutina.FrecuenciaSem,
+                objetivo = rutina.Objetivo,
+                fk_id_tipo_rutina = rutina.FkIdTipoRutina,
+                id = rutina.Id
+            });
             return result > 0;
         }
 
         public async Task<bool> Delete(int id)
         {
             using var db = DbConnection();
-            var sql = "DELETE FROM rutinas WHERE Id = @Id";
+            var sql = "DELETE FROM rutinas WHERE id = @id";
             var result = await db.ExecuteAsync(sql, new { Id = id });
             return result > 0;
         }
