@@ -1,8 +1,10 @@
-﻿using CRUD_PracticaProf.Dapper.ManejadorTipos;
+﻿using CRUD_PracticaProf.Dapper.ConvertirJson;
+using CRUD_PracticaProf.Dapper.ManejadorTipos;
 using CRUD_PracticaProf.Datos;
 using CRUD_PracticaProf.Datos.Repositorio;
 using Dapper;
 using MySql.Data.MySqlClient;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +25,12 @@ builder.Services.AddCors(options =>
 Console.WriteLine("Orígenes permitidos: " + string.Join(", ", origenesPermitidos));
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new FechaJson());
+        options.JsonSerializerOptions.Converters.Add(new HoraJson());
+    });
 
 
 //builder.Services.AddOpenApi();
