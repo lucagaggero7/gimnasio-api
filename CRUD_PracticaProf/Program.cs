@@ -1,5 +1,7 @@
-﻿using CRUD_PracticaProf.Datos;
+﻿using CRUD_PracticaProf.Dapper.ManejadorTipos;
+using CRUD_PracticaProf.Datos;
 using CRUD_PracticaProf.Datos.Repositorio;
+using Dapper;
 using MySql.Data.MySqlClient;
 
 
@@ -33,6 +35,9 @@ builder.Services.AddSwaggerGen();
 //Testing
 var MySQLConfig = new MySQLConfig(builder.Configuration.GetConnectionString("MySqlConnection"));
 builder.Services.AddSingleton(MySQLConfig);
+
+SqlMapper.AddTypeHandler(new Fecha());
+SqlMapper.AddTypeHandler(new Hora());
 
 //Dev
 //builder.Services.AddSingleton(new MySqlConnection(builder.Configuration.GetConnectionString("MYSqlConnection")
