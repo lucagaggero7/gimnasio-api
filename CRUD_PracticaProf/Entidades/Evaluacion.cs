@@ -14,11 +14,10 @@ namespace CRUD_PracticaProf.Entidades
         public string Tipo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La fecha es obligatoria")]
-        public DateTime Fecha { get; set; }
+        public DateOnly Fecha { get; set; }
 
         [Required(ErrorMessage = "La Hora es obligatoria")]
-        [StringLength(45, ErrorMessage = "La Hora no puede exceder los 45 caracteres")]
-        public string Hora { get; set; } = string.Empty;
+        public TimeOnly Hora { get; set; }
 
         // Llave foránea a Clientes
         [Required(ErrorMessage = "El ID del cliente es obligatorio")]

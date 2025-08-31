@@ -18,9 +18,9 @@ namespace CRUD_PracticaProf.Modelos
         public string Estado { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La fecha de inicio es obligatoria")]
-        public DateTime FechaInicio { get; set; }
+        public DateOnly FechaInicio { get; set; }
 
-        public DateTime FechaVencimiento { get; set; } // Puede ser nulo
+        public DateOnly FechaVencimiento { get; set; } // Puede ser nulo
 
         public long ContactoEmergencia { get; set; } // Puede ser nulo
 

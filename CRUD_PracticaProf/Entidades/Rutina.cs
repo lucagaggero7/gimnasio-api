@@ -20,7 +20,7 @@ namespace CRUD_PracticaProf.Modelos
             public string Nombre { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "La fecha de inicio es obligatoria")]
-            public DateTime FechaInicio { get; set; }
+            public DateOnly FechaInicio { get; set; }
 
             [Required(ErrorMessage = "La duración es obligatoria")]
             [StringLength(45, ErrorMessage = "La duración no puede exceder los 45 caracteres")]

@@ -12,7 +12,7 @@ namespace CRUD_PracticaProf.Modelos
         public int Id { get; set; }
         public long Monto { get; set; }
 
-        public DateTime Fecha { get; set; }
+        public DateOnly Fecha { get; set; }
 
         public int FkIdFormaPago { get; set; }
         public int FkIdMembresia { get; set; }
