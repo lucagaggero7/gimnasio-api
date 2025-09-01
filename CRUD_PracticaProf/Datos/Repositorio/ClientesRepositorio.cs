@@ -28,8 +28,17 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<Cliente>> GetAll()
         {
             var db = dbConnection();
-            
-            var sql = @"SELECT * FROM clientes";
+
+            var sql = @"SELECT 
+               id,
+               nombre,
+               apellido,
+               dni,
+               email,
+               telefono,
+               direccion,
+               fecha_nacimiento AS FechaNacimiento
+            FROM clientes";
 
             return await  db.QueryAsync<Cliente>(sql, new { });
         }
