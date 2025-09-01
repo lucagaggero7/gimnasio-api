@@ -20,6 +20,11 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
+
+        /// <summary>
+        /// AAAAAAAAAAAAAAAAA
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<Evaluacion>> GetAll()
         {
             using var db = DbConnection();
