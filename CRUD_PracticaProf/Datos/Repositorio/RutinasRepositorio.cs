@@ -40,7 +40,14 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<Rutina> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM rutinas WHERE id = @id";
+            var sql = @"SELECT id AS Id,
+                        nombre AS Nombre,
+                        fecha_inicio AS FechaInicio,
+                        duracion AS Duracion, 
+                        objetivo AS Objetivo,
+                        frecuencia_sem AS FrecuenciaSem,
+                        fk_id_tipo_rutina AS FkIdTipoRutina
+                        FROM rutinas WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<Rutina>(sql, new { Id = id });
         }
 
