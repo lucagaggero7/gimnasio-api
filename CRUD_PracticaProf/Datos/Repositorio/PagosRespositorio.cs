@@ -27,7 +27,13 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<Pago>> GetAll()
         {
             using var db = dbConnection();
-            var sql = "SELECT * FROM pagos";
+            var sql = @"SELECT id AS Id,
+                        monto AS Monto,
+                        fecha AS Fecha,
+                        fk_id_forma_pago AS FkIdFormaPago, 
+                        fk_id_membresia AS FkIdMembresia, 
+                        fk_id_cliente AS FkIdCliente
+                        FROM pagos";
             return await db.QueryAsync<Pago>(sql);
         }
 
