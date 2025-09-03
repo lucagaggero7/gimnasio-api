@@ -17,10 +17,7 @@ namespace CRUD_PracticaProf.Controllers
             _clienteRepositorio = clienteRepositorio;
         }
 
-        /// <summary>
-        /// Obtiene todos los clientes registrados.
-        /// </summary>
-        /// <returns>Lista de clientes</returns>
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

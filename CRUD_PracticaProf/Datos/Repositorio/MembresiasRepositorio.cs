@@ -41,16 +41,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<Membresia> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = @"SELECT id AS Id,
-                        estado AS Estado,
-                        fecha_inicio AS FechaInicio,
-                        fecha_vencimiento AS FechaVencimiento,
-                        contacto_emergencia AS ContactoEmergencia,
-                        nombre_contacto AS NombreContacto,
-                        fk_id_cliente AS FkIdCliente, 
-                        fk_id_tipo_membresia AS FkIdTipoMembresia, 
-                        fk_id_rutina AS FkIdRutina
-                        FROM membresias WHERE id = @id";
+            var sql = "SELECT * FROM membresias WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<Membresia>(sql, new { Id = id });
         }
 

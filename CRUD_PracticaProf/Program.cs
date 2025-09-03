@@ -3,7 +3,6 @@ using CRUD_PracticaProf.Dapper.ManejadorTipos;
 using CRUD_PracticaProf.Datos;
 using CRUD_PracticaProf.Datos.Repositorio;
 using Dapper;
-using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 using System.Text.Json.Serialization;
 
@@ -36,15 +35,7 @@ builder.Services.AddControllers()
 
 //builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gym API", Version = "v1" });
-
-    // Incluye los comentarios XML
-    var xmlFile = "GymApi.xml"; // <-- nombre de tu archivo XML
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
-});
+builder.Services.AddSwaggerGen();
 
 
 
