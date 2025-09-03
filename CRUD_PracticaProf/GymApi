@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CRUD_PracticaProf</name>
+    </assembly>
+    <members>
+        <member name="F:CRUD_PracticaProf.Controllers.EjerciciosController._ejercicioRepositorio">
+            
+        </member>
+        <member name="M:CRUD_PracticaProf.Datos.Repositorio.EvaluacionesRepositorio.GetAll">
+            <summary>
+            AAAAAAAAAAAAAAAAA
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CRUD_PracticaProf.Modelos.Cliente">
+            <summary>
+            Representa un cliente.
+            Todas las propiedades JSON se serializan en camelCase.
+            </summary>
+        </member>
+    </members>
+</doc>

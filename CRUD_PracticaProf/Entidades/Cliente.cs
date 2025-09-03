@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Modelos
 {
+    /// <summary>
+    /// Representa un cliente.
+    /// Todas las propiedades JSON se serializan en camelCase.
+    /// </summary>
     public class Cliente
     {
         public int Id { get; set; }
