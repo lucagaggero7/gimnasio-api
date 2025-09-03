@@ -55,7 +55,16 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"SELECT * FROM clientes WHERE id = @id";
+            var sql = @"SELECT 
+               id,
+               nombre,
+               apellido,
+               dni,
+               email,
+               telefono,
+               direccion,
+               fecha_nacimiento AS FechaNacimiento
+               FROM clientes WHERE id = @id";
 
             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
         }

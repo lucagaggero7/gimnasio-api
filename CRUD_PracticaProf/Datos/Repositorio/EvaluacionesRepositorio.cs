@@ -29,13 +29,12 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         {
             using var db = DbConnection();
 
-            var sql = @"
-                 SELECT 
-                 e.id, e.fecha, e.hora, e.fk_id_cliente,
-                 c.id, c.nombre, c.apellido
-                 FROM evaluaciones e
-                 INNER JOIN clientes c ON e.fk_id_cliente = c.id;
-                    ";
+            var sql = @"SELECT 
+                        e.id AS Id, e.tipo AS Tipo, e.fecha AS Fecha, e.hora AS Hora, e.fk_id_cliente AS FkIdCliente,
+                         c.id AS Id, c.nombre AS Nombre, c.apellido AS Apellido
+                        FROM evaluaciones e
+                        INNER JOIN clientes c ON e.fk_id_cliente = c.id";
+
 
             var evaluaciones = await db.QueryAsync<Evaluacion, ClienteMostrarDTO, Evaluacion>(
                 sql,
@@ -44,7 +43,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                     evaluacion.Cliente = cliente;
                     return evaluacion;
                 },
-                splitOn: "id" 
+                splitOn: "Id"
             );
 
             return evaluaciones;
@@ -53,8 +52,25 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<Evaluacion> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM evaluaciones WHERE id = @id";
-            return await db.QueryFirstOrDefaultAsync<Evaluacion>(sql, new { Id = id });
+            var sql = @"SELECT 
+                        e.id AS Id, e.tipo AS Tipo, e.fecha AS Fecha, e.hora AS Hora, e.fk_id_cliente AS FkIdCliente,
+                         c.id AS Id, c.nombre AS Nombre, c.apellido AS Apellido
+                        FROM evaluaciones e
+                        INNER JOIN clientes c ON e.fk_id_cliente = c.id
+                        WHERE e.id = @id";
+
+            var evaluacion = await db.QueryAsync<Evaluacion, ClienteMostrarDTO, Evaluacion>(
+                    sql,
+                    (evaluacion, cliente) =>
+                    {
+                         evaluacion.Cliente = cliente;
+                          return evaluacion;
+                     },
+                         new { id },
+                     splitOn: "Id"
+                    );
+
+            return evaluacion.FirstOrDefault();
         }
 
         public async Task<bool> Create(Evaluacion evaluacion)
