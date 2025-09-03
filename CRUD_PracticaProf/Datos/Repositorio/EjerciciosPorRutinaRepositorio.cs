@@ -22,14 +22,17 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         public async Task<IEnumerable<EjercicioPorRutina>> GetAll()
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM ejercicios_por_rutina";
+            var sql = @"SELECT id AS Id,
+                        fk_id_rutina AS FkIdRutina,
+                        fK_id_ejercicio AS FkIdEjercicio
+                       FROM ejercicios_por_rutina";
             return await db.QueryAsync<EjercicioPorRutina>(sql);
         }
 
         public async Task<EjercicioPorRutina> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = "SELECT * FROM ejercicios_por_rutina WHERE id = @id";
+            var sql = @"SELECT * FROM ejercicios_por_rutina WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<EjercicioPorRutina>(sql, new { Id = id });
         }
 
