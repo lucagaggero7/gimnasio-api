@@ -32,7 +32,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             var sql = @"
                  SELECT 
                  e.id, e.fecha, e.hora, e.fk_id_cliente,
-                 c.id, c.nombre
+                 c.id, c.nombre, c.apellido
                  FROM evaluaciones e
                  INNER JOIN clientes c ON e.fk_id_cliente = c.id;
                     ";
