@@ -8,13 +8,18 @@ using System.Threading.Tasks;
 
 namespace CRUD_PracticaProf.Modelos
 {
+    /// <summary>
+    /// Representa una forma de pago del sistema.
+    /// Se serializa en camelCase.
+    /// </summary>
     public class FormaPago
     {
         [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre de la forma de pago es obligatorio")]
-        public string Nombre { get; set; } = string.Empty; 
+        [StringLength(45, ErrorMessage = "La forma de pago no puede exceder los 45 caracteres")]
+        public string Nombre { get; set; } 
 
     }
 }

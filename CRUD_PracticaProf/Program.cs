@@ -46,8 +46,6 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
-
-
 //Testing
 var MySQLConfig = new MySQLConfig(builder.Configuration.GetConnectionString("MySqlConnection"));
 builder.Services.AddSingleton(MySQLConfig);
@@ -70,10 +68,7 @@ builder.Services.AddScoped<IEvaluacionesRepositorio, EvaluacionesRepositorio>();
 builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
 builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>(); 
 
-
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 //app.MapOpenApi();
