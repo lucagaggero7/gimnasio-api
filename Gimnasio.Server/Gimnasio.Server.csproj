@@ -4,8 +4,10 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\Stefano\Desktop\Files\ITSC_3_ANIO\Practica Profesionalizante II\CRUD_PracticaProf\CRUD_PracticaProf\bin\Debug\net9.0\GymApi.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\net9.0\Gimnasio.Server.xml</DocumentationFile>
+    <AssemblyName>Gimnasio.Server</AssemblyName>
+    <RootNamespace>Gimnasio.Server</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

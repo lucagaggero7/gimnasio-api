@@ -38,10 +38,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gym API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gimnasio Server", Version = "v1" });
 
     // Incluye los comentarios XML
-    var xmlFile = "GymApi.xml"; // <-- nombre de tu archivo XML
+    var xmlFile = "Gimnasio.Server.xml"; // <-- nombre de tu archivo XML
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
