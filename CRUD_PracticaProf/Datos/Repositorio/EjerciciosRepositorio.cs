@@ -1,12 +1,8 @@
-
-﻿using CRUD_PracticaProf.Entidades;
+using CRUD_PracticaProf.Entidades;
 using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using static CRUD_PracticaProf.Datos.Repositorio.EjerciciosRepositorio;
-﻿using CRUD_PracticaProf.Modelos;
-using Dapper;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
