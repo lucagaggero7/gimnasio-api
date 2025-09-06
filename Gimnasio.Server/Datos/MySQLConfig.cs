@@ -13,6 +13,5 @@ namespace CRUD_PracticaProf.Datos
         {
             ConnectionString = connectionString;
         }
-     
     }
 }
