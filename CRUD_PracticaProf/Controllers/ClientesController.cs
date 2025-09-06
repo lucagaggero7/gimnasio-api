@@ -18,9 +18,14 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         /// <summary>
-        /// Obtiene todos los clientes registrados.
+        /// Obtiene todos los clientes registrados en el sistema.
         /// </summary>
-        /// <returns>Lista de clientes</returns>
+        /// <remarks>
+        /// Devuelve una lista completa con los datos de los clientes.
+        /// </remarks>
+        /// <returns>
+        /// Respuesta HTTP 200 con la lista de clientes.
+        /// </returns>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -28,6 +33,15 @@ namespace CRUD_PracticaProf.Controllers
 
         }
 
+        /// <summary>
+        /// Obtiene todos los clientes en formato DTO.
+        /// </summary>
+        /// <remarks>
+        /// Se devuelve una lista simplificada de clientes, con campos seleccionados.
+        /// </remarks>
+        /// <returns>
+        /// Respuesta HTTP 200 con la lista de clientes DTO.
+        /// </returns>
         [HttpGet("mostrar")]
         public async Task<IActionResult> GetAllDTO()
         {
@@ -35,6 +49,15 @@ namespace CRUD_PracticaProf.Controllers
             return Ok(clientes);
         }
 
+
+        /// <summary>
+        /// Busca un cliente por su identificador.
+        /// </summary>
+        /// <param name="id">Id del cliente a buscar.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con el cliente encontrado,  
+        /// o HTTP 404 si no existe un cliente con ese Id.
+        /// </returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -50,7 +73,14 @@ namespace CRUD_PracticaProf.Controllers
             return Ok(cliente);
         }
 
-
+        /// <summary>
+        /// Registra un nuevo cliente en el sistema.
+        /// </summary>
+        /// <param name="cliente">Objeto cliente con la información a crear.</param>
+        /// <returns>
+        /// Respuesta HTTP 201 con el cliente creado,  
+        /// o HTTP 400 si el modelo no es válido.
+        /// </returns>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Cliente cliente)
         {
@@ -69,6 +99,16 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
+        /// <summary>
+        /// Actualiza los datos de un cliente existente.
+        /// </summary>
+        /// <param name="id">Id del cliente a actualizar (en la URL).</param>
+        /// <param name="cliente">Objeto cliente con los nuevos datos.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con un mensaje de éxito,  
+        /// HTTP 400 si hay inconsistencias en los datos,  
+        /// o HTTP 404 si el cliente no existe.
+        /// </returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Cliente cliente)
         {
@@ -92,7 +132,14 @@ namespace CRUD_PracticaProf.Controllers
             return Ok(new { mensaje = "Cliente actualizado con éxito" });
         }
 
-
+        /// <summary>
+        /// Elimina un cliente por su identificador.
+        /// </summary>
+        /// <param name="id">Id del cliente a eliminar.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con un mensaje de éxito,  
+        /// o HTTP 404 si el cliente no existe.
+        /// </returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
