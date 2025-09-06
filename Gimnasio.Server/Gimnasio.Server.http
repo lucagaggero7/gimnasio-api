@@ -1,0 +1,6 @@
+@Gimnasio.Server_HostAddress = https://localhost:7112
+
+GET {{Gimnasio.Server_HostAddress}}/clientes/
+Accept: application/json
+
+###
