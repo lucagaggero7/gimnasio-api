@@ -10,10 +10,10 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         Task<Ejercicio> GetById(int id);
 
-        Task<bool> Create(Ejercicio ejercicio);
+        Task<Ejercicio> Create(Ejercicio ejercicio);
 
         Task<bool> Update(Ejercicio ejercicio);
 
-        Task<bool> Delete(Ejercicio ejercicio);
+        Task<bool> Delete(int  id);
     }
 }

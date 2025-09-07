@@ -20,6 +20,6 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         Task<bool> Update(Cliente cliente);
 
-        Task<bool> Delete(Cliente cliente);
+        Task<bool> Delete(int id);
     }
 }
