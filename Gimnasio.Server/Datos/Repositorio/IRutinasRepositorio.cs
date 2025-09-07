@@ -12,7 +12,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     {
         Task<IEnumerable<Rutina>> GetAll();
         Task<Rutina> GetById(int id);
-        Task<bool> Create(Rutina rutina);
+        Task<Rutina> Create(Rutina rutina);
         Task<bool> Update(Rutina rutina);
         Task<bool> Delete(int id);
     }

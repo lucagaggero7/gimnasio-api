@@ -13,7 +13,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         Task<Pago> GetById(int id);
 
-        Task<bool> Create(Pago pago);
+        Task<Pago> Create(Pago pago);
 
         Task<bool> Update(Pago pago);
 

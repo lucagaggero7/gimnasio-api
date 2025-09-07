@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     {
         Task<IEnumerable<TipoRutina>> GetAll();
         Task<TipoRutina> GetById(int id);
-        Task<bool> Create(TipoRutina tipoRutina);
+        Task<TipoRutina> Create(TipoRutina tipoRutina);
         Task<bool> Update(TipoRutina tipoRutina);
         Task<bool> Delete(int id);
     }
