@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     {
         Task<IEnumerable<Membresia>> GetAll();
         Task<Membresia> GetById(int id);
-        Task<bool> Create(Membresia membresia);
+        Task<Membresia> Create(Membresia membresia);
         Task<bool> Update(Membresia membresia);
         Task<bool> Delete(int id);
     }

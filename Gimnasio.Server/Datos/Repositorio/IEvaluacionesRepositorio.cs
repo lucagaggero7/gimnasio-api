@@ -7,7 +7,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     {
         Task<IEnumerable<Evaluacion>> GetAll();
         Task<Evaluacion> GetById(int id);
-        Task<bool> Create(Evaluacion evaluacion);
+        Task<Evaluacion> Create(Evaluacion evaluacion);
         Task<bool> Update(Evaluacion evaluacion);
         Task<bool> Delete(int id);
     }
