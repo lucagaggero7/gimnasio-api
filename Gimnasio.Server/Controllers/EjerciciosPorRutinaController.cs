@@ -34,12 +34,13 @@ namespace CRUD_PracticaProf.Controllers
         }
 
         /// <summary>
-        /// Busca un ejercicios por rutina por su identificador.
+        /// Busca un ejercicio por rutina por su identificador.
         /// </summary>
-        /// <param name="id">Id del ejercicios por rutina a buscar.</param>
+        /// <param name="id">Id del ejercicio por rutina a buscar.</param>
         /// <returns>
-        /// Respuesta HTTP 200 con el ejercicios por rutina encontrado,  
+        /// Respuesta HTTP 200 con el ejercicio por rutina encontrado,  
         /// o HTTP 404 si no existe un ejercicio por rutina con ese Id.
+        /// /// </returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
