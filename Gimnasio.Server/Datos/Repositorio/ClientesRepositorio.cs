@@ -69,14 +69,15 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(Cliente cliente)
+        public async Task<Cliente> Create(Cliente cliente)
         {
             var db = dbConnection();
 
             var sql = @"INSERT INTO clientes (nombre, apellido, dni, email, telefono, direccion, fecha_nacimiento)
-                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento) ";
+                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento);
+                         SELECT LAST_INSERT_ID(); ";
 
-            var result = await db.ExecuteAsync(sql, new
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 nombre = cliente.Nombre,
                 apellido = cliente.Apellido,
@@ -87,7 +88,8 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 fecha_nacimiento = cliente.FechaNacimiento
             });
 
-            return result > 0; // Returns true if one or more rows were affected
+            cliente.Id = id;
+            return cliente; 
         }
 
         public async Task<bool> Update(Cliente cliente)
