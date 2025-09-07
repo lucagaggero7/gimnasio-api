@@ -121,13 +121,13 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return result > 0; // Returns true if one or more rows were affected
         }
 
-        public async Task<bool> Delete(Cliente cliente)
+        public async Task<bool> Delete(int id)
         {
             var db = dbConnection();
 
             var sql = @"DELETE FROM clientes WHERE id = @id";
 
-            var result = await db.ExecuteAsync(sql, new { Id = cliente.Id });
+            var result = await db.ExecuteAsync(sql, new { Id = id });
 
             return result > 0; // Returns true if one or more rows were affected
         }

@@ -2,13 +2,14 @@ using CRUD_PracticaProf.Entidades;
 using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
-using static CRUD_PracticaProf.Datos.Repositorio.EjerciciosRepositorio;
+using MySqlX.XDevAPI;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CRUD_PracticaProf.Datos.Repositorio.EjerciciosRepositorio;
 
 namespace CRUD_PracticaProf.Datos.Repositorio
 {
@@ -46,14 +47,15 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 return await db.QueryFirstOrDefaultAsync<Ejercicio>(sql, new { Id = id });
             }
 
-            public async Task<bool> Create(Ejercicio ejercicio)
+            public async Task<Ejercicio> Create(Ejercicio ejercicio)
             {
                 var db = dbConnection();
 
                 var sql = @"INSERT INTO ejercicios (nombre, series, repeticiones, notas)
-                        VALUES (@nombre, @series, @repeticiones, @notas) ";
+                        VALUES (@nombre, @series, @repeticiones, @notas);
+                        SELECT LAST_INSERT_ID(); ";
 
-                var result = await db.ExecuteAsync(sql, new
+                var id = await db.ExecuteScalarAsync<int>(sql, new
                 {
                     nombre = ejercicio.Nombre,
                     series = ejercicio.Series,
@@ -61,7 +63,8 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                     notas = ejercicio.Notas
                 });
 
-                return result > 0; // Returns true if one or more rows were affected
+                ejercicio.Id = id;
+                 return ejercicio;
             }
 
             public async Task<bool> Update(Ejercicio ejercicio)
@@ -88,13 +91,13 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 return result > 0; // Returns true if one or more rows were affected
             }
 
-            public async Task<bool> Delete(Ejercicio ejercicio)
+            public async Task<bool> Delete(int id)
             {
                 var db = dbConnection();
 
                 var sql = @"DELETE FROM ejercicios WHERE id = @id";
 
-                var result = await db.ExecuteAsync(sql, new { Id = ejercicio.Id });
+                var result = await db.ExecuteAsync(sql, new { Id = id });
 
                 return result > 0; // Returns true if one or more rows were affected
             }

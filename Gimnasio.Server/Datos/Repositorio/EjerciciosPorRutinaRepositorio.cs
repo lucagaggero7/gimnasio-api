@@ -39,17 +39,22 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<EjercicioPorRutina>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(EjercicioPorRutina ejercicioPorRutina)
+        public async Task<EjercicioPorRutina> Create(EjercicioPorRutina ejercicioPorRutina)
         {
             using var db = DbConnection();
             var sql = @"INSERT INTO ejercicios_por_rutina (fk_id_rutina, fk_id_ejercicio)
-                        VALUES (@fk_id_rutina, @fk_id_ejercicio)";
-            var result = await db.ExecuteAsync(sql, new
+                        VALUES (@fk_id_rutina, @fk_id_ejercicio);
+                        SELECT LAST_INSERT_ID(); ";
+
+
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 fk_id_rutina = ejercicioPorRutina.FkIdRutina,
                 fk_id_ejercicio = ejercicioPorRutina.FkIdEjercicio
             });
-            return result > 0;
+
+            ejercicioPorRutina.Id = id;
+            return ejercicioPorRutina;
         }
 
         public async Task<bool> Update(EjercicioPorRutina ejercicioPorRutina)
