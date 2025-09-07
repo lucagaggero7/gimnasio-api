@@ -35,15 +35,19 @@ namespace CRUD_PracticaProf.Datos.Repositorio
         return await db.QueryFirstOrDefaultAsync<TipoRutina>(sql, new { Id = id });
     }
 
-    public async Task<bool> Create(TipoRutina tipoRutina)
+    public async Task<TipoRutina> Create(TipoRutina tipoRutina)
     {
         using var db = DbConnection();
-        var sql = "INSERT INTO tipos_rutina (nombre) VALUES (@nombre)";
-            var result = await db.ExecuteAsync(sql, new
-            {
-                nombre = tipoRutina.Nombre
-            });
-            return result > 0;
+        var sql = @"INSERT INTO tipos_rutina (nombre) VALUES (@nombre);
+                  SELECT LAST_INSERT_ID(); ";
+
+        var id = await db.ExecuteScalarAsync<int>(sql, new
+        {
+            nombre = tipoRutina.Nombre
+        });
+
+        tipoRutina.Id = id;
+        return tipoRutina;
     }
 
     public async Task<bool> Update(TipoRutina tipoRutina)

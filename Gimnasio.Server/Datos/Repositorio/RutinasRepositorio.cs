@@ -51,13 +51,14 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<Rutina>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(Rutina rutina)
+        public async Task<Rutina> Create(Rutina rutina)
         {
             using var db = DbConnection();
             var sql = @"INSERT INTO rutinas (nombre, fecha_inicio, duracion, frecuencia_sem, objetivo, fk_id_tipo_rutina)
-                        VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_tipo_rutina)";
+                        VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_tipo_rutina);
+                        SELECT LAST_INSERT_ID(); ";
 
-            var result = await db.ExecuteAsync(sql, new
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 nombre = rutina.Nombre,
                 fecha_inicio = rutina.FechaInicio,
@@ -66,7 +67,9 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 objetivo = rutina.Objetivo,
                 fk_id_tipo_rutina = rutina.FkIdTipoRutina
             });
-            return result > 0;
+
+            rutina.Id = id;
+            return rutina;
         }
 
         public async Task<bool> Update(Rutina rutina)

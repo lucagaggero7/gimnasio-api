@@ -50,13 +50,14 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<Pago>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(Pago pago)
+        public async Task<Pago> Create(Pago pago)
         {
             using var db = dbConnection();
             var sql = @"INSERT INTO pagos (monto, fecha, fk_id_forma_pago, fk_id_membresia, fk_id_cliente)
-                        VALUES (@monto, @fecha, @fk_id_forma_pago, @fk_id_membresia, @fk_id_cliente)";
+                        VALUES (@monto, @fecha, @fk_id_forma_pago, @fk_id_membresia, @fk_id_cliente);
+                        SELECT LAST_INSERT_ID(); ";
 
-            var result = await db.ExecuteAsync(sql, new
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 monto = pago.Monto,
                 fecha = pago.Fecha,
@@ -64,7 +65,9 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 fk_id_membresia = pago.FkIdMembresia,
                 fk_id_cliente = pago.FkIdCliente
             });
-            return result > 0;
+
+            pago.Id = id;
+            return pago;
         }
 
         public async Task<bool> Update(Pago pago)
