@@ -44,10 +44,12 @@ namespace CRUD_PracticaProf.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var ejercicioPorRutina = await _ejerciciosPorRutinaRepositorio.GetById(id);
+
             if (ejercicioPorRutina == null)
             {
-                return NotFound($"No existe un registro de ejercicio por rutina con ID {id}");
+                return NotFound(new { mensaje = $"No existe un registro de ejercicio por rutina con ID {id}" });
             }
+
             return Ok(ejercicioPorRutina);
         }
 
@@ -62,10 +64,18 @@ namespace CRUD_PracticaProf.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] EjercicioPorRutina ejercicioPorRutina)
         {
-            if (ejercicioPorRutina == null) return BadRequest("El objeto de ejercicio por rutina no puede ser nulo.");
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (ejercicioPorRutina == null)
+            {
+                return BadRequest(new { mensaje = $"El objeto de ejercicio por rutina no puede ser nulo." });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
+            }
 
             var created = await _ejerciciosPorRutinaRepositorio.Create(ejercicioPorRutina);
+
             return Created("created", created);
         }
 

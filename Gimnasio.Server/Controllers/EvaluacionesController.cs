@@ -69,9 +69,10 @@ namespace CRUD_PracticaProf.Controllers
             {
                 return BadRequest(new { mensaje = $"La evaluacion no puede ser nula." });
             }
+
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
             }
 
             var created = await _evaluacionesRepositorio.Create(evaluacion);
