@@ -16,7 +16,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         Task<Cliente> GetById(int id);
 
-        Task<bool> Create(Cliente cliente);
+        Task<Cliente> Create(Cliente cliente);
 
         Task<bool> Update(Cliente cliente);
 
