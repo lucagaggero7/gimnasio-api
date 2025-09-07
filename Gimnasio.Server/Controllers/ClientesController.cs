@@ -67,7 +67,7 @@ namespace CRUD_PracticaProf.Controllers
 
             if (cliente == null)
             {
-                return NotFound($"No existen clientes con ID {id}");
+                return NotFound(new { mensaje = $"No existen clientes con ID {id}" });
             }
 
             return Ok(cliente);
@@ -86,7 +86,7 @@ namespace CRUD_PracticaProf.Controllers
         {
             if (cliente == null)
             {
-                return BadRequest("El cliente no puede ser nulo.");
+                return BadRequest(new { mensaje = $"El cliente no puede ser nulo." });
             }
 
             if (!ModelState.IsValid)
@@ -96,7 +96,8 @@ namespace CRUD_PracticaProf.Controllers
 
             var created = await _clienteRepositorio.Create(cliente);
 
-            return Created("created", created);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+
         }
 
         /// <summary>
@@ -113,21 +114,21 @@ namespace CRUD_PracticaProf.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] Cliente cliente)
         {
             if (cliente == null)
-                return BadRequest("El cliente no puede ser nulo.");
+                return BadRequest(new { mensaje = $"El cliente no puede ser nulo." });
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (cliente.Id == 0)
-                return BadRequest("El Id del cliente es obligatorio.");
+                return BadRequest(new { mensaje = $"El Id del cliente es obligatorio." });
 
             if (cliente.Id != id)
-                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL."});
 
             var filasAfectadas = await _clienteRepositorio.Update(cliente);
 
             if (filasAfectadas == false)
-                return NotFound("Cliente no encontrado.");
+                return NotFound(new { mensaje = $"Cliente no encontrado."});
 
             return Ok(new { mensaje = "Cliente actualizado con éxito" });
         }
@@ -146,7 +147,7 @@ namespace CRUD_PracticaProf.Controllers
             var filasAfectadas = await _clienteRepositorio.Delete(new Cliente { Id = id });
 
             if (filasAfectadas == false)
-                return NotFound("Cliente no encontrado.");
+                return NotFound(new { mensaje = $"Cliente no encontrado."});
 
             return Ok(new { mensaje = "Cliente eliminado con éxito" });
         }
