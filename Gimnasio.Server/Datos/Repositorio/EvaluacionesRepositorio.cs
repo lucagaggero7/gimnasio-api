@@ -20,11 +20,6 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
-
-        /// <summary>
-        /// AAAAAAAAAAAAAAAAA
-        /// </summary>
-        /// <returns></returns>
         public async Task<IEnumerable<Evaluacion>> GetAll()
         {
             using var db = DbConnection();
@@ -73,20 +68,23 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return evaluacion.FirstOrDefault();
         }
 
-        public async Task<bool> Create(Evaluacion evaluacion)
+        public async Task<Evaluacion> Create(Evaluacion evaluacion)
         {
             using var db = DbConnection();
             var sql = @"INSERT INTO evaluaciones (tipo, fecha, hora, fk_id_cliente)
-                 VALUES (@tipo, @fecha, @hora, @fk_id_cliente)";
+                 VALUES (@tipo, @fecha, @hora, @fk_id_cliente);
+                  SELECT LAST_INSERT_ID(); ";
 
-            var result = await db.ExecuteAsync(sql, new
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 tipo = evaluacion.Tipo,
                 fecha = evaluacion.Fecha,
                 hora = evaluacion.Hora,
                 fk_id_cliente = evaluacion.FkIdCliente
             });
-            return result > 0;
+
+            evaluacion.Id = id;
+            return evaluacion;
         }
 
         public async Task<bool> Update(Evaluacion evaluacion)

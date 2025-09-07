@@ -54,13 +54,14 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<Membresia>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(Membresia membresia)
+        public async Task<Membresia> Create(Membresia membresia)
         {
             using var db = DbConnection();
             var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, nombre_contacto, fk_id_cliente, fk_id_tipo_membresia, fk_id_rutina)
-                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @nombre_contacto, @fk_id_cliente, @fk_id_tipo_membresia, @fk_id_rutina)";
+                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @nombre_contacto, @fk_id_cliente, @fk_id_tipo_membresia, @fk_id_rutina);
+                        SELECT LAST_INSERT_ID(); ";
 
-            var result = await db.ExecuteAsync(sql, new
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 estado = membresia.Estado,
                 fecha_inicio = membresia.FechaInicio,
@@ -71,7 +72,9 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 fk_id_tipo_membresia = membresia.FkIdTipoMembresia,
                 fk_id_rutina = membresia.FkIdRutina
             });
-            return result > 0;
+
+            membresia.Id = id;
+            return membresia;
         }
 
         public async Task<bool> Update(Membresia membresia)

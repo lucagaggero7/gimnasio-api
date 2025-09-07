@@ -1,4 +1,5 @@
-﻿using CRUD_PracticaProf.Modelos;
+﻿using CRUD_PracticaProf.Entidades;
+using CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
@@ -33,15 +34,20 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<FormaPago>(sql, new { Id = id });
         }
 
-        public async Task<bool> Create(FormaPago formaPago)
+        public async Task<FormaPago> Create(FormaPago formaPago)
         {
             using var db = DbConnection();
-            var sql = "INSERT INTO formas_pago (nombre) VALUES (@nombre)";
-            var result = await db.ExecuteAsync(sql, new
+            var sql = @"INSERT INTO formas_pago (nombre) VALUES (@nombre);
+                         SELECT LAST_INSERT_ID(); ";
+
+
+            var id = await db.ExecuteScalarAsync<int>(sql, new
             {
                 nombre = formaPago.Nombre
             });
-            return result > 0;
+
+            formaPago.Id = id;
+            return formaPago;
         }
 
         public async Task<bool> Update(FormaPago formaPago)
