@@ -1,4 +1,5 @@
 ﻿using CRUD_PracticaProf.Datos.Repositorio;
+using CRUD_PracticaProf.Entidades;
 using CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,28 @@ namespace CRUD_PracticaProf.Controllers
             _ejerciciosPorRutinaRepositorio = ejerciciosPorRutinaRepositorio;
         }
 
+        /// <summary>
+        /// Obtiene todos los ejercicios por rutina registrados en el sistema.
+        /// </summary>
+        /// <remarks>
+        /// Devuelve una lista completa con los datos de los ejercicios por rutina.
+        /// </remarks>
+        /// <returns>
+        /// Respuesta HTTP 200 con la lista de ejercicios por rutina.
+        /// </returns>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _ejerciciosPorRutinaRepositorio.GetAll());
         }
 
+        /// <summary>
+        /// Busca un ejercicios por rutina por su identificador.
+        /// </summary>
+        /// <param name="id">Id del ejercicios por rutina a buscar.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con el ejercicios por rutina encontrado,  
+        /// o HTTP 404 si no existe un ejercicio por rutina con ese Id.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -34,6 +51,14 @@ namespace CRUD_PracticaProf.Controllers
             return Ok(ejercicioPorRutina);
         }
 
+        /// <summary>
+        /// Registra un nuevo ejercicio por rutina en el sistema.
+        /// </summary>
+        /// <param name="ejercicioPorRutina">Objeto ejercicio por rutina con la información a crear.</param>
+        /// <returns>
+        /// Respuesta HTTP 201 con el ejercicio por rutina creado,  
+        /// o HTTP 400 si el modelo no es válido.
+        /// </returns>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] EjercicioPorRutina ejercicioPorRutina)
         {
@@ -44,47 +69,68 @@ namespace CRUD_PracticaProf.Controllers
             return Created("created", created);
         }
 
+        /// <summary>
+        /// Actualiza los datos de un ejercicio por rutina existente.
+        /// </summary>
+        /// <param name="id">Id del ejercicio por rutina a actualizar (en la URL).</param>
+        /// <param name="ejercicioPorRutina">Objeto ejercicio por rutina con los nuevos datos.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con un mensaje de éxito,  
+        /// HTTP 400 si hay inconsistencias en los datos,  
+        /// o HTTP 404 si el ejercicio por rutina no existe.
+        /// </returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] EjercicioPorRutina ejercicioPorRutina)
         {
-            if (ejercicioPorRutina == null) return BadRequest("El objeto de ejercicio por rutina no puede ser nulo.");
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var existing = await _ejerciciosPorRutinaRepositorio.GetById(ejercicioPorRutina.Id);
-            if (existing == null)
+            if (ejercicioPorRutina == null)
             {
-                return NotFound($"No se encontró el registro con ID {ejercicioPorRutina.Id} para actualizar.");
+                return BadRequest(new { mensaje = $"El ejercicio por rutina no puede ser nulo." });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
             }
 
             if (ejercicioPorRutina.Id == 0)
-                return BadRequest("El Id del ejercicio por rutina es obligatorio.");
+            {
+                return BadRequest(new { mensaje = $"El Id del ejercicio por rutina es obligatorio." });
+            }
 
             if (ejercicioPorRutina.Id != id)
-                return BadRequest("El Id del body debe coincidir con el Id de la URL.");
+            {
+                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL." });
+            }
 
             var filasAfectadas = await _ejerciciosPorRutinaRepositorio.Update(ejercicioPorRutina);
 
             if (filasAfectadas == false)
-                return NotFound("Ejercicio por rutina no encontrado.");
+            {
+                return NotFound(new { mensaje = $"Ejercicio por rutina no encontrado." });
+            }
 
-            return Ok(new { mensaje = "Registro de ejercicio por rutina actualizado con éxito" });
+            return Ok(new { mensaje = "Ejercicio por rutina actualizado con exito" });
         }
 
+        /// <summary>
+        /// Elimina un ejercicio por rutina por su identificador.
+        /// </summary>
+        /// <param name="id">Id del ejercicio por rutina a eliminar.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con un mensaje de éxito,  
+        /// o HTTP 404 si el ejercicio por rutina no existe.
+        /// </returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _ejerciciosPorRutinaRepositorio.GetById(id);
-            if (existing == null)
-            {
-                return NotFound($"No se encontró el registro con ID {id} para eliminar.");
-            }
-
             var filasAfectadas = await _ejerciciosPorRutinaRepositorio.Delete(id);
 
             if (filasAfectadas == false)
-                return NotFound("Ejercicio por rutina no encontrado.");
+            {
+                return NotFound(new { mensaje = $"Ejercicio por rutina no encontrado." });
+            }
 
-            return Ok(new { mensaje = "Registro de ejercicio por rutina eliminado con éxito" });
+            return Ok(new { mensaje = $"Registro de ejercicio por rutina eliminado con éxito" });
         }
     }
 }

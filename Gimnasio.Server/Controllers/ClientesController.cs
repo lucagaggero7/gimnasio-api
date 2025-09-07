@@ -49,7 +49,6 @@ namespace CRUD_PracticaProf.Controllers
             return Ok(clientes);
         }
 
-
         /// <summary>
         /// Busca un cliente por su identificador.
         /// </summary>
@@ -61,8 +60,6 @@ namespace CRUD_PracticaProf.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            //return Ok(await _clienteRepositorio.GetById(id));
-
             var cliente = await _clienteRepositorio.GetById(id);
 
             if (cliente == null)
@@ -114,21 +111,36 @@ namespace CRUD_PracticaProf.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] Cliente cliente)
         {
             if (cliente == null)
+            {
                 return BadRequest(new { mensaje = $"El cliente no puede ser nulo." });
+            }
+
+            //var errores = ModelState.Values
+            //    .SelectMany(v => v.Errors)
+            //    .Select(e => e.ErrorMessage)
+            //    .ToList();
 
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
+            }
 
             if (cliente.Id == 0)
+            {
                 return BadRequest(new { mensaje = $"El Id del cliente es obligatorio." });
+            }
 
             if (cliente.Id != id)
-                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL."});
+            {
+                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL." });
+            }
 
             var filasAfectadas = await _clienteRepositorio.Update(cliente);
 
             if (filasAfectadas == false)
-                return NotFound(new { mensaje = $"Cliente no encontrado."});
+            {
+                return NotFound(new { mensaje = $"Cliente no encontrado." });
+            }
 
             return Ok(new { mensaje = "Cliente actualizado con éxito" });
         }
@@ -144,10 +156,12 @@ namespace CRUD_PracticaProf.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var filasAfectadas = await _clienteRepositorio.Delete(new Cliente { Id = id });
+            var filasAfectadas = await _clienteRepositorio.Delete(id);
 
             if (filasAfectadas == false)
-                return NotFound(new { mensaje = $"Cliente no encontrado."});
+            {
+                return NotFound(new { mensaje = $"Cliente no encontrado." });
+            }
 
             return Ok(new { mensaje = "Cliente eliminado con éxito" });
         }
