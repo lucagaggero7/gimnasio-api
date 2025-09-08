@@ -1,8 +1,9 @@
-﻿using CRUD_PracticaProf.Dapper.ConvertirJson;
+﻿
 using CRUD_PracticaProf.Dapper.ManejadorTipos;
 using CRUD_PracticaProf.Datos;
 using CRUD_PracticaProf.Datos.Repositorio;
 using Dapper;
+using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 using System.Text.Json.Serialization;
