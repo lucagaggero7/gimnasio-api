@@ -28,7 +28,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El estado es obligatorio")]
         [StringLength(10, ErrorMessage = "El estado no puede exceder los 10 caracteres")]
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
 
         /// <summary>
         /// Fecha de inicio de la membresia (dd/mm/yyyy). 
@@ -49,7 +49,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El contacto de emergencia es obligatorio")]
         [StringLength(20, ErrorMessage = "El teléfono no puede superar los 20 caracteres.")]
-        public string ContactoEmergencia { get; set; }
+        public string ContactoEmergencia { get; set; } = string.Empty;
 
         /// <summary>
         /// Nombre del contacto de emergencia.
@@ -57,7 +57,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El nombre del contacto de emergencia es obligatorio")]
         [StringLength(30, ErrorMessage = "El nombre del contacto no puede exceder los 30 caracteres")]
-        public string NombreContacto { get; set; }
+        public string NombreContacto { get; set; } = string.Empty;
 
         /// <summary>
         /// Identificador de clave foranea. Obligatorio

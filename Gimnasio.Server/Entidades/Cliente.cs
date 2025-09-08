@@ -27,7 +27,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(50, ErrorMessage = "El nombre no puede superar los 50 caracteres.")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         /// <summary>
         /// Apellido del cliente.
@@ -35,7 +35,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El apellido es obligatorio.")]
         [StringLength(50, ErrorMessage = "El apellido no puede superar los 50 caracteres.")]
-        public string Apellido { get; set; }
+        public string Apellido { get; set; } = string.Empty;
 
         /// <summary>
         /// DNI del cliente.
@@ -43,7 +43,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El DNI es obligatorio.")]
         [Range(1000000, 99999999, ErrorMessage = "El DNI debe tener entre 7 y 8 dígitos.")]
-        public int Dni { get; set; }
+        public int Dni { get; set; } 
 
         /// <summary>
         /// Email del cliente.
@@ -52,7 +52,7 @@ namespace CRUD_PracticaProf.Modelos
         [Required(ErrorMessage = "El email es obligatorio.")]
         [EmailAddress(ErrorMessage = "El formato del email no es válido.")]
         [StringLength(100, ErrorMessage = "El email no puede superar los 100 caracteres.")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// Teléfono del cliente.
@@ -60,7 +60,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El Telefono es obligatorio")]
         [StringLength(20, ErrorMessage = "El teléfono no puede superar los 20 caracteres.")]
-        public string Telefono { get; set; }
+        public string Telefono { get; set; } = string.Empty;
 
         /// <summary>
         /// Dirección del cliente.
@@ -68,7 +68,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "La Direccion es obligatoria")]
         [StringLength(200, ErrorMessage = "La dirección no puede superar los 200 caracteres.")]
-        public string Direccion { get; set; }
+        public string Direccion { get; set; } = string.Empty;
 
         /// <summary>
         /// Fecha de nacimiento del cliente.

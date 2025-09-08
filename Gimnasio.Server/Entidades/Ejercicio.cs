@@ -22,7 +22,7 @@ namespace CRUD_PracticaProf.Entidades
         /// </summary>
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(50, ErrorMessage = "El nombre no puede superar los 50 caracteres.")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         /// <summary>
         /// Cantidad de series.
@@ -30,7 +30,7 @@ namespace CRUD_PracticaProf.Entidades
         /// </summary>
         [Required(ErrorMessage = "La/s serie/s son obligatorias.")]
         [StringLength(50, ErrorMessage = "La/s serie/s no pueden superar los 50 caracteres.")]
-        public string Series { get; set; }
+        public string Series { get; set; } = string.Empty;
 
         /// <summary>
         /// Cantidad de repeticiones.
@@ -38,7 +38,7 @@ namespace CRUD_PracticaProf.Entidades
         /// </summary>
         [Required(ErrorMessage = "La/s repeticion/es son obligatorias.")]
         [StringLength(50, ErrorMessage = "La/s repeticion/es no pueden superar los 50 caracteres.")]
-        public string Repeticiones { get; set; }
+        public string Repeticiones { get; set; } = string.Empty;
 
         /// <summary>
         /// Notas complementarias.

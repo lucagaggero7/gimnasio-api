@@ -27,7 +27,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El nombre de la forma de pago es obligatorio")]
         [StringLength(45, ErrorMessage = "La forma de pago no puede exceder los 45 caracteres")]
-        public string Nombre { get; set; } 
+        public string Nombre { get; set; } = string.Empty;
 
     }
 }

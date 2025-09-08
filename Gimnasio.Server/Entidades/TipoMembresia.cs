@@ -27,7 +27,7 @@ namespace CRUD_PracticaProf.Modelos
         /// </summary>
         [Required(ErrorMessage = "El nombre del tipo de membresía es obligatorio")]
         [StringLength(20, ErrorMessage = "El nombre no puede exceder los 20 caracteres")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
     }
 }
 

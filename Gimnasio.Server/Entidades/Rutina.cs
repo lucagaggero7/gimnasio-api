@@ -30,7 +30,7 @@ namespace CRUD_PracticaProf.Modelos
             /// </summary>
             [Required(ErrorMessage = "El nombre de la rutina es obligatorio")]
             [StringLength(45, ErrorMessage = "El nombre no puede exceder los 45 caracteres")]
-            public string Nombre { get; set; }
+            public string Nombre { get; set; } = string.Empty;
 
             /// <summary>
             /// Fecha de inicio de la rutina (dd/mm/yyyy).
@@ -45,7 +45,7 @@ namespace CRUD_PracticaProf.Modelos
             /// </summary>
             [Required(ErrorMessage = "La duración es obligatoria")]
             [StringLength(45, ErrorMessage = "La duración no puede exceder los 45 caracteres")]
-            public string Duracion { get; set; }
+            public string Duracion { get; set; } = string.Empty;
 
             /// <summary>
             /// Frecuencia semanal de la rutina.
@@ -53,7 +53,7 @@ namespace CRUD_PracticaProf.Modelos
             /// </summary>
             [Required(ErrorMessage = "La frecuencia semanal es obligatoria")]
             [StringLength(45, ErrorMessage = "La frecuencia semanal no puede exceder los 45 caracteres")]
-            public string FrecuenciaSem { get; set; }
+            public string FrecuenciaSem { get; set; } = string.Empty;
 
             /// <summary>
             /// Objetivo de la rutina.
@@ -61,7 +61,7 @@ namespace CRUD_PracticaProf.Modelos
             /// </summary>
             [Required(ErrorMessage = "El objetivo es obligatorio")]
             [StringLength(45, ErrorMessage = "El objetivo no puede exceder los 45 caracteres")]
-            public string Objetivo { get; set; }
+            public string Objetivo { get; set; } = string.Empty;
 
             /// <summary>
             /// Identificador de clave foranea. Obligatorio

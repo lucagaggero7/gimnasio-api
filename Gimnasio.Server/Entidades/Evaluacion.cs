@@ -24,7 +24,7 @@ namespace CRUD_PracticaProf.Entidades
         /// </summary>
         [Required(ErrorMessage = "El Tipo es obligatorio")]
         [StringLength(45, ErrorMessage = "El Tipo no puede exceder los 45 caracteres")]
-        public string Tipo { get; set; }
+        public string Tipo { get; set; } = string.Empty;
 
         /// <summary>
         /// Fecha de la evaluacion (dd/mm/yyyy).
@@ -53,6 +53,6 @@ namespace CRUD_PracticaProf.Entidades
         /// DTO para mostrar al cliente en la evaluacion
         /// Obligatorio
         /// </summary>
-        public ClienteMostrarDTO Cliente { get; set; }
+        public ClienteMostrarDTO Cliente { get; set; } = new ();
     }
 }
