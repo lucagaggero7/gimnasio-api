@@ -1,5 +1,6 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
+using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,20 +82,16 @@ namespace Gimnasio.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Cliente cliente)
         {
-            if (cliente == null)
-            {
-                return BadRequest(new { mensaje = $"El cliente no puede ser nulo." });
-            }
+            var validation = ApiValidaciones.ValidarEntidad(cliente, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
+                return validation;
             }
 
             var created = await _clienteRepositorio.Create(cliente);
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-
         }
 
         /// <summary>
@@ -110,29 +107,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Cliente cliente)
         {
-            if (cliente == null)
-            {
-                return BadRequest(new { mensaje = $"El cliente no puede ser nulo." });
-            }
+            var validation = ApiValidaciones.ValidarEntidadConId(id, cliente, ModelState);
 
-            //var errores = ModelState.Values
-            //    .SelectMany(v => v.Errors)
-            //    .Select(e => e.ErrorMessage)
-            //    .ToList();
-
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
-            }
-
-            if (cliente.Id == 0)
-            {
-                return BadRequest(new { mensaje = $"El Id del cliente es obligatorio." });
-            }
-
-            if (cliente.Id != id)
-            {
-                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL." });
+                return validation;
             }
 
             var filasAfectadas = await _clienteRepositorio.Update(cliente);
@@ -156,6 +135,9 @@ namespace Gimnasio.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            // var validation = ApiValidations.ValidateId(id);
+            // if (validation != null) return validation;
+
             var filasAfectadas = await _clienteRepositorio.Delete(id);
 
             if (filasAfectadas == false)

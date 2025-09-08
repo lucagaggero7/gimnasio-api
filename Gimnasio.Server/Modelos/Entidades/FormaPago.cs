@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Gimnasio.Server.Modelos.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Gimnasio.Server.Modelos.Entidades
 {
@@ -6,7 +7,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa una forma de pago del sistema.
     /// Se serializa en camelCase.
     /// </summary>
-    public class FormaPago
+    public class FormaPago : IHasId
     {
         /// <summary>
         /// Identificador único de la forma de pago.

@@ -1,3 +1,4 @@
+using Gimnasio.Server.Modelos.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Gimnasio.Server.Modelos.Entidades
@@ -6,7 +7,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa un ejercicio del sistema.
     /// Se serializa en camelCase.
     /// </summary>
-    public class Ejercicio
+    public class Ejercicio : IHasId
     {
         /// <summary>
         /// Identificador único del ejercicio.

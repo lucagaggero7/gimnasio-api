@@ -1,5 +1,6 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
+using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
 
@@ -63,14 +64,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Evaluacion evaluacion)
         {
-            if (evaluacion == null)
-            {
-                return BadRequest(new { mensaje = $"La evaluacion no puede ser nula." });
-            }
+            var validation = ApiValidaciones.ValidarEntidad(evaluacion, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
+                return validation;
             }
 
             var created = await _evaluacionesRepositorio.Create(evaluacion);
@@ -91,24 +89,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Evaluacion evaluacion)
         {
-            if (evaluacion == null)
-            {
-                return BadRequest(new { mensaje = $"La evaluacion no puede ser nula." });
-            }
+            var validation = ApiValidaciones.ValidarEntidadConId(id, evaluacion, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
-            }
-
-            if (evaluacion.Id == 0)
-            {
-                return BadRequest(new { mensaje = $"El Id de la evaluacion es obligatorio." });
-            }
-
-            if (evaluacion.Id != id)
-            {
-                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL." });
+                return validation;
             }
 
             var filasAfectadas = await _evaluacionesRepositorio.Update(evaluacion);

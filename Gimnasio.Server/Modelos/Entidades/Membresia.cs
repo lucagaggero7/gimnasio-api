@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Gimnasio.Server.Modelos.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gimnasio.Server.Modelos.Entidades
@@ -7,7 +8,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa una membresia del sistema.
     /// Se serializa en camelCase.
     /// </summary>
-    public class Membresia
+    public class Membresia : IHasId
     {
         /// <summary>
         /// Identificador único de la membresia.

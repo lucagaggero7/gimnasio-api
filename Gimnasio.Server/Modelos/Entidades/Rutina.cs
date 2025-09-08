@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Gimnasio.Server.Modelos.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gimnasio.Server.Modelos.Entidades
@@ -7,8 +8,8 @@ namespace Gimnasio.Server.Modelos.Entidades
         /// Representa una rutina del sistema.
         /// Se serializa en camelCase.
         /// </summary>
-        public class Rutina
-        {
+        public class Rutina : IHasId
+    {
             /// <summary>
             /// Identificador único de la rutina.
             /// Clave primaria en la base de datos.

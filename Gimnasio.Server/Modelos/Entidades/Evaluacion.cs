@@ -1,4 +1,5 @@
 ﻿using Gimnasio.Server.Modelos.DTO;
+using Gimnasio.Server.Modelos.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,7 +9,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa una evaluacion del sistema.
     /// Se serializa en camelCase.
     /// </summary>
-    public class Evaluacion
+    public class Evaluacion : IHasId
     {
         /// <summary>
         /// Identificador único de la evaluacion.

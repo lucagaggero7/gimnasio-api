@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Gimnasio.Server.Modelos.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gimnasio.Server.Modelos.Entidades
@@ -7,7 +8,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa la relación muchos a muchos entre Rutinas y Ejercicios.
     /// Se serializa en camelCase.
     /// </summary>
-    public class EjercicioPorRutina
+    public class EjercicioPorRutina : IHasId
     {
         /// <summary>
         /// Identificador único del ejercicio por rutina.

@@ -1,5 +1,6 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
+using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
 using System.Threading.Tasks;
@@ -64,14 +65,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] FormaPago formaPago)
         {
-            if (formaPago == null)
-            {
-                return BadRequest(new { mensaje = $"La forma de pago no puede ser nula." });
-            }
+            var validation = ApiValidaciones.ValidarEntidad(formaPago, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
+                return validation;
             }
 
             var created = await _formasPagoRepositorio.Create(formaPago);
@@ -92,24 +90,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] FormaPago formaPago)
         {
-            if (formaPago == null)
-            {
-                return BadRequest(new { mensaje = $"La forma de pago no puede ser nula." });
-            }
+            var validation = ApiValidaciones.ValidarEntidadConId(id, formaPago, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
-            }
-
-            if (formaPago.Id == 0)
-            {
-                return BadRequest(new { mensaje = $"El Id de la forma de pago es obligatorio." });
-            }
-
-            if (formaPago.Id != id)
-            {
-                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL." });
+                return validation;
             }
 
             var filasAfectadas = await _formasPagoRepositorio.Update(formaPago);

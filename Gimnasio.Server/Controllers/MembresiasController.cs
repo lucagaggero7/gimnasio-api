@@ -1,5 +1,6 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
+using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
@@ -64,14 +65,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Membresia membresia)
         {
-            if (membresia == null)
-            {
-                return BadRequest(new { mensaje = $"La membresía no puede ser nula." });
-            }
+            var validation = ApiValidaciones.ValidarEntidad(membresia, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
+                return validation;
             }
 
             var created = await _membresiaRepositorio.Create(membresia);
@@ -92,24 +90,11 @@ namespace Gimnasio.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Membresia membresia)
         {
-            if (membresia == null)
-            {
-                return BadRequest(new { mensaje = $"La membresia no puede ser nula." });
-            }
+            var validation = ApiValidaciones.ValidarEntidadConId(id, membresia, ModelState);
 
-            if (!ModelState.IsValid)
+            if (validation != null)
             {
-                return BadRequest(new { mensaje = $"Faltan datos obligatorios" });
-            }
-
-            if (membresia.Id == 0)
-            {
-                return BadRequest(new { mensaje = $"El Id de la membresia es obligatorio." });
-            }
-
-            if (membresia.Id != id)
-            {
-                return BadRequest(new { mensaje = $"El Id del body debe coincidir con el Id de la URL." });
+                return validation;
             }
 
             var filasAfectadas = await _membresiaRepositorio.Update(membresia);

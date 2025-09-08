@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Gimnasio.Server.Modelos.Interfaces;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
@@ -11,7 +12,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa un cliente del sistema.
     /// Se serializa en camelCase.
     /// </summary>
-    public class Cliente
+    public class Cliente : IHasId 
     {
         /// <summary>
         /// Identificador único del cliente.
