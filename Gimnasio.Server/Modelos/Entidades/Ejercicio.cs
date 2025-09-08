@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Gimnasio.Server.Entidades
+namespace Gimnasio.Server.Modelos.Entidades
 {
     /// <summary>
     /// Representa un ejercicio del sistema.

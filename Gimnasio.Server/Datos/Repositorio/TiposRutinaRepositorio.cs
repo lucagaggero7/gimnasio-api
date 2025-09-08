@@ -1,12 +1,12 @@
-﻿using Gimnasio.Server.Entidades; 
-using Gimnasio.Server.Datos.Repositorio; 
-using Gimnasio.Server; 
+﻿using Gimnasio.Server.Datos.Repositorio;
+using Gimnasio.Server;
 using Dapper;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Gimnasio.Server.Modelos.Entidades;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {

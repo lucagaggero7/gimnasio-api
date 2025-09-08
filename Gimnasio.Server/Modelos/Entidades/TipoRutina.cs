@@ -1,22 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Gimnasio.Server.Entidades
+namespace Gimnasio.Server.Modelos.Entidades
 {
     /// <summary>
-    /// Representa un tipo de membresia del sistema.
+    /// Representa un tipo de rutina del sistema.
     /// Se serializa en camelCase.
     /// </summary>
-    public class TipoMembresia
+    public class TipoRutina
     {
         /// <summary>
-        /// Identificador único del tipo de membresia.
+        /// Identificador único del tipo de rutina.
         /// Clave primaria en la base de datos.
         /// </summary>
         [Key]
         public int Id { get; set; }
 
         /// <summary>
-        /// Nombre del tipo de membresia.
+        /// Nombre del tipo de rutina.
         /// Obligatorio, máximo 20 caracteres.
         /// </summary>
         [Required(ErrorMessage = "El nombre del tipo de membresía es obligatorio")]
@@ -24,4 +24,3 @@ namespace Gimnasio.Server.Entidades
         public string Nombre { get; set; } = string.Empty;
     }
 }
-

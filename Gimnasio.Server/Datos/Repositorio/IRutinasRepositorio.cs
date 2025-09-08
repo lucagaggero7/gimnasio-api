@@ -1,4 +1,4 @@
-﻿using Gimnasio.Server.Entidades;
+﻿using Gimnasio.Server.Modelos.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;

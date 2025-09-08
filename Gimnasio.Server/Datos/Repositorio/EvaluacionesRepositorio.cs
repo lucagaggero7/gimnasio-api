@@ -1,9 +1,9 @@
-﻿using Gimnasio.Server.DTO;
-using Gimnasio.Server.Entidades;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
 using System.Data;
+using Gimnasio.Server.Modelos.Entidades;
+using Gimnasio.Server.Modelos.DTO;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {

@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gimnasio.Server.Entidades
+namespace Gimnasio.Server.Modelos.Entidades
 {
     /// <summary>
     /// Representa un cliente del sistema.

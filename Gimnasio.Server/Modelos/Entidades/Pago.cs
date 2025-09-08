@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Gimnasio.Server.Entidades
+namespace Gimnasio.Server.Modelos.Entidades
 {
     /// <summary>
     /// Representa un pago del sistema.

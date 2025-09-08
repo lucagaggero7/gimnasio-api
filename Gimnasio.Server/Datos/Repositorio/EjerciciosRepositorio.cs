@@ -1,4 +1,3 @@
-using Gimnasio.Server.Entidades;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Gimnasio.Server.Datos.Repositorio.EjerciciosRepositorio;
+using Gimnasio.Server.Modelos.Entidades;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {
