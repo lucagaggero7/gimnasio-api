@@ -39,7 +39,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gimnasio Server", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gimnasio Server Test", Version = "v1" });
 
     // Incluye los comentarios XML
     var xmlFile = "Gimnasio.Server.xml"; // <-- nombre de tu archivo XML
