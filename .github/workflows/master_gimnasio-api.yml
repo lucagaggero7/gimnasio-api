@@ -31,15 +31,15 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      # 4️⃣ Publish directamente (sin build)
+      # 4️⃣ Publish solo el proyecto web
       - name: Publish .NET app
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish Gimnasio.Server/Gimnasio.Server.csproj -c Release
 
-      # 5️⃣ Comprimir el artifact
+      # 5️⃣ Comprimir el output de publish
       - name: Compress published app
-        run: tar -czf myapp.tar.gz -C "${{env.DOTNET_ROOT}}/myapp" .
+        run: tar -czf myapp.tar.gz -C Gimnasio.Server/bin/Release/net9.0/publish .
 
-      # 6️⃣ Upload artifact
+      # 6️⃣ Subir artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -54,17 +54,17 @@ jobs:
       contents: read
 
     steps:
-      # 1️⃣ Download artifact
+      # 1️⃣ Descargar artifact
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: .net-app
 
-      # 2️⃣ Extract artifact
+      # 2️⃣ Extraer artifact en folder ./myapp
       - name: Extract artifact
-        run: tar -xzf myapp.tar.gz
+        run: mkdir myapp && tar -xzf myapp.tar.gz -C myapp
 
-      # 3️⃣ Login to Azure
+      # 3️⃣ Login a Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -72,9 +72,8 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8C0A6D9241CD43B192A15DA487878C7D }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3939984263F94D1FAFE7F13F7BF2A281 }}
 
-      # 4️⃣ Deploy apuntando al folder correcto
+      # 4️⃣ Deploy apuntando a ./myapp
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'gimnasio-api'
