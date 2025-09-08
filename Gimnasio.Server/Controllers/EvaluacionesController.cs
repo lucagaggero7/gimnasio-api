@@ -1,7 +1,5 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Entidades;
-using Gimnasio.Server.Modelos;
-using Gimnasio.Server.Modelos.CRUD_PracticaProf.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
 

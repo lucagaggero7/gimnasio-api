@@ -1,4 +1,4 @@
-﻿using Gimnasio.Server.Modelos; 
+﻿using Gimnasio.Server.Entidades; 
 using Gimnasio.Server.Datos.Repositorio; 
 using Gimnasio.Server; 
 using Dapper;

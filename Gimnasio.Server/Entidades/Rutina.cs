@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Gimnasio.Server.Modelos
+namespace Gimnasio.Server.Entidades
 {
-    namespace CRUD_PracticaProf.Modelos
-    {
         /// <summary>
         /// Representa una rutina del sistema.
         /// Se serializa en camelCase.
@@ -72,5 +64,4 @@ namespace Gimnasio.Server.Modelos
             [ForeignKey("TipoRutina")]
             public int FkIdTipoRutina { get; set; }
         }
-    }
 }

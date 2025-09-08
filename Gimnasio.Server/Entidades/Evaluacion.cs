@@ -1,5 +1,4 @@
 ﻿using Gimnasio.Server.DTO;
-using Gimnasio.Server.Modelos;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -1,6 +1,5 @@
 
 ﻿using Gimnasio.Server.Entidades;
-using Gimnasio.Server.Modelos;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {

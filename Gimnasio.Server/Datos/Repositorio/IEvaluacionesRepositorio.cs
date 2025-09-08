@@ -1,5 +1,4 @@
 ﻿using Gimnasio.Server.Entidades;
-using Gimnasio.Server.Modelos.CRUD_PracticaProf.Modelos;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {

@@ -1,5 +1,4 @@
-﻿using Gimnasio.Server.Modelos;
-using Gimnasio.Server.Modelos.CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.Entidades;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;

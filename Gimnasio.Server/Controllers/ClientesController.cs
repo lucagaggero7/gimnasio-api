@@ -1,5 +1,5 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
-using Gimnasio.Server.Modelos;
+using Gimnasio.Server.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,7 +62,7 @@ namespace Gimnasio.Server.Controllers
         {
             var cliente = await _clienteRepositorio.GetById(id);
 
-            if (cliente == null)
+            if (cliente is null)
             {
                 return NotFound(new { mensaje = $"No existen clientes con ID {id}" });
             }
