@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_PracticaProf.Modelos
+namespace Gimnasio.Server.Modelos
 {
     /// <summary>
     /// Representa una membresia del sistema.

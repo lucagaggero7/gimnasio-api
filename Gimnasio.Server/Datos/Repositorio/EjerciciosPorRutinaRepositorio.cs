@@ -1,4 +1,4 @@
-﻿using CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public class EjerciciosPorRutinaRepositorio : IEjerciciosPorRutinaRepositorio
     {

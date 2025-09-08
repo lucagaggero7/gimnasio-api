@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 
-namespace CRUD_PracticaProf.Dapper.ManejadorTipos
+namespace Gimnasio.Server.Services.Dapper.ManejadorTipos
 {
     public class Hora : SqlMapper.TypeHandler<TimeOnly>
     {

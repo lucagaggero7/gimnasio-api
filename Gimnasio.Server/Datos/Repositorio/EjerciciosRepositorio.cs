@@ -1,5 +1,5 @@
-using CRUD_PracticaProf.Entidades;
-using CRUD_PracticaProf.Modelos;
+using Gimnasio.Server.Entidades;
+using Gimnasio.Server.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
@@ -9,9 +9,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static CRUD_PracticaProf.Datos.Repositorio.EjerciciosRepositorio;
+using static Gimnasio.Server.Datos.Repositorio.EjerciciosRepositorio;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public class EjerciciosRepositorio : IEjerciciosRepositorio
     {

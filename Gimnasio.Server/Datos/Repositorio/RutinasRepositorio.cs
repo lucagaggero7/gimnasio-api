@@ -1,5 +1,5 @@
-﻿using CRUD_PracticaProf.Modelos;
-using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.Modelos;
+using Gimnasio.Server.Modelos.CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public class RutinasRepositorio : IRutinasRepositorio
     {

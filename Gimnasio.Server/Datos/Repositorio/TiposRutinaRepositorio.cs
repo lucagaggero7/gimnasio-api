@@ -1,6 +1,6 @@
-﻿using CRUD_PracticaProf.Modelos; 
-using CRUD_PracticaProf.Datos.Repositorio; 
-using CRUD_PracticaProf; 
+﻿using Gimnasio.Server.Modelos; 
+using Gimnasio.Server.Datos.Repositorio; 
+using Gimnasio.Server; 
 using Dapper;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public class TiposRutinaRepositorio : ITiposRutinaRepositorio
 {

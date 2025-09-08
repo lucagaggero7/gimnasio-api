@@ -1,13 +1,13 @@
-﻿using CRUD_PracticaProf.DTO;
-using CRUD_PracticaProf.Entidades;
-using CRUD_PracticaProf.Modelos;
-using CRUD_PracticaProf.Modelos.CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.DTO;
+using Gimnasio.Server.Entidades;
+using Gimnasio.Server.Modelos;
+using Gimnasio.Server.Modelos.CRUD_PracticaProf.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
 using System.Data;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public class EvaluacionesRepositorio : IEvaluacionesRepositorio
     {

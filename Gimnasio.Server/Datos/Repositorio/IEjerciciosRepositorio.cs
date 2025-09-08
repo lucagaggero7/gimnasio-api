@@ -1,8 +1,8 @@
 
-﻿using CRUD_PracticaProf.Entidades;
-using CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.Entidades;
+using Gimnasio.Server.Modelos;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public interface IEjerciciosRepositorio
     {

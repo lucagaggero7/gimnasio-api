@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_PracticaProf.Datos
+namespace Gimnasio.Server.Datos
 {
     public class MySQLConfig
     {

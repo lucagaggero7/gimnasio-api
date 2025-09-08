@@ -1,9 +1,9 @@
-﻿using CRUD_PracticaProf.DTO;
-using CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.DTO;
+using Gimnasio.Server.Modelos;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CRUD_PracticaProf.Entidades
+namespace Gimnasio.Server.Entidades
 {
     /// <summary>
     /// Representa una evaluacion del sistema.

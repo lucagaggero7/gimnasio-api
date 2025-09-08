@@ -1,12 +1,12 @@
-﻿
-using CRUD_PracticaProf.Dapper.ManejadorTipos;
-using CRUD_PracticaProf.Datos;
-using CRUD_PracticaProf.Datos.Repositorio;
-using Dapper;
-using Gimnasio.Server.Services.Dapper.ConvertirJson;
+﻿using Dapper;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 using System.Text.Json.Serialization;
+using Gimnasio.Server.Datos;
+using Gimnasio.Server.Datos.Repositorio;
+using Gimnasio.Server.Services.Dapper.ManejadorTipos;
+using Gimnasio.Server.Services.Dapper.ConvertirJson;
+
 
 
 var builder = WebApplication.CreateBuilder(args);

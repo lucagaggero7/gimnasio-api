@@ -1,12 +1,12 @@
-﻿using CRUD_PracticaProf.DTO;
-using CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.DTO;
+using Gimnasio.Server.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public interface IClientesRepositorio
     {

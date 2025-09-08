@@ -1,5 +1,5 @@
-﻿using CRUD_PracticaProf.DTO;
-using CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.DTO;
+using Gimnasio.Server.Modelos;
 using Dapper;
 using MySql.Data.MySqlClient;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_PracticaProf.Datos.Repositorio
+namespace Gimnasio.Server.Datos.Repositorio
 {
     public class ClientesRepositorio : IClientesRepositorio
     {

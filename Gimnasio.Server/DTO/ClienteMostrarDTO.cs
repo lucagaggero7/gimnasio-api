@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRUD_PracticaProf.DTO
+namespace Gimnasio.Server.DTO
 {
     /// <summary>
     /// Representa un cliente en la tabla evaluacion.

@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace CRUD_PracticaProf.Entidades
+namespace Gimnasio.Server.Entidades
 {
     /// <summary>
     /// Representa un ejercicio del sistema.

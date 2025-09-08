@@ -1,10 +1,10 @@
-﻿using CRUD_PracticaProf.Datos.Repositorio;
-using CRUD_PracticaProf.Modelos;
+﻿using Gimnasio.Server.Datos.Repositorio;
+using Gimnasio.Server.Modelos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
 
-namespace CRUD_PracticaProf.Controllers
+namespace Gimnasio.Server.Controllers
 {
     [Route("tipos-membresia")]
     [ApiController]
