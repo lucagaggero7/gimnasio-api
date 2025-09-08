@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CRUD_PracticaProf.Dapper.ConvertirJson
+namespace Gimnasio.Server.Services.Dapper.ConvertirJson
 {
     public class FechaJson : JsonConverter<DateOnly>
     {
