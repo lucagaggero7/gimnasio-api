@@ -21,7 +21,7 @@ namespace CRUD_PracticaProf.DTO
         /// </summary>
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(50, ErrorMessage = "El nombre no puede superar los 50 caracteres.")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         /// <summary>
         /// Apellido del cliente.
@@ -29,6 +29,6 @@ namespace CRUD_PracticaProf.DTO
         /// </summary>
         [Required(ErrorMessage = "El apellido es obligatorio.")]
         [StringLength(50, ErrorMessage = "El apellido no puede superar los 50 caracteres.")]
-        public string Apellido { get; set; }
+        public string Apellido { get; set; } = string.Empty;
     }
 }
