@@ -38,7 +38,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
                 return await db.QueryAsync<Ejercicio>(sql, new { });
             }
 
-            public async Task<Ejercicio> GetById(int id)
+            public async Task<Ejercicio?> GetById(int id)
             {
                 var db = dbConnection();
 

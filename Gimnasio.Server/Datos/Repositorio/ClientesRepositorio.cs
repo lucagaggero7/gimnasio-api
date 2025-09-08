@@ -51,7 +51,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryAsync<ClienteMostrarDTO>(sql, new { });
         }
 
-        public async Task<Cliente> GetById(int id)
+        public async Task<Cliente?> GetById(int id)
         {
             var db = dbConnection();
 

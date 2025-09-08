@@ -37,7 +37,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
             return await db.QueryAsync<Rutina>(sql);
         }
 
-        public async Task<Rutina> GetById(int id)
+        public async Task<Rutina?> GetById(int id)
         {
             using var db = DbConnection();
             var sql = @"SELECT id AS Id,
