@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy ASP.Net Core app to Azure Web App - gimnasio-api
 
 on:
@@ -8,74 +11,55 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
-      # 1️⃣ Checkout
       - uses: actions/checkout@v4
 
-      # 2️⃣ Cache de NuGet
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      # 3️⃣ Setup .NET
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
 
-      # 4️⃣ Publish solo el proyecto web
-      - name: Publish .NET app
-        run: dotnet publish Gimnasio.Server/Gimnasio.Server.csproj -c Release
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-      # 5️⃣ Comprimir el output de publish
-      - name: Compress published app
-        run: tar -czf myapp.tar.gz -C Gimnasio.Server/bin/Release/net9.0/publish .
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      # 6️⃣ Subir artifact
-      - name: Upload artifact
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: myapp.tar.gz
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write
-      contents: read
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
-      # 1️⃣ Descargar artifact
-      - name: Download artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-
-      # 2️⃣ Extraer artifact en folder ./myapp
-      - name: Extract artifact
-        run: mkdir myapp && tar -xzf myapp.tar.gz -C myapp
-
-      # 3️⃣ Login a Azure
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_62F333CD5F1744EBA3E1612686C1A281 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8C0A6D9241CD43B192A15DA487878C7D }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3939984263F94D1FAFE7F13F7BF2A281 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_70AE633E661B47ABB16C8FAC2772B497 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FE053B12D23C4A759B0F70FE506C4D96 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_250A1F70F4D745A7A4012DB04F54E716 }}
 
-      # 4️⃣ Deploy apuntando a ./myapp
       - name: Deploy to Azure Web App
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'gimnasio-api'
           slot-name: 'Production'
-          package: ./myapp
+          package: .
+          
