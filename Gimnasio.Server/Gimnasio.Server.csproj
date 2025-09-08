@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Validation\" />
+    <Folder Include="Servicios\Validation\" />
   </ItemGroup>
 
 </Project>
