@@ -8,6 +8,7 @@
     <DocumentationFile>bin\$(Configuration)\net9.0\Gimnasio.Server.xml</DocumentationFile>
     <AssemblyName>Gimnasio.Server</AssemblyName>
     <RootNamespace>Gimnasio.Server</RootNamespace>
+	<NoWarn>1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
