@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     {
         Task<IEnumerable<Pago>> GetAll();
 
-        Task<Pago> GetById(int id);
+        Task<Pago?> GetById(int id);
 
         Task<Pago> Create(Pago pago);
 

@@ -8,7 +8,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     {
         Task<IEnumerable<Ejercicio>> GetAll();
 
-        Task<Ejercicio> GetById(int id);
+        Task<Ejercicio?> GetById(int id);
 
         Task<Ejercicio> Create(Ejercicio ejercicio);
 

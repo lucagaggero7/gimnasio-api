@@ -14,7 +14,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
 
         Task<IEnumerable<ClienteMostrarDTO>> GetAllDTO();
 
-        Task<Cliente> GetById(int id);
+        Task<Cliente?> GetById(int id);
 
         Task<Cliente> Create(Cliente cliente);
 

@@ -11,7 +11,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     public interface IRutinasRepositorio
     {
         Task<IEnumerable<Rutina>> GetAll();
-        Task<Rutina> GetById(int id);
+        Task<Rutina?> GetById(int id);
         Task<Rutina> Create(Rutina rutina);
         Task<bool> Update(Rutina rutina);
         Task<bool> Delete(int id);

@@ -10,7 +10,7 @@ namespace CRUD_PracticaProf.Datos.Repositorio
     public interface IEjerciciosPorRutinaRepositorio
     {
         Task<IEnumerable<EjercicioPorRutina>> GetAll();
-        Task<EjercicioPorRutina> GetById(int id);
+        Task<EjercicioPorRutina?> GetById(int id);
         Task<EjercicioPorRutina> Create(EjercicioPorRutina ejercicioPorRutina);
         Task<bool> Update(EjercicioPorRutina ejercicioPorRutina);
         Task<bool> Delete(int id);
