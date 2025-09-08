@@ -47,8 +47,19 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //Testing
-var MySQLConfig = new MySQLConfig(builder.Configuration.GetConnectionString("MySqlConnection"));
-builder.Services.AddSingleton(MySQLConfig);
+var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    var environment = builder.Environment.EnvironmentName;
+    var message = environment == "Development"
+        ? "MySQL connection string not found at Development env"
+        : "MySQL connection string not found. Check App Service";
+
+    throw new InvalidOperationException(message);
+}
+
+var mySQLConfig = new MySQLConfig(connectionString);
+builder.Services.AddSingleton(mySQLConfig);
 
 SqlMapper.AddTypeHandler(new Fecha());
 SqlMapper.AddTypeHandler(new Hora());
