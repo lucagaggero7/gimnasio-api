@@ -71,14 +71,5 @@ namespace Gimnasio.Server.Modelos.Entidades
         [Range(1, int.MaxValue, ErrorMessage = "El ID del tipo de membresia debe ser mayor a 0.")]
         [ForeignKey("TipoMembresia")]
         public int FkIdTipoMembresia { get; set; }
-
-        /// <summary>
-        /// Identificador de clave foranea. Obligatorio
-        /// Tabla rutina.
-        /// </summary>
-        [Required(ErrorMessage = "El ID de la rutina es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "El ID de la rutina debe ser mayor a 0.")]
-        [ForeignKey("Rutina")]
-        public int FkIdRutina { get; set; }
     }
 }
