@@ -31,8 +31,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         contacto_emergencia AS ContactoEmergencia,
                         nombre_contacto AS NombreContacto,
                         fk_id_cliente AS FkIdCliente, 
-                        fk_id_tipo_membresia AS FkIdTipoMembresia, 
-                        fk_id_rutina AS FkIdRutina
+                        fk_id_tipo_membresia AS FkIdTipoMembresia
                         FROM membresias";
 
             return await db.QueryAsync<Membresia>(sql);
@@ -48,8 +47,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         contacto_emergencia AS ContactoEmergencia,
                         nombre_contacto AS NombreContacto,
                         fk_id_cliente AS FkIdCliente, 
-                        fk_id_tipo_membresia AS FkIdTipoMembresia, 
-                        fk_id_rutina AS FkIdRutina
+                        fk_id_tipo_membresia AS FkIdTipoMembresia
                         FROM membresias WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<Membresia>(sql, new { Id = id });
         }
@@ -57,8 +55,8 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<Membresia> Create(Membresia membresia)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, nombre_contacto, fk_id_cliente, fk_id_tipo_membresia, fk_id_rutina)
-                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @nombre_contacto, @fk_id_cliente, @fk_id_tipo_membresia, @fk_id_rutina);
+            var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, nombre_contacto, fk_id_cliente, fk_id_tipo_membresia)
+                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @nombre_contacto, @fk_id_cliente, @fk_id_tipo_membresia);
                         SELECT LAST_INSERT_ID(); ";
 
             var id = await db.ExecuteScalarAsync<int>(sql, new
@@ -69,8 +67,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 contacto_emergencia = membresia.ContactoEmergencia,
                 nombre_contacto = membresia.NombreContacto,
                 fk_id_cliente = membresia.FkIdCliente,
-                fk_id_tipo_membresia = membresia.FkIdTipoMembresia,
-                fk_id_rutina = membresia.FkIdRutina
+                fk_id_tipo_membresia = membresia.FkIdTipoMembresia
             });
 
             membresia.Id = id;
@@ -87,8 +84,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         contacto_emergencia = @contacto_emergencia,
                         nombre_contacto = @nombre_contacto,
                         fk_id_cliente = @fk_id_cliente,
-                        fk_id_tipo_membresia = @fk_id_tipo_membresia,
-                        fk_id_rutina = @fk_id_rutina
+                        fk_id_tipo_membresia = @fk_id_tipo_membresia
                         WHERE id = @id";
 
             var result = await db.ExecuteAsync(sql, new
@@ -100,7 +96,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                 nombre_contacto = membresia.NombreContacto,
                 fk_id_cliente = membresia.FkIdCliente,
                 fk_id_tipo_membresia = membresia.FkIdTipoMembresia,
-                fk_id_rutina = membresia.FkIdRutina,
                 id = membresia.Id
             });
             return result > 0;
