@@ -39,10 +39,24 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gimnasio Server Test", Version = "v1" });
+    // Detectar entorno
+    var env = builder.Environment;
+
+    // Definir el título según el entorno
+    var title = "Gimnasio Server";
+    if (env.IsDevelopment())
+    {
+        title += " (Development)";
+    }
+
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = title,
+        Version = "v1"
+    });
 
     // Incluye los comentarios XML
-    var xmlFile = "Gimnasio.Server.xml"; // <-- nombre de tu archivo XML
+    var xmlFile = "Gimnasio.Server.xml"; // nombre de tu archivo XML
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
