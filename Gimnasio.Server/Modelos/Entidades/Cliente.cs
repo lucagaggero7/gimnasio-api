@@ -84,6 +84,12 @@ namespace Gimnasio.Server.Modelos.Entidades
         [Required(ErrorMessage = "El contacto de emergencia es obligatorio")]
         [StringLength(20, ErrorMessage = "El teléfono no puede superar los 20 caracteres.")]
         public string ContactoEmergencia { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Estado del cliente.
+        /// No obligatorio, booleano.
+        /// </summary>
+        public bool Estado { get; set; } = false;
     }
 
 }
