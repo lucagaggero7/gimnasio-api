@@ -10,11 +10,11 @@ namespace Gimnasio.Server.Datos.Repositorio
 {
     public interface IClientesRepositorio
     {
-        Task<IEnumerable<Cliente>> GetAll();
+        Task<IEnumerable<ClienteDTO>> GetAll();
 
-        Task<IEnumerable<ClienteMostrarDTO>> GetAllDTO();
+        Task<IEnumerable<ClienteForaneoDTO>> GetFkDTO();
 
-        Task<Cliente?> GetById(int id);
+        Task<ClienteDTO?> GetById(int id);
 
         Task<Cliente> Create(Cliente cliente);
 

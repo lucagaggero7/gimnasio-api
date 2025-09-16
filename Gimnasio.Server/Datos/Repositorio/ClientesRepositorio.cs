@@ -25,7 +25,7 @@ namespace Gimnasio.Server.Datos.Repositorio
         }
 
 
-        public async Task<IEnumerable<Cliente>> GetAll()
+        public async Task<IEnumerable<ClienteDTO>> GetAll()
         {
             var db = dbConnection();
 
@@ -43,18 +43,18 @@ namespace Gimnasio.Server.Datos.Repositorio
                 INNER JOIN (SELECT fk_id_cliente, MAX(id) AS last_membresia_id FROM membresias 
                 GROUP BY fk_id_cliente) last_m ON m.id = last_m.last_membresia_id) m ON m.fk_id_cliente = c.id;";
 
-            return await  db.QueryAsync<Cliente>(sql);
+            return await  db.QueryAsync<ClienteDTO>(sql);
         }
 
-        public async Task<IEnumerable<ClienteMostrarDTO>> GetAllDTO()
+        public async Task<IEnumerable<ClienteForaneoDTO>> GetFkDTO()
         {
             using var db = dbConnection();
             var sql = "SELECT id, nombre, apellido FROM clientes";
 
-            return await db.QueryAsync<ClienteMostrarDTO>(sql, new { });
+            return await db.QueryAsync<ClienteForaneoDTO>(sql, new { });
         }
 
-        public async Task<Cliente?> GetById(int id)
+        public async Task<ClienteDTO?> GetById(int id)
         {
             var db = dbConnection();
 
@@ -72,7 +72,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 GROUP BY fk_id_cliente) last_m ON m.id = last_m.last_membresia_id) m ON m.fk_id_cliente = c.id
                 WHERE c.id = @id;";
 
-            return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { id });
+            return await db.QueryFirstOrDefaultAsync<ClienteDTO>(sql, new { id });
         }
             
 
