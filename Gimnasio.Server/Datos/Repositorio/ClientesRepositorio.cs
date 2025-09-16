@@ -38,7 +38,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                telefono,
                direccion,
                fecha_nacimiento AS FechaNacimiento,
-               contacto_emergencia AS ContactoEmergencia
+               contacto_emergencia AS ContactoEmergencia,
+               estado AS Estado
             FROM clientes";
 
             return await  db.QueryAsync<Cliente>(sql, new { });
@@ -65,7 +66,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                telefono,
                direccion,
                fecha_nacimiento AS FechaNacimiento,
-               contacto_emergencia AS ContactoEmergencia
+               contacto_emergencia AS ContactoEmergencia,
+               estado AS Estado
                FROM clientes WHERE id = @id";
 
             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
