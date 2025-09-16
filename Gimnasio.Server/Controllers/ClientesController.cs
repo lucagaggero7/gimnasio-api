@@ -44,9 +44,9 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes DTO.
         /// </returns>
         [HttpGet("mostrar")]
-        public async Task<IActionResult> GetAllDTO()
+        public async Task<IActionResult> GetFkDTO()
         {
-            var clientes = await _clienteRepositorio.GetAllDTO();
+            var clientes = await _clienteRepositorio.GetFkDTO();
             return Ok(clientes);
         }
 
