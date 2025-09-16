@@ -29,20 +29,21 @@ namespace Gimnasio.Server.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"SELECT 
-               id,
-               nombre,
-               apellido,
-               dni,
-               email,
-               telefono,
-               direccion,
-               fecha_nacimiento AS FechaNacimiento,
-               contacto_emergencia AS ContactoEmergencia,
-               estado AS Estado
-            FROM clientes";
+            var sql = @"
+            SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia,
+            CASE 
+                WHEN CURDATE() BETWEEN m.fecha_inicio AND m.fecha_vencimiento THEN TRUE
+                ELSE FALSE
+                END AS Estado
+                FROM clientes c
+                LEFT JOIN (
+                -- Subconsulta que devuelve la última membresía de cada cliente por id
+                SELECT m.*
+                FROM membresias m
+                INNER JOIN (SELECT fk_id_cliente, MAX(id) AS last_membresia_id FROM membresias 
+                GROUP BY fk_id_cliente) last_m ON m.id = last_m.last_membresia_id) m ON m.fk_id_cliente = c.id;";
 
-            return await  db.QueryAsync<Cliente>(sql, new { });
+            return await  db.QueryAsync<Cliente>(sql);
         }
 
         public async Task<IEnumerable<ClienteMostrarDTO>> GetAllDTO()
@@ -57,21 +58,23 @@ namespace Gimnasio.Server.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"SELECT 
-               id,
-               nombre,
-               apellido,
-               dni,
-               email,
-               telefono,
-               direccion,
-               fecha_nacimiento AS FechaNacimiento,
-               contacto_emergencia AS ContactoEmergencia,
-               estado AS Estado
-               FROM clientes WHERE id = @id";
+            var sql = @" SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia,
+            CASE 
+                WHEN CURDATE() BETWEEN m.fecha_inicio AND m.fecha_vencimiento THEN TRUE
+                ELSE FALSE
+                END AS Estado
+                FROM clientes c
+                LEFT JOIN (
+                -- Subconsulta que devuelve la última membresía de cada cliente por id
+                SELECT m.*
+                FROM membresias m
+                INNER JOIN (SELECT fk_id_cliente, MAX(id) AS last_membresia_id FROM membresias 
+                GROUP BY fk_id_cliente) last_m ON m.id = last_m.last_membresia_id) m ON m.fk_id_cliente = c.id
+                WHERE c.id = @id;";
 
-            return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { id });
         }
+            
 
         public async Task<Cliente> Create(Cliente cliente)
         {
