@@ -29,7 +29,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         INNER JOIN clientes c ON e.fk_id_cliente = c.id";
 
 
-            var evaluaciones = await db.QueryAsync<Evaluacion, ClienteMostrarDTO, Evaluacion>(
+            var evaluaciones = await db.QueryAsync<Evaluacion, ClienteForaneoDTO, Evaluacion>(
                 sql,
                 (evaluacion, cliente) =>
                 {
@@ -52,7 +52,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         INNER JOIN clientes c ON e.fk_id_cliente = c.id
                         WHERE e.id = @id";
 
-            var evaluacion = await db.QueryAsync<Evaluacion, ClienteMostrarDTO, Evaluacion>(
+            var evaluacion = await db.QueryAsync<Evaluacion, ClienteForaneoDTO, Evaluacion>(
                     sql,
                     (evaluacion, cliente) =>
                     {
