@@ -57,11 +57,12 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<Membresia> Create(Membresia membresia)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, total, saldo, fk_id_cliente, fk_id_tipo_membresia)
-                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @total, @saldo, @fk_id_cliente, @fk_id_tipo_membresia);
-                        SELECT LAST_INSERT_ID(); ";
+            var sqlInsert = @"
+                    INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, total, saldo, fk_id_cliente, fk_id_tipo_membresia)
+                    VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @total, @saldo, @fk_id_cliente, @fk_id_tipo_membresia);
+                    SELECT LAST_INSERT_ID();";
 
-            var id = await db.ExecuteScalarAsync<int>(sql, new
+            var id = await db.ExecuteScalarAsync<int>(sqlInsert, new
             {
                 estado = membresia.Estado,
                 fecha_inicio = membresia.FechaInicio,
@@ -74,6 +75,18 @@ namespace Gimnasio.Server.Datos.Repositorio
             });
 
             membresia.Id = id;
+
+            var sqlUpdateCliente = @"
+                 UPDATE clientes
+                     SET contacto_emergencia = @contacto_emergencia
+                        WHERE id = @id_cliente;";
+
+            await db.ExecuteAsync(sqlUpdateCliente, new
+            {
+                contacto_emergencia = membresia.ContactoEmergencia,
+                id_cliente = membresia.FkIdCliente
+            });
+
             return membresia;
         }
 
