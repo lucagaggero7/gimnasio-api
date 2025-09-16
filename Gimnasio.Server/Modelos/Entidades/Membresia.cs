@@ -47,14 +47,6 @@ namespace Gimnasio.Server.Modelos.Entidades
         public string ContactoEmergencia { get; set; } = string.Empty;
 
         /// <summary>
-        /// Nombre del contacto de emergencia.
-        /// Obligatorio, máximo 30 caracteres.
-        /// </summary>
-        [Required(ErrorMessage = "El nombre del contacto de emergencia es obligatorio")]
-        [StringLength(30, ErrorMessage = "El nombre del contacto no puede exceder los 30 caracteres")]
-        public string NombreContacto { get; set; } = string.Empty;
-
-        /// <summary>
         /// Identificador de clave foranea. Obligatorio
         /// Tabla cliente.
         /// </summary>

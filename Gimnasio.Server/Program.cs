@@ -39,10 +39,8 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    // Detectar entorno
     var env = builder.Environment;
 
-    // Definir el título según el entorno
     var title = "Gimnasio Server";
     if (env.IsDevelopment())
     {
@@ -55,8 +53,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    // Incluye los comentarios XML
-    var xmlFile = "Gimnasio.Server.xml"; // nombre de tu archivo XML
+    var xmlFile = "Gimnasio.Server.xml"; 
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });

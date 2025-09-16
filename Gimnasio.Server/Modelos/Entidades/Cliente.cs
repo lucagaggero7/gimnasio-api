@@ -76,6 +76,14 @@ namespace Gimnasio.Server.Modelos.Entidades
         /// </summary>
         [Required(ErrorMessage = "La fecha de nacimiento es obligatoria.")]
         public DateOnly FechaNacimiento { get; set; }
+
+        /// <summary>
+        /// Numero del contacto de emergencia.
+        /// Obligatorio, máximo 20 caracteres.
+        /// </summary>
+        [Required(ErrorMessage = "El contacto de emergencia es obligatorio")]
+        [StringLength(20, ErrorMessage = "El teléfono no puede superar los 20 caracteres.")]
+        public string ContactoEmergencia { get; set; } = string.Empty;
     }
 
 }

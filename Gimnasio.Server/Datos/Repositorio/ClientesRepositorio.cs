@@ -37,7 +37,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                email,
                telefono,
                direccion,
-               fecha_nacimiento AS FechaNacimiento
+               fecha_nacimiento AS FechaNacimiento,
+               contacto_emergencia AS ContactoEmergencia
             FROM clientes";
 
             return await  db.QueryAsync<Cliente>(sql, new { });
@@ -63,7 +64,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                email,
                telefono,
                direccion,
-               fecha_nacimiento AS FechaNacimiento
+               fecha_nacimiento AS FechaNacimiento,
+               contacto_emergencia AS ContactoEmergencia
                FROM clientes WHERE id = @id";
 
             return await db.QueryFirstOrDefaultAsync<Cliente>(sql, new { Id = id });
@@ -73,8 +75,8 @@ namespace Gimnasio.Server.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"INSERT INTO clientes (nombre, apellido, dni, email, telefono, direccion, fecha_nacimiento)
-                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento);
+            var sql = @"INSERT INTO clientes (nombre, apellido, dni, email, telefono, direccion, fecha_nacimiento, contacto_emergencia)
+                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento, @contacto_emergencia);
                          SELECT LAST_INSERT_ID(); ";
 
             var id = await db.ExecuteScalarAsync<int>(sql, new
@@ -85,7 +87,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                 email = cliente.Email,
                 telefono = cliente.Telefono,
                 direccion = cliente.Direccion,
-                fecha_nacimiento = cliente.FechaNacimiento
+                fecha_nacimiento = cliente.FechaNacimiento,
+                contacto_emergencia = cliente.ContactoEmergencia
             });
 
             cliente.Id = id;
@@ -103,7 +106,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                         email = @email,
                         telefono = @telefono,
                         direccion = @direccion,
-                        fecha_nacimiento = @fecha_nacimiento
+                        fecha_nacimiento = @fecha_nacimiento,
+                        contacto_emergencia = @contacto_emergencia
                         WHERE id = @id";
 
             var result = await db.ExecuteAsync(sql, new
@@ -115,6 +119,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 telefono = cliente.Telefono,
                 direccion = cliente.Direccion,
                 fecha_nacimiento = cliente.FechaNacimiento,
+                contacto_emergencia = cliente.ContactoEmergencia,
                 id = cliente.Id
             });
 
