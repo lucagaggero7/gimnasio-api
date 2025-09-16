@@ -29,6 +29,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                         fecha_inicio AS FechaInicio,
                         fecha_vencimiento AS FechaVencimiento,
                         contacto_emergencia AS ContactoEmergencia,
+                        total AS Total,
+                        saldo AS Saldo,
                         fk_id_cliente AS FkIdCliente, 
                         fk_id_tipo_membresia AS FkIdTipoMembresia
                         FROM membresias";
@@ -44,6 +46,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                         fecha_inicio AS FechaInicio,
                         fecha_vencimiento AS FechaVencimiento,
                         contacto_emergencia AS ContactoEmergencia,
+                        total AS Total,
+                        saldo AS Saldo,
                         fk_id_cliente AS FkIdCliente, 
                         fk_id_tipo_membresia AS FkIdTipoMembresia
                         FROM membresias WHERE id = @id";
@@ -53,8 +57,8 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<Membresia> Create(Membresia membresia)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, fk_id_cliente, fk_id_tipo_membresia)
-                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @fk_id_cliente, @fk_id_tipo_membresia);
+            var sql = @"INSERT INTO membresias (estado, fecha_inicio, fecha_vencimiento, contacto_emergencia, total, saldo, fk_id_cliente, fk_id_tipo_membresia)
+                        VALUES (@estado, @fecha_inicio, @fecha_vencimiento, @contacto_emergencia, @total, @saldo, @fk_id_cliente, @fk_id_tipo_membresia);
                         SELECT LAST_INSERT_ID(); ";
 
             var id = await db.ExecuteScalarAsync<int>(sql, new
@@ -63,6 +67,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                 fecha_inicio = membresia.FechaInicio,
                 fecha_vencimiento = membresia.FechaVencimiento,
                 contacto_emergencia = membresia.ContactoEmergencia,
+                total = membresia.Total,
+                saldo = membresia.Saldo,
                 fk_id_cliente = membresia.FkIdCliente,
                 fk_id_tipo_membresia = membresia.FkIdTipoMembresia
             });
@@ -79,6 +85,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                         fecha_inicio = @fecha_inicio,
                         fecha_vencimiento = @fecha_vencimiento,
                         contacto_emergencia = @contacto_emergencia,
+                        total= @total,
+                        saldo = @saldo,
                         fk_id_cliente = @fk_id_cliente,
                         fk_id_tipo_membresia = @fk_id_tipo_membresia
                         WHERE id = @id";
@@ -89,6 +97,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                 fecha_inicio = membresia.FechaInicio,
                 fecha_vencimiento = membresia.FechaVencimiento,
                 contacto_emergencia = membresia.ContactoEmergencia,
+                total = membresia.Total,
+                saldo = membresia.Saldo,
                 fk_id_cliente = membresia.FkIdCliente,
                 fk_id_tipo_membresia = membresia.FkIdTipoMembresia,
                 id = membresia.Id

@@ -47,6 +47,22 @@ namespace Gimnasio.Server.Modelos.Entidades
         public string ContactoEmergencia { get; set; } = string.Empty;
 
         /// <summary>
+        /// Total a pagar del cliente.
+        /// Obligatorio, entre 1 y 10 dígitos.
+        /// </summary>
+        [Required(ErrorMessage = "El Total a pagar es obligatorio.")]
+        [Range(0, 9999999999, ErrorMessage = "El Total debe tener entre 1 y 10 dígitos.")]
+        public int Total { get; set; }
+
+        /// <summary>
+        /// Saldo restante del cliente.
+        /// Obligatorio, entre 1 y 10 dígitos.
+        /// </summary>
+        [Required(ErrorMessage = "El Saldo a pagar es obligatorio.")]
+        [Range(0, 9999999999, ErrorMessage = "El Saldo debe tener entre 1 y 10 dígitos.")]
+        public int Saldo { get; set; }
+
+        /// <summary>
         /// Identificador de clave foranea. Obligatorio
         /// Tabla cliente.
         /// </summary>
