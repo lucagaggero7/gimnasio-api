@@ -53,6 +53,6 @@ namespace Gimnasio.Server.Modelos.Entidades
         /// DTO para mostrar al cliente en la evaluacion
         /// Obligatorio
         /// </summary>
-        public ClienteMostrarDTO Cliente { get; set; } = new ();
+        public ClienteForaneoDTO Cliente { get; set; } = new ();
     }
 }
