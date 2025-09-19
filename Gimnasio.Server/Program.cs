@@ -1,11 +1,12 @@
 ﻿using Dapper;
-using Microsoft.OpenApi.Models;
-using MySql.Data.MySqlClient;
-using System.Text.Json.Serialization;
 using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
-using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
+using Gimnasio.Server.Services.Dapper.ManejadorTipos;
+using Microsoft.OpenApi.Models;
+using MySql.Data.MySqlClient;
+using StackExchange.Redis;
+using System.Text.Json.Serialization;
 
 
 
@@ -19,10 +20,22 @@ builder.Services.AddOutputCache(options =>
     });
 });
 
-builder.Services.AddStackExchangeRedisOutputCache(opciones =>
+builder.Services.AddStackExchangeRedisOutputCache(options =>
 {
-    opciones.Configuration = builder.Configuration.GetConnectionString("redis");
+    options.Configuration = builder.Configuration.GetConnectionString("redis");
 
+    var config = ConfigurationOptions.Parse(options.Configuration);
+
+    config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
+
+    config.CommandMap = CommandMap.Create(
+        new HashSet<string> { "INFO", "CONFIG", "CLUSTER", "PING", "ECHO", "CLIENT" },
+        available: false
+    );
+
+    config.SocketManager = SocketManager.Shared;
+
+    options.ConfigurationOptions = config;
 });
 
 // Add services to the container.
