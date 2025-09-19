@@ -70,9 +70,17 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException(message);
 }
 
-builder.Services.AddOutputCache(opciones =>
+builder.Services.AddOutputCache(options =>
 {
-    opciones.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(10);
+    options.AddPolicy("Default", policy =>
+    {
+        policy.Expire(TimeSpan.FromDays(7));
+    });
+});
+
+builder.Services.AddStackExchangeRedisOutputCache(opciones =>
+{
+    opciones.Configuration = builder.Configuration.GetConnectionString("redis");
 
 });
 

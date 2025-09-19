@@ -33,7 +33,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes.
         /// </returns>
         [HttpGet]
-        [OutputCache(Tags = [cacheKey])]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _clienteRepositorio.GetAll());
