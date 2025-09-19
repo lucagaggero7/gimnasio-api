@@ -3,6 +3,7 @@ using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
@@ -12,10 +13,14 @@ namespace Gimnasio.Server.Controllers
     public class PagosController : ControllerBase
     {
         private readonly IPagosRepositorio _pagosRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
 
-        public PagosController(IPagosRepositorio pagosRepositorio)
+        private const string cacheKey = "Pagos";
+
+        public PagosController(IPagosRepositorio pagosRepositorio, IOutputCacheStore outputCacheStore)
         {
             _pagosRepositorio = pagosRepositorio;
+            this.outputCacheStore = outputCacheStore;
         }
 
         /// <summary>
@@ -28,6 +33,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de pagos.
         /// </returns>
         [HttpGet]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _pagosRepositorio.GetAll());
@@ -42,6 +48,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe un pago con ese Id.
         /// </returns>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var pago = await _pagosRepositorio.GetById(id);
@@ -74,6 +81,8 @@ namespace Gimnasio.Server.Controllers
 
             var created = await _pagosRepositorio.Create(pago);
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -104,6 +113,8 @@ namespace Gimnasio.Server.Controllers
                 return NotFound(new { mensaje = $"Pago no encontrado." });
             }
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = "Pago actualizado con exito" });
         }
 
@@ -124,6 +135,8 @@ namespace Gimnasio.Server.Controllers
             {
                 return NotFound(new { mensaje = $"Pago no encontrado." });
             }
+
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
             return Ok(new { mensaje = "Pago eliminado con éxito" });
         }

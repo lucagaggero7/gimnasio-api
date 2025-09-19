@@ -3,6 +3,7 @@ using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
@@ -12,11 +13,15 @@ namespace Gimnasio.Server.Controllers
     public class EjerciciosController : ControllerBase
     {
         private readonly IEjerciciosRepositorio _ejercicioRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
 
-        public EjerciciosController(IEjerciciosRepositorio ejercicioRepositorio)
+        private const string cacheKey = "Ejercicios";
+
+        public EjerciciosController(IEjerciciosRepositorio ejercicioRepositorio, IOutputCacheStore outputCacheStore)
         {
 
             _ejercicioRepositorio = ejercicioRepositorio;
+            this.outputCacheStore = outputCacheStore;
         }
 
         /// <summary>
@@ -29,6 +34,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de ejercicios.
         /// </returns>
         [HttpGet]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _ejercicioRepositorio.GetAll());
@@ -43,6 +49,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe un ejercicio con ese Id.
         /// </returns>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var ejercicio = await _ejercicioRepositorio.GetById(id);
@@ -75,6 +82,8 @@ namespace Gimnasio.Server.Controllers
 
             var created = await _ejercicioRepositorio.Create(ejercicio);
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -105,6 +114,8 @@ namespace Gimnasio.Server.Controllers
                 return NotFound(new { mensaje = $"Ejercicio no encontrado." });
             }
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = "Ejercicio actualizado con exito" });
         }
 
@@ -125,6 +136,8 @@ namespace Gimnasio.Server.Controllers
             {
                 return NotFound(new { mensaje = $"Ejercicio no encontrado." });
             }
+
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
             return Ok(new { mensaje = $"Ejercicio eliminado con éxito" });
         }

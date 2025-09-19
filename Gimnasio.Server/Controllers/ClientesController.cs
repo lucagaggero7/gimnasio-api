@@ -3,6 +3,7 @@ using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace Gimnasio.Server.Controllers
 {
@@ -11,11 +12,15 @@ namespace Gimnasio.Server.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly IClientesRepositorio _clienteRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
 
-        public ClientesController(IClientesRepositorio clienteRepositorio)
+        private const string cacheKey = "Clientes";
+
+        public ClientesController(IClientesRepositorio clienteRepositorio, IOutputCacheStore outputCacheStore)
         {
 
             _clienteRepositorio = clienteRepositorio;
+            this.outputCacheStore = outputCacheStore;
         }
 
         /// <summary>
@@ -28,6 +33,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes.
         /// </returns>
         [HttpGet]
+        [OutputCache(Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _clienteRepositorio.GetAll());
@@ -44,6 +50,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes DTO.
         /// </returns>
         [HttpGet("mostrar")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetFkDTO()
         {
             var clientes = await _clienteRepositorio.GetFkDTO();
@@ -59,6 +66,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe un cliente con ese Id.
         /// </returns>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var cliente = await _clienteRepositorio.GetById(id);
@@ -91,6 +99,8 @@ namespace Gimnasio.Server.Controllers
 
             var created = await _clienteRepositorio.Create(cliente);
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -121,6 +131,8 @@ namespace Gimnasio.Server.Controllers
                 return NotFound(new { mensaje = $"Cliente no encontrado." });
             }
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = "Cliente actualizado con éxito" });
         }
 
@@ -144,6 +156,8 @@ namespace Gimnasio.Server.Controllers
             {
                 return NotFound(new { mensaje = $"Cliente no encontrado." });
             }
+
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
             return Ok(new { mensaje = "Cliente eliminado con éxito" });
         }

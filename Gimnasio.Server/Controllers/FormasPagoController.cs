@@ -2,6 +2,7 @@
 using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
 using System.Threading.Tasks;
 
@@ -12,10 +13,14 @@ namespace Gimnasio.Server.Controllers
     public class FormasPagoController : ControllerBase
     {
         private readonly IFormasPagoRepositorio _formasPagoRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
 
-        public FormasPagoController(IFormasPagoRepositorio formasPagoRepositorio)
+        private const string cacheKey = "FormasPago";
+
+        public FormasPagoController(IFormasPagoRepositorio formasPagoRepositorio, IOutputCacheStore outputCacheStore)
         {
             _formasPagoRepositorio = formasPagoRepositorio;
+            this.outputCacheStore = outputCacheStore;
         }
 
         /// <summary>
@@ -28,6 +33,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de formas de pago.
         /// </returns>
         [HttpGet]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _formasPagoRepositorio.GetAll());
@@ -42,6 +48,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe la forma de pago con ese Id.
         /// </returns>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var formaPago = await _formasPagoRepositorio.GetById(id);
@@ -74,6 +81,8 @@ namespace Gimnasio.Server.Controllers
 
             var created = await _formasPagoRepositorio.Create(formaPago);
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -104,6 +113,8 @@ namespace Gimnasio.Server.Controllers
                 return NotFound(new { mensaje = $"Forma de pago no encontrada." });
             }
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = $"Forma de pago actualizada con éxito" });
         }
 
@@ -123,8 +134,10 @@ namespace Gimnasio.Server.Controllers
             if (filasAfectadas == false)
             {
                 return NotFound(new { mensaje = $"Forma de pago no encontrada." });
-            } 
-       
+            }
+
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = $"Forma de pago eliminada con éxito" });
         }
     }

@@ -2,6 +2,7 @@
 using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
@@ -11,10 +12,14 @@ namespace Gimnasio.Server.Controllers
     public class EvaluacionesController : ControllerBase
     {
         private readonly IEvaluacionesRepositorio _evaluacionesRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
 
-        public EvaluacionesController(IEvaluacionesRepositorio evaluacionesRepositorio)
+        private const string cacheKey = "Evaluaciones";
+
+        public EvaluacionesController(IEvaluacionesRepositorio evaluacionesRepositorio, IOutputCacheStore outputCacheStore)
         {
             _evaluacionesRepositorio = evaluacionesRepositorio;
+            this.outputCacheStore = outputCacheStore;
         }
 
         /// <summary>
@@ -27,6 +32,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de evaluaciones.
         /// </returns>
         [HttpGet]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _evaluacionesRepositorio.GetAll());
@@ -41,6 +47,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe la evaluacion con ese Id.
         /// </returns>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var evaluacion = await _evaluacionesRepositorio.GetById(id);
@@ -73,6 +80,8 @@ namespace Gimnasio.Server.Controllers
 
             var created = await _evaluacionesRepositorio.Create(evaluacion);
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -103,6 +112,8 @@ namespace Gimnasio.Server.Controllers
                 return NotFound(new { mensaje = $"Evaluacion no encontrada." });
             }
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = $"Evaluacion actualizada con éxito" });
         }
 
@@ -123,6 +134,8 @@ namespace Gimnasio.Server.Controllers
             {
                 return NotFound(new { mensaje = $"Evaluacion no encontrada." });
             }
+
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
             return Ok(new { mensaje = "Evaluacion eliminada con éxito" });
         }

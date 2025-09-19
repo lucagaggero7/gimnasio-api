@@ -70,6 +70,12 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException(message);
 }
 
+builder.Services.AddOutputCache(opciones =>
+{
+    opciones.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(10);
+
+});
+
 var mySQLConfig = new MySQLConfig(connectionString);
 builder.Services.AddSingleton(mySQLConfig);
 
@@ -103,6 +109,8 @@ app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
+
+app.UseOutputCache();
 
 app.MapControllers();
 

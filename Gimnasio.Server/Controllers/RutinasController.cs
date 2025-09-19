@@ -3,6 +3,7 @@ using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
@@ -12,10 +13,14 @@ namespace Gimnasio.Server.Controllers
     public class RutinasController : ControllerBase
     {
         private readonly IRutinasRepositorio _rutinasRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
 
-        public RutinasController(IRutinasRepositorio rutinasRepositorio)
+        private const string cacheKey = "Rutinas";
+
+        public RutinasController(IRutinasRepositorio rutinasRepositorio, IOutputCacheStore outputCacheStore)
         {
             _rutinasRepositorio = rutinasRepositorio;
+            this.outputCacheStore = outputCacheStore;
         }
 
         /// <summary>
@@ -28,6 +33,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de rutinas.
         /// </returns>
         [HttpGet]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _rutinasRepositorio.GetAll());
@@ -42,6 +48,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe la rutina con ese Id.
         /// </returns>
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var rutina = await _rutinasRepositorio.GetById(id);
@@ -74,6 +81,8 @@ namespace Gimnasio.Server.Controllers
 
             var created = await _rutinasRepositorio.Create(rutina);
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -104,6 +113,8 @@ namespace Gimnasio.Server.Controllers
                 return NotFound(new { mensaje = $"Rutina no encontrada." });
             }
 
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
+
             return Ok(new { mensaje = $"Rutina actualizada con éxito" });
         }
 
@@ -124,6 +135,8 @@ namespace Gimnasio.Server.Controllers
             {
                 return NotFound(new { mensaje = $"Rutina no encontrada." });
             }
+
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
             return Ok(new { mensaje = "Rutina eliminada con éxito" });
         }
