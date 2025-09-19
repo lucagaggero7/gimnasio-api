@@ -11,6 +11,20 @@ using Gimnasio.Server.Services.Dapper.ConvertirJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOutputCache(options =>
+{
+    options.AddPolicy("Default", policy =>
+    {
+        policy.Expire(TimeSpan.FromDays(7));
+    });
+});
+
+builder.Services.AddStackExchangeRedisOutputCache(opciones =>
+{
+    opciones.Configuration = builder.Configuration.GetConnectionString("redis");
+
+});
+
 // Add services to the container.
 
 var origenesPermitidos = builder.Configuration.GetValue<string>("OrigenesPermitidos")!.Split(",");
@@ -69,20 +83,6 @@ if (string.IsNullOrEmpty(connectionString))
 
     throw new InvalidOperationException(message);
 }
-
-builder.Services.AddOutputCache(options =>
-{
-    options.AddPolicy("Default", policy =>
-    {
-        policy.Expire(TimeSpan.FromDays(7));
-    });
-});
-
-builder.Services.AddStackExchangeRedisOutputCache(opciones =>
-{
-    opciones.Configuration = builder.Configuration.GetConnectionString("redis");
-
-});
 
 var mySQLConfig = new MySQLConfig(connectionString);
 builder.Services.AddSingleton(mySQLConfig);
