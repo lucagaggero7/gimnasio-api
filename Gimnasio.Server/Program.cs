@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Gimnasio.Server.Controllers;
 using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
@@ -20,23 +21,34 @@ builder.Services.AddOutputCache(options =>
     });
 });
 
-builder.Services.AddStackExchangeRedisOutputCache(options =>
+var redisConn = builder.Configuration.GetConnectionString("redis");
+
+if (string.IsNullOrWhiteSpace(redisConn))
 {
-    options.Configuration = builder.Configuration.GetConnectionString("redis");
+    builder.Services.AddOutputCache(options =>
+    {
+        options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
+    });
 
-    var config = ConfigurationOptions.Parse(options.Configuration);
+    Console.WriteLine("Usando OutputCache local.");
+}
+else
+{
+    builder.Services.AddStackExchangeRedisOutputCache(options =>
+    {
+        var config = ConfigurationOptions.Parse(redisConn);
+        config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
+        config.CommandMap = CommandMap.Create(
+            new HashSet<string> { "INFO", "CONFIG", "CLUSTER", "PING", "ECHO", "CLIENT" },
+            available: false
+        );
+        config.SocketManager = SocketManager.Shared;
+        options.ConfigurationOptions = config;
+    });
 
-    config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
+    Console.WriteLine("Usando OutputCache distribuido.");
+}
 
-    config.CommandMap = CommandMap.Create(
-        new HashSet<string> { "INFO", "CONFIG", "CLUSTER", "PING", "ECHO", "CLIENT" },
-        available: false
-    );
-
-    config.SocketManager = SocketManager.Shared;
-
-    options.ConfigurationOptions = config;
-});
 
 // Add services to the container.
 
@@ -116,7 +128,9 @@ builder.Services.AddScoped<ITiposMembresiaRepositorio, TiposMembresiaRepositorio
 builder.Services.AddScoped<IRutinasRepositorio, RutinasRepositorio>();
 builder.Services.AddScoped<IEvaluacionesRepositorio, EvaluacionesRepositorio>();
 builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
-builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>(); 
+builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>();
+
+builder.Services.AddHttpClient<CodigosAreaControllers>();
 
 var app = builder.Build();
 
