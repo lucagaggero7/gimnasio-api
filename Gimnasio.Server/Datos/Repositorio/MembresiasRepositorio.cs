@@ -92,7 +92,7 @@ namespace Gimnasio.Server.Datos.Repositorio
 
             var id = await db.ExecuteScalarAsync<int>(sql, new
             {
-                estado = membresia.Estado,
+                estado = "SIN PAGO",
                 fecha_inicio = membresia.FechaInicio,
                 fecha_vencimiento = membresia.FechaVencimiento,
                 contacto_emergencia = membresia.ContactoEmergencia,
@@ -103,6 +103,7 @@ namespace Gimnasio.Server.Datos.Repositorio
             });
 
             membresia.Id = id;
+            membresia.Estado = "SIN PAGO";
 
             var sqlUpdateCliente = @"
                  UPDATE clientes
