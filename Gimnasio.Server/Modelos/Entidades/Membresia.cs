@@ -19,10 +19,8 @@ namespace Gimnasio.Server.Modelos.Entidades
 
         /// <summary>
         /// Estado de la membresia.
-        /// Obligatorio, máximo 10 caracteres.
+        /// Calculado.
         /// </summary>
-        [Required(ErrorMessage = "El estado es obligatorio")]
-        [StringLength(10, ErrorMessage = "El estado no puede exceder los 10 caracteres")]
         public string Estado { get; set; } = string.Empty;
 
         /// <summary>
