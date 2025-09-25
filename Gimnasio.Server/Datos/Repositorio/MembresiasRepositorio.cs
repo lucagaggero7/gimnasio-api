@@ -41,18 +41,46 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<Membresia?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = @"SELECT id AS Id,
-                        estado AS Estado,
-                        fecha_inicio AS FechaInicio,
-                        fecha_vencimiento AS FechaVencimiento,
-                        contacto_emergencia AS ContactoEmergencia,
-                        total AS Total,
-                        saldo AS Saldo,
-                        fk_id_cliente AS FkIdCliente, 
-                        fk_id_tipo_membresia AS FkIdTipoMembresia
-                        FROM membresias WHERE id = @id";
-            return await db.QueryFirstOrDefaultAsync<Membresia>(sql, new { Id = id });
+
+            var sqlMembresia = @"SELECT id AS Id,
+                                estado AS Estado,
+                                fecha_inicio AS FechaInicio,
+                                fecha_vencimiento AS FechaVencimiento,
+                                contacto_emergencia AS ContactoEmergencia,
+                                total AS Total,
+                                saldo AS Saldo,
+                                fk_id_cliente AS FkIdCliente, 
+                                fk_id_tipo_membresia AS FkIdTipoMembresia
+                         FROM membresias WHERE id = @id";
+
+            var membresia = await db.QueryFirstOrDefaultAsync<Membresia>(sqlMembresia, new { Id = id });
+
+            if (membresia == null)
+                return null;
+
+            var sqlPagos = @"SELECT id AS Id,
+                            monto AS Monto,
+                            fecha AS Fecha,
+                            fk_id_forma_pago AS FkIdFormaPago,
+                            fk_id_membresia AS FkIdMembresia,
+                            fk_id_cliente AS FkIdCliente
+                     FROM pagos
+                     WHERE fk_id_membresia = @id";
+
+            var pagos = (await db.QueryAsync<Pago>(sqlPagos, new { Id = id })).ToList();
+
+            membresia.Pagos = pagos;
+
+            if (!pagos.Any())
+                membresia.Estado = "SIN PAGO";
+            else if (membresia.Saldo > 0)
+                membresia.Estado = "PENDIENTE";
+            else
+                membresia.Estado = "PAGADO";
+
+            return membresia;
         }
+
 
         public async Task<Membresia> Create(Membresia membresia)
         {

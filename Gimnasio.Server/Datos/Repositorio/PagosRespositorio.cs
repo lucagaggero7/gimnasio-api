@@ -53,52 +53,232 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<Pago> Create(Pago pago)
         {
             using var db = dbConnection();
-            var sql = @"INSERT INTO pagos (monto, fecha, fk_id_forma_pago, fk_id_membresia, fk_id_cliente)
-                        VALUES (@monto, @fecha, @fk_id_forma_pago, @fk_id_membresia, @fk_id_cliente);
-                        SELECT LAST_INSERT_ID(); ";
+            using var transaction = await db.BeginTransactionAsync();
 
-            var id = await db.ExecuteScalarAsync<int>(sql, new
+            try
             {
-                monto = pago.Monto,
-                fecha = pago.Fecha,
-                fk_id_forma_pago = pago.FkIdFormaPago,
-                fk_id_membresia = pago.FkIdMembresia,
-                fk_id_cliente = pago.FkIdCliente
-            });
+                var sqlInsert = @"INSERT INTO pagos (monto, fecha, fk_id_forma_pago, fk_id_membresia, fk_id_cliente)
+                          VALUES (@monto, @fecha, @fk_id_forma_pago, @fk_id_membresia, @fk_id_cliente);
+                          SELECT LAST_INSERT_ID();";
 
-            pago.Id = id;
-            return pago;
+                var id = await db.ExecuteScalarAsync<int>(sqlInsert, new
+                {
+                    monto = pago.Monto,
+                    fecha = pago.Fecha,
+                    fk_id_forma_pago = pago.FkIdFormaPago,
+                    fk_id_membresia = pago.FkIdMembresia,
+                    fk_id_cliente = pago.FkIdCliente
+                }, transaction);
+
+                pago.Id = id;
+
+                var sqlUpdateSaldo = @"UPDATE membresias
+                               SET saldo = saldo - @monto
+                               WHERE id = @idMembresia";
+
+                await db.ExecuteAsync(sqlUpdateSaldo, new
+                {
+                    monto = pago.Monto,
+                    idMembresia = pago.FkIdMembresia
+                }, transaction);
+
+                var sqlSelectSaldo = @"SELECT total, saldo 
+                               FROM membresias 
+                               WHERE id = @idMembresia";
+
+                var membresia = await db.QueryFirstOrDefaultAsync<(int Total, int Saldo)>(
+                    sqlSelectSaldo, new { idMembresia = pago.FkIdMembresia }, transaction);
+
+                string nuevoEstado;
+                if (membresia.Saldo == membresia.Total)
+                    nuevoEstado = "SIN PAGO";
+                else if (membresia.Saldo > 0)
+                    nuevoEstado = "PENDIENTE";
+                else
+                    nuevoEstado = "PAGADO";
+
+                var sqlUpdateEstado = @"UPDATE membresias
+                                SET estado = @estado
+                                WHERE id = @idMembresia";
+
+                await db.ExecuteAsync(sqlUpdateEstado, new
+                {
+                    estado = nuevoEstado,
+                    idMembresia = pago.FkIdMembresia
+                }, transaction);
+
+                await transaction.CommitAsync();
+                return pago;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
+
 
         public async Task<bool> Update(Pago pago)
         {
             using var db = dbConnection();
-            var sql = @"UPDATE pagos SET
-                        monto = @monto,
-                        fecha = @fecha,
-                        fk_id_forma_pago = @fk_id_forma_pago,
-                        fk_id_membresia = @fk_id_membresia,
-                        fk_id_cliente = @fk_id_cliente
-                        WHERE Id = @idPagos";
+            using var transaction = db.BeginTransaction();
 
-            var result = await db.ExecuteAsync(sql, new
+            try
             {
-                monto = pago.Monto,
-                fecha = pago.Fecha,
-                fk_id_forma_pago = pago.FkIdFormaPago,
-                fk_id_membresia = pago.FkIdMembresia,
-                fk_id_cliente = pago.FkIdCliente,
-                id = pago.Id
-            });
-            return result > 0;
+                var sqlUpdatePago = @"UPDATE pagos SET
+                                monto = @monto,
+                                fecha = @fecha,
+                                fk_id_forma_pago = @fk_id_forma_pago,
+                                fk_id_membresia = @fk_id_membresia,
+                                fk_id_cliente = @fk_id_cliente
+                              WHERE id = @id";
+
+                var result = await db.ExecuteAsync(sqlUpdatePago, new
+                {
+                    monto = pago.Monto,
+                    fecha = pago.Fecha,
+                    fk_id_forma_pago = pago.FkIdFormaPago,
+                    fk_id_membresia = pago.FkIdMembresia,
+                    fk_id_cliente = pago.FkIdCliente,
+                    id = pago.Id
+                }, transaction);
+
+                if (result == 0)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+                var sqlPagos = @"SELECT IFNULL(SUM(monto),0) 
+                         FROM pagos 
+                         WHERE fk_id_membresia = @idMembresia";
+
+                var totalPagado = await db.ExecuteScalarAsync<decimal>(
+                    sqlPagos,
+                    new { idMembresia = pago.FkIdMembresia },
+                    transaction
+                );
+
+                var sqlMembresia = @"SELECT total 
+                             FROM membresias 
+                             WHERE id = @idMembresia";
+
+                var totalMembresia = await db.ExecuteScalarAsync<decimal>(
+                    sqlMembresia,
+                    new { idMembresia = pago.FkIdMembresia },
+                    transaction
+                );
+
+                var saldo = totalMembresia - totalPagado;
+
+                string estado;
+                if (totalPagado == 0)
+                    estado = "SIN PAGO";
+                else if (saldo > 0)
+                    estado = "PENDIENTE";
+                else
+                    estado = "PAGADO";
+
+                var sqlUpdateMembresia = @"UPDATE membresias 
+                                   SET saldo = @saldo, estado = @estado
+                                   WHERE id = @idMembresia";
+
+                await db.ExecuteAsync(sqlUpdateMembresia, new
+                {
+                    saldo,
+                    estado,
+                    idMembresia = pago.FkIdMembresia
+                }, transaction);
+
+                transaction.Commit();
+                return true;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
+
 
         public async Task<bool> Delete(int id)
         {
             using var db = dbConnection();
-            var sql = "DELETE FROM pagos WHERE id = @id";
-            var result = await db.ExecuteAsync(sql, new { Id = id });
-            return result > 0;
+            using var transaction = db.BeginTransaction();
+
+            try
+            {
+                var sqlGetMembresia = @"SELECT fk_id_membresia 
+                                FROM pagos 
+                                WHERE id = @idPago";
+
+                var fkIdMembresia = await db.ExecuteScalarAsync<int?>(sqlGetMembresia, new { idPago = id }, transaction);
+
+                if (fkIdMembresia == null)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+                var sqlDelete = @"DELETE FROM pagos WHERE id = @id";
+                var result = await db.ExecuteAsync(sqlDelete, new { id }, transaction);
+
+                if (result == 0)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+                var sqlPagos = @"SELECT IFNULL(SUM(monto),0) 
+                         FROM pagos 
+                         WHERE fk_id_membresia = @idMembresia";
+
+                var totalPagado = await db.ExecuteScalarAsync<decimal>(
+                    sqlPagos,
+                    new { idMembresia = fkIdMembresia },
+                    transaction
+                );
+
+                var sqlMembresiaTotal = @"SELECT total 
+                                  FROM membresias 
+                                  WHERE id = @idMembresia";
+
+                var totalMembresia = await db.ExecuteScalarAsync<decimal>(
+                    sqlMembresiaTotal,
+                    new { idMembresia = fkIdMembresia },
+                    transaction
+                );
+
+                var saldo = totalMembresia - totalPagado;
+
+                string estado;
+                if (totalPagado == 0)
+                    estado = "SIN PAGO";
+                else if (saldo > 0)
+                    estado = "PENDIENTE";
+                else
+                    estado = "PAGADO";
+
+                var sqlUpdateMembresia = @"UPDATE membresias 
+                                   SET saldo = @saldo, estado = @estado
+                                   WHERE id = @idMembresia";
+
+                await db.ExecuteAsync(sqlUpdateMembresia, new
+                {
+                    saldo,
+                    estado,
+                    idMembresia = fkIdMembresia
+                }, transaction);
+
+                transaction.Commit();
+                return true;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
+
     }
 }

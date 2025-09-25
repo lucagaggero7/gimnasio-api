@@ -79,5 +79,12 @@ namespace Gimnasio.Server.Modelos.Entidades
         [Range(1, int.MaxValue, ErrorMessage = "El ID del tipo de membresia debe ser mayor a 0.")]
         [ForeignKey("TipoMembresia")]
         public int FkIdTipoMembresia { get; set; }
+
+        /// <summary>
+        /// Lista de pagos sobre la membresia. Calculado
+        /// Tabla pagos.
+        /// </summary>
+        [NotMapped]
+        public List<Pago> Pagos { get; set; } = new();
     }
 }
