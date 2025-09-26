@@ -50,9 +50,10 @@ namespace Gimnasio.Server.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<Pago>(sql, new { Id = id });
         }
 
-        public async Task<Pago> Create(Pago pago)
+      public async Task<Pago> Create(Pago pago)
         {
             using var db = dbConnection();
+            await db.OpenAsync(); // Abrir la conexión
             using var transaction = await db.BeginTransactionAsync();
 
             try
@@ -73,17 +74,14 @@ namespace Gimnasio.Server.Datos.Repositorio
 
                 pago.Id = id;
 
-                // Obtener membresía completa (total, saldo y lista de pagos)
+                // Obtener membresía completa
                 var sqlSelectMembresia = @"SELECT id, total, saldo, estado FROM membresias WHERE id = @idMembresia";
                 var membresiaEntity = await db.QueryFirstOrDefaultAsync<Membresia>(
                     sqlSelectMembresia, new { idMembresia = pago.FkIdMembresia }, transaction);
 
                 if (membresiaEntity != null)
                 {
-                    // Agregar pago a la lista en memoria
                     membresiaEntity.Pagos.Add(pago);
-
-                    // Actualizar saldo
                     membresiaEntity.Saldo = (int)(membresiaEntity.Saldo - pago.Monto);
 
 
@@ -95,7 +93,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                     else
                         membresiaEntity.Estado = "PAGADO";
 
-                    // Persistir cambios en la base de datos
                     var sqlUpdate = @"UPDATE membresias 
                               SET saldo = @saldo, estado = @estado 
                               WHERE id = @id";
@@ -118,9 +115,11 @@ namespace Gimnasio.Server.Datos.Repositorio
         }
 
 
+
         public async Task<bool> Update(Pago pago)
         {
             using var db = dbConnection();
+            await db.OpenAsync(); // Abrir la conexión
             using var transaction = db.BeginTransaction();
 
             try
@@ -204,6 +203,7 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<bool> Delete(int id)
         {
             using var db = dbConnection();
+            await db.OpenAsync(); // Abrir la conexión
             using var transaction = db.BeginTransaction();
 
             try
