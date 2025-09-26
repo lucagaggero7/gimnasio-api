@@ -57,6 +57,7 @@ namespace Gimnasio.Server.Datos.Repositorio
 
             try
             {
+                // Insertar pago
                 var sqlInsert = @"INSERT INTO pagos (monto, fecha, fk_id_forma_pago, fk_id_membresia, fk_id_cliente)
                           VALUES (@monto, @fecha, @fk_id_forma_pago, @fk_id_membresia, @fk_id_cliente);
                           SELECT LAST_INSERT_ID();";
@@ -72,40 +73,39 @@ namespace Gimnasio.Server.Datos.Repositorio
 
                 pago.Id = id;
 
-                var sqlUpdateSaldo = @"UPDATE membresias
-                               SET saldo = saldo - @monto
-                               WHERE id = @idMembresia";
+                // Obtener membresía completa (total, saldo y lista de pagos)
+                var sqlSelectMembresia = @"SELECT id, total, saldo, estado FROM membresias WHERE id = @idMembresia";
+                var membresiaEntity = await db.QueryFirstOrDefaultAsync<Membresia>(
+                    sqlSelectMembresia, new { idMembresia = pago.FkIdMembresia }, transaction);
 
-                await db.ExecuteAsync(sqlUpdateSaldo, new
+                if (membresiaEntity != null)
                 {
-                    monto = pago.Monto,
-                    idMembresia = pago.FkIdMembresia
-                }, transaction);
+                    // Agregar pago a la lista en memoria
+                    membresiaEntity.Pagos.Add(pago);
 
-                var sqlSelectSaldo = @"SELECT total, saldo 
-                               FROM membresias 
-                               WHERE id = @idMembresia";
+                    // Actualizar saldo
+                    membresiaEntity.Saldo = (int)(membresiaEntity.Saldo - pago.Monto);
 
-                var membresia = await db.QueryFirstOrDefaultAsync<(int Total, int Saldo)>(
-                    sqlSelectSaldo, new { idMembresia = pago.FkIdMembresia }, transaction);
 
-                string nuevoEstado;
-                if (membresia.Saldo == membresia.Total)
-                    nuevoEstado = "SIN PAGO";
-                else if (membresia.Saldo > 0)
-                    nuevoEstado = "PENDIENTE";
-                else
-                    nuevoEstado = "PAGADO";
+                    // Actualizar estado según saldo
+                    if (membresiaEntity.Saldo == membresiaEntity.Total)
+                        membresiaEntity.Estado = "SIN PAGO";
+                    else if (membresiaEntity.Saldo > 0)
+                        membresiaEntity.Estado = "PENDIENTE";
+                    else
+                        membresiaEntity.Estado = "PAGADO";
 
-                var sqlUpdateEstado = @"UPDATE membresias
-                                SET estado = @estado
-                                WHERE id = @idMembresia";
-
-                await db.ExecuteAsync(sqlUpdateEstado, new
-                {
-                    estado = nuevoEstado,
-                    idMembresia = pago.FkIdMembresia
-                }, transaction);
+                    // Persistir cambios en la base de datos
+                    var sqlUpdate = @"UPDATE membresias 
+                              SET saldo = @saldo, estado = @estado 
+                              WHERE id = @id";
+                    await db.ExecuteAsync(sqlUpdate, new
+                    {
+                        saldo = membresiaEntity.Saldo,
+                        estado = membresiaEntity.Estado,
+                        id = membresiaEntity.Id
+                    }, transaction);
+                }
 
                 await transaction.CommitAsync();
                 return pago;
