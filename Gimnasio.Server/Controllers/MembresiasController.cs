@@ -138,6 +138,7 @@ namespace Gimnasio.Server.Controllers
             }
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("Clientes", default);
 
             return Ok(new { mensaje = $"Membresía eliminada con éxito" });
         }
