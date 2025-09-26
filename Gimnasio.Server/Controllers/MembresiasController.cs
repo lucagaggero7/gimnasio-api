@@ -82,6 +82,7 @@ namespace Gimnasio.Server.Controllers
             var created = await _membresiaRepositorio.Create(membresia);
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("Clientes", default);
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
