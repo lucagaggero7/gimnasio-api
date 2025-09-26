@@ -82,6 +82,7 @@ namespace Gimnasio.Server.Controllers
             var created = await _pagosRepositorio.Create(pago);
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("Membresias", default);
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
@@ -114,6 +115,7 @@ namespace Gimnasio.Server.Controllers
             }
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("Membresias", default);
 
             return Ok(new { mensaje = "Pago actualizado con exito" });
         }
@@ -137,6 +139,7 @@ namespace Gimnasio.Server.Controllers
             }
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("Membresias", default);
 
             return Ok(new { mensaje = "Pago eliminado con éxito" });
         }
