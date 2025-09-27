@@ -11,6 +11,7 @@ namespace Gimnasio.Server.Datos.Repositorio
     {
         Task<IEnumerable<Membresia>> GetAll();
         Task<Membresia?> GetById(int id);
+        Task<IEnumerable<Membresia>> GetByClienteId(int id);
         Task<Membresia> Create(Membresia membresia);
         Task<bool> Update(Membresia membresia);
         Task<bool> Delete(int id);

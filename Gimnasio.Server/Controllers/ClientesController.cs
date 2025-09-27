@@ -12,14 +12,16 @@ namespace Gimnasio.Server.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly IClientesRepositorio _clienteRepositorio;
+        private readonly IMembresiasRepositorio _membresiaRepositorio;
         private readonly IOutputCacheStore outputCacheStore;
 
         private const string cacheKey = "Clientes";
 
-        public ClientesController(IClientesRepositorio clienteRepositorio, IOutputCacheStore outputCacheStore)
+        public ClientesController(IClientesRepositorio clienteRepositorio, IMembresiasRepositorio membresiaRepositorio, IOutputCacheStore outputCacheStore)
         {
 
             _clienteRepositorio = clienteRepositorio;
+            _membresiaRepositorio = membresiaRepositorio;
             this.outputCacheStore = outputCacheStore;
         }
 
@@ -77,6 +79,26 @@ namespace Gimnasio.Server.Controllers
             }
 
             return Ok(cliente);
+        }
+
+        /// <summary>
+        /// Busca una lista de membresias por su cliente.
+        /// </summary>
+        /// <param name="id">Id del cliente a buscar.</param>
+        /// <returns>
+        /// Respuesta HTTP 200 con la lista de membresias encontradas,  
+        /// o HTTP 404 si no existen membresias que pertenezcan a ese cliente.
+        /// </returns>
+        [HttpGet("{id}/membresias")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        public async Task<IActionResult> GetMembresiasPorCliente(int id)
+        {
+            var membresias = await _membresiaRepositorio.GetByClienteId(id);
+
+            if (!membresias.Any())
+                return NotFound(new { mensaje = "El cliente no tiene membresías." });
+
+            return Ok(membresias);
         }
 
         /// <summary>
