@@ -92,7 +92,7 @@ namespace Gimnasio.Server.Controllers
         /// </returns>
         [HttpGet("{id}/membresias")]
         [OutputCache(PolicyName = "Default", Tags = [cacheKey2])]
-        public async Task<IActionResult> GetMembresiasPorCliente(int id)
+        public async Task<IActionResult> GetByCliente(int id)
         {
             var membresias = await _membresiaRepositorio.GetByClienteId(id);
 
