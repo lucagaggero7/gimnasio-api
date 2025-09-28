@@ -115,50 +115,48 @@ namespace Gimnasio.Server.Datos.Repositorio
             using var db = DbConnection();
 
             var sql = @"
-                    SELECT 
-                     m.id AS Id, 
-                    m.estado AS Estado,
-                     m.fecha_inicio AS FechaInicio,
-                      m.fecha_vencimiento AS FechaVencimiento,
-                     m.contacto_emergencia AS ContactoEmergencia,
-                     m.total AS Total, 
-                     m.saldo AS Saldo,
-                     m.fk_id_cliente AS FkIdCliente,
-                     m.fk_id_tipo_membresia AS FkIdTipoMembresia,
-                     p.id AS PagoId, 
-                     p.monto AS Monto, 
-                    p.fecha AS Fecha,
-                    p.fk_id_forma_pago AS FkIdFormaPago,
-                     p.fk_id_membresia AS FkIdMembresia,
-                     p.fk_id_cliente AS FkIdCliente
-                     FROM membresias m
-                    LEFT JOIN pagos p ON m.id = p.fk_id_membresia
-                    WHERE m.fk_id_cliente = @clienteId
-                    ";
-
+        SELECT 
+            m.id AS Id, 
+            m.estado AS Estado,
+            m.fecha_inicio AS FechaInicio,
+            m.fecha_vencimiento AS FechaVencimiento,
+            m.contacto_emergencia AS ContactoEmergencia,
+            m.total AS Total, 
+            m.saldo AS Saldo,
+            m.fk_id_cliente AS FkIdCliente,
+            m.fk_id_tipo_membresia AS FkIdTipoMembresia,
+            p.id AS Id,
+            p.monto AS Monto,
+            p.fecha AS Fecha,
+            p.fk_id_forma_pago AS FkIdFormaPago,
+            p.fk_id_membresia AS FkIdMembresia,
+            p.fk_id_cliente AS FkIdCliente
+        FROM membresias m
+        LEFT JOIN pagos p ON m.id = p.fk_id_membresia
+        WHERE m.fk_id_cliente = @clienteId
+    ";
 
             var lookup = new Dictionary<int, Membresia>();
 
             var result = await db.QueryAsync<Membresia, Pago, Membresia>(
-    sql,
-    (m, p) =>
-    {
-        if (!lookup.TryGetValue(m.Id, out var mem))
-        {
-            mem = m;
-            mem.Pagos = new List<Pago>();
-            lookup.Add(mem.Id, mem);
-        }
+                sql,
+                (m, p) =>
+                {
+                    if (!lookup.TryGetValue(m.Id, out var mem))
+                    {
+                        mem = m;
+                        mem.Pagos = new List<Pago>();
+                        lookup.Add(mem.Id, mem);
+                    }
 
-        if (p != null)
-            mem.Pagos.Add(p);
+                    if (p != null)
+                        mem.Pagos.Add(p);
 
-        return mem;
-    },
-    new { clienteId },
-    splitOn: "PagoId" 
-);
-
+                    return mem;
+                },
+                new { clienteId },
+                splitOn: "Id"
+            );
 
             foreach (var m in lookup.Values)
             {
@@ -172,7 +170,6 @@ namespace Gimnasio.Server.Datos.Repositorio
 
             return lookup.Values;
         }
-
 
 
         public async Task<Membresia> Create(Membresia membresia)
