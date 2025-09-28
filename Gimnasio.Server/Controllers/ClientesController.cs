@@ -16,6 +16,7 @@ namespace Gimnasio.Server.Controllers
         private readonly IOutputCacheStore outputCacheStore;
 
         private const string cacheKey = "Clientes";
+        private const string cacheKey2 = "Membresias";
 
         public ClientesController(IClientesRepositorio clienteRepositorio, IMembresiasRepositorio membresiaRepositorio, IOutputCacheStore outputCacheStore)
         {
@@ -90,7 +91,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existen membresias que pertenezcan a ese cliente.
         /// </returns>
         [HttpGet("{id}/membresias")]
-        [OutputCache(PolicyName = "Default", Tags = ["Membresias"])]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey2])]
         public async Task<IActionResult> GetMembresiasPorCliente(int id)
         {
             var membresias = await _membresiaRepositorio.GetByClienteId(id);
