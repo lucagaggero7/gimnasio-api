@@ -90,7 +90,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existen membresias que pertenezcan a ese cliente.
         /// </returns>
         [HttpGet("{id}/membresias")]
-        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        [OutputCache(PolicyName = "Default", Tags = ["Membresias"])]
         public async Task<IActionResult> GetMembresiasPorCliente(int id)
         {
             var membresias = await _membresiaRepositorio.GetByClienteId(id);
