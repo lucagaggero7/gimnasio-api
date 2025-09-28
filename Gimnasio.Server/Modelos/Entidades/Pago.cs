@@ -51,13 +51,11 @@ namespace Gimnasio.Server.Modelos.Entidades
         public int FkIdMembresia { get; set; }
 
         /// <summary>
-        /// Identificador de clave foranea. Obligatorio
+        /// Identificador de clave foranea. No obligatorio
         /// Tabla cliente.
         /// </summary>
-        [Required(ErrorMessage = "El ID del cliente es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "El ID del cliente debe ser mayor a 0.")]
         [ForeignKey("Cliente")]
-        public int FkIdCliente { get; set; }
+        public int? FkIdCliente { get; set; }
 
     }
 }

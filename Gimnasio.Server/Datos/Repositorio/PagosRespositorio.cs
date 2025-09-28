@@ -50,16 +50,29 @@ namespace Gimnasio.Server.Datos.Repositorio
             return await db.QueryFirstOrDefaultAsync<Pago>(sql, new { Id = id });
         }
 
-      public async Task<Pago> Create(Pago pago)
+        public async Task<Pago> Create(Pago pago)
         {
             using var db = dbConnection();
-            await db.OpenAsync(); // Abrir la conexión
+            await db.OpenAsync();
             using var transaction = await db.BeginTransactionAsync();
 
             try
             {
-                // Insertar pago
-                var sqlInsert = @"INSERT INTO pagos (monto, fecha, fk_id_forma_pago, fk_id_membresia, fk_id_cliente)
+                // 1. Obtener id_cliente de la membresía
+                var sqlSelectCliente = @"SELECT fk_id_cliente 
+                                 FROM membresias 
+                                 WHERE id = @idMembresia";
+                var idCliente = await db.ExecuteScalarAsync<int>(
+                    sqlSelectCliente,
+                    new { idMembresia = pago.FkIdMembresia },
+                    transaction);
+
+                if (idCliente == 0)
+                    throw new Exception("No se encontró la membresía o no tiene cliente asignado.");
+
+                // 2. Insertar pago usando el idCliente obtenido
+                var sqlInsert = @"INSERT INTO pagos 
+                          (monto, fecha, fk_id_forma_pago, fk_id_membresia, fk_id_cliente)
                           VALUES (@monto, @fecha, @fk_id_forma_pago, @fk_id_membresia, @fk_id_cliente);
                           SELECT LAST_INSERT_ID();";
 
@@ -69,23 +82,23 @@ namespace Gimnasio.Server.Datos.Repositorio
                     fecha = pago.Fecha,
                     fk_id_forma_pago = pago.FkIdFormaPago,
                     fk_id_membresia = pago.FkIdMembresia,
-                    fk_id_cliente = pago.FkIdCliente
+                    fk_id_cliente = idCliente
                 }, transaction);
 
                 pago.Id = id;
+                pago.FkIdCliente = idCliente; // opcional, para devolver el pago completo
 
-                // Obtener membresía completa
-                var sqlSelectMembresia = @"SELECT id, total, saldo, estado FROM membresias WHERE id = @idMembresia";
+                // 3. Actualizar saldo de la membresía
+                var sqlSelectMembresia = @"SELECT id, total, saldo, estado 
+                                   FROM membresias 
+                                   WHERE id = @idMembresia";
                 var membresiaEntity = await db.QueryFirstOrDefaultAsync<Membresia>(
                     sqlSelectMembresia, new { idMembresia = pago.FkIdMembresia }, transaction);
 
                 if (membresiaEntity != null)
                 {
-                    membresiaEntity.Pagos.Add(pago);
-                    membresiaEntity.Saldo = (int)(membresiaEntity.Saldo - pago.Monto);
+                    membresiaEntity.Saldo -= (int)pago.Monto;
 
-
-                    // Actualizar estado según saldo
                     if (membresiaEntity.Saldo == membresiaEntity.Total)
                         membresiaEntity.Estado = "SIN PAGO";
                     else if (membresiaEntity.Saldo > 0)
@@ -113,7 +126,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                 throw;
             }
         }
-
 
 
         public async Task<bool> Update(Pago pago)
