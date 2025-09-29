@@ -5,17 +5,28 @@ namespace Gimnasio.Server.Services.Dapper.ConvertirJson
 {
     public class HoraJson : JsonConverter<TimeOnly>
     {
-        private readonly string _formato = "HH:mm:ss";
 
         public override TimeOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var valor = reader.GetString();
-            return TimeOnly.ParseExact(valor!, _formato);
+            if (string.IsNullOrWhiteSpace(valor))
+                return default;
+
+            if (TimeOnly.TryParseExact(valor, "HH:mm:ss", out var time))
+                return time;
+
+            if (TimeOnly.TryParseExact(valor, "HH:mm", out time))
+                return time;
+
+            throw new FormatException($"Formato de hora inválido: {valor}");
         }
 
         public override void Write(Utf8JsonWriter writer, TimeOnly value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString(_formato));
+            if (value.Second == 0)
+                writer.WriteStringValue(value.ToString("HH:mm"));
+            else
+                writer.WriteStringValue(value.ToString("HH:mm:ss"));
         }
     }
 }
