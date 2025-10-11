@@ -97,7 +97,7 @@ namespace Gimnasio.Server.Controllers
             var membresias = await _membresiaRepositorio.GetByClienteId(id);
 
             if (!membresias.Any())
-                return NotFound(new { mensaje = "El cliente no tiene membresías." });
+                return Ok(new { mensaje = "El cliente no tiene membresías." });
 
             return Ok(membresias);
         }
