@@ -30,7 +30,7 @@ namespace Gimnasio.Server.Datos.Repositorio
             var db = dbConnection();
 
             var sql = @"
-            SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia, c.fecha AS Fecha,
+            SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia, c.fecha,
             CASE 
                 WHEN CURDATE() BETWEEN m.fecha_inicio AND m.fecha_vencimiento THEN TRUE
                 ELSE FALSE
@@ -58,7 +58,7 @@ namespace Gimnasio.Server.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @" SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia, c.fecha AS Fecha,
+            var sql = @" SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia, c.fecha,
             CASE 
                 WHEN CURDATE() BETWEEN m.fecha_inicio AND m.fecha_vencimiento THEN TRUE
                 ELSE FALSE
