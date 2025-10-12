@@ -80,5 +80,12 @@ namespace Gimnasio.Server.Modelos.DTO
         /// No obligatorio, booleano.
         /// </summary>
         public bool Estado { get; set; } = false;
+
+        /// <summary>
+        /// Fecha de creacion del cliente.
+        /// Obligatoria.
+        /// </summary>
+        [Required(ErrorMessage = "La fecha de creacion es obligatoria.")]
+        public DateOnly Fecha { get; set; }
     }
 }
