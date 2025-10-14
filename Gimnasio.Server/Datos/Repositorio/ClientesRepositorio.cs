@@ -113,8 +113,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         telefono = @telefono,
                         direccion = @direccion,
                         fecha_nacimiento = @fecha_nacimiento,
-                        contacto_emergencia = @contacto_emergencia,
-                        fecha = @fecha
+                        contacto_emergencia = @contacto_emergencia
                         WHERE id = @id";
 
             var result = await db.ExecuteAsync(sql, new
@@ -126,8 +125,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 telefono = cliente.Telefono,
                 direccion = cliente.Direccion,
                 fecha_nacimiento = cliente.FechaNacimiento,
-                contacto_emergencia = cliente.ContactoEmergencia,
-                fecha = cliente.Fecha,
+                contacto_emergencia = cliente.ContactoEmergencia
                 id = cliente.Id
             });
 
