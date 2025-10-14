@@ -125,7 +125,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 telefono = cliente.Telefono,
                 direccion = cliente.Direccion,
                 fecha_nacimiento = cliente.FechaNacimiento,
-                contacto_emergencia = cliente.ContactoEmergencia
+                contacto_emergencia = cliente.ContactoEmergencia,
                 id = cliente.Id
             });
 
