@@ -30,7 +30,7 @@ namespace Gimnasio.Server.Datos.Repositorio
             var db = dbConnection();
 
             var sql = @"
-            SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia,
+            SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia, c.fecha AS Fecha,
             CASE 
                 WHEN CURDATE() BETWEEN m.fecha_inicio AND m.fecha_vencimiento THEN TRUE
                 ELSE FALSE
@@ -58,7 +58,7 @@ namespace Gimnasio.Server.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @" SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia,
+            var sql = @" SELECT c.id, c.nombre, c.apellido, c.dni, c.email,c.telefono, c.direccion, c.fecha_nacimiento AS FechaNacimiento, c.contacto_emergencia AS ContactoEmergencia, c.fecha AS Fecha,
             CASE 
                 WHEN CURDATE() BETWEEN m.fecha_inicio AND m.fecha_vencimiento THEN TRUE
                 ELSE FALSE
@@ -80,8 +80,8 @@ namespace Gimnasio.Server.Datos.Repositorio
         {
             var db = dbConnection();
 
-            var sql = @"INSERT INTO clientes (nombre, apellido, dni, email, telefono, direccion, fecha_nacimiento, contacto_emergencia)
-                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento, @contacto_emergencia);
+            var sql = @"INSERT INTO clientes (nombre, apellido, dni, email, telefono, direccion, fecha_nacimiento, contacto_emergencia, fecha)
+                        VALUES (@nombre, @apellido, @dni, @email, @telefono, @direccion, @fecha_nacimiento, @contacto_emergencia, @fecha);
                          SELECT LAST_INSERT_ID(); ";
 
             var id = await db.ExecuteScalarAsync<int>(sql, new
@@ -93,7 +93,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                 telefono = cliente.Telefono,
                 direccion = cliente.Direccion,
                 fecha_nacimiento = cliente.FechaNacimiento,
-                contacto_emergencia = cliente.ContactoEmergencia
+                contacto_emergencia = cliente.ContactoEmergencia,
+                fecha = cliente.Fecha
             });
 
             cliente.Id = id;
@@ -112,7 +113,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                         telefono = @telefono,
                         direccion = @direccion,
                         fecha_nacimiento = @fecha_nacimiento,
-                        contacto_emergencia = @contacto_emergencia
+                        contacto_emergencia = @contacto_emergencia,
+                        fecha = @fecha
                         WHERE id = @id";
 
             var result = await db.ExecuteAsync(sql, new
@@ -125,6 +127,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 direccion = cliente.Direccion,
                 fecha_nacimiento = cliente.FechaNacimiento,
                 contacto_emergencia = cliente.ContactoEmergencia,
+                fecha = cliente.Fecha,
                 id = cliente.Id
             });
 

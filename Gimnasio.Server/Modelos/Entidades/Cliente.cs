@@ -85,6 +85,13 @@ namespace Gimnasio.Server.Modelos.Entidades
         [StringLength(20, ErrorMessage = "El teléfono no puede superar los 20 caracteres.")]
         public string ContactoEmergencia { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Fecha de creacion del cliente.
+        /// Obligatoria.
+        /// </summary>
+        [Required(ErrorMessage = "La fecha de creacion es obligatoria.")]
+        public DateOnly Fecha { get; set; }
+
     }
 
 }
