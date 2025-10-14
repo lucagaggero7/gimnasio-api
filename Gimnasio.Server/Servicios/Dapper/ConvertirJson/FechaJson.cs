@@ -5,7 +5,7 @@ namespace Gimnasio.Server.Services.Dapper.ConvertirJson
 {
     public class FechaJson : JsonConverter<DateOnly>
     {
-        private readonly string _formato = "yyyy-MM-dd";
+        private readonly string _formato = "dd/MM/yyyy";
 
         public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
