@@ -110,6 +110,52 @@ namespace Gimnasio.Server.Datos.Repositorio
             return membresia;
         }
 
+        public async Task<IEnumerable<Membresia>> GetDebt()
+        {
+            using var db = DbConnection();
+
+            var sqlMembresias = @"
+        SELECT id AS Id,
+               estado AS Estado,
+               fecha_inicio AS FechaInicio,
+               fecha_vencimiento AS FechaVencimiento,
+               contacto_emergencia AS ContactoEmergencia,
+               total AS Total,
+               saldo AS Saldo,
+               fk_id_cliente AS FkIdCliente, 
+               fk_id_tipo_membresia AS FkIdTipoMembresia
+        FROM membresias
+        WHERE saldo > 0";
+
+            var membresias = (await db.QueryAsync<Membresia>(sqlMembresias)).ToList();
+
+            foreach (var m in membresias)
+            {
+                var sqlPagos = @"
+            SELECT id AS Id,
+                   monto AS Monto,
+                   fecha AS Fecha,
+                   fk_id_forma_pago AS FkIdFormaPago,
+                   fk_id_membresia AS FkIdMembresia,
+                   fk_id_cliente AS FkIdCliente
+            FROM pagos
+            WHERE fk_id_membresia = @membresiaId";
+
+                var pagos = (await db.QueryAsync<Pago>(sqlPagos, new { membresiaId = m.Id })).ToList();
+                m.Pagos = pagos;
+
+                if (!pagos.Any())
+                    m.Estado = "SIN PAGO";
+                else if (m.Saldo > 0)
+                    m.Estado = "PENDIENTE";
+                else
+                    m.Estado = "PAGADO";
+            }
+
+            return membresias;
+        }
+
+
         public async Task<IEnumerable<Membresia>> GetByClienteId(int clienteId)
         {
             using var db = DbConnection();

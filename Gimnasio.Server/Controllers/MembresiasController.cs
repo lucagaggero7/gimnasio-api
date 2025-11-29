@@ -62,6 +62,23 @@ namespace Gimnasio.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene todas las membresias con deuda.
+        /// </summary>
+        /// <remarks>
+        /// Devuelve una lista completa con los datos de las membresias con deuda.
+        /// </remarks>
+        /// <returns>
+        /// Respuesta HTTP 200 con la lista de membresias.
+        /// </returns>
+        [HttpGet("deuda")]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        public async Task<IActionResult> GetDebt()
+        {
+            return Ok(await _membresiaRepositorio.GetDebt());
+        }
+
+
+        /// <summary>
         /// Registra una nueva membresia en el sistema.
         /// </summary>
         /// <param name="membresia">Objeto membresia con la información a crear.</param>
