@@ -1,12 +1,14 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("evaluaciones")]
     [ApiController]
     public class EvaluacionesController : ControllerBase

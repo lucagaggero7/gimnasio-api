@@ -1,4 +1,5 @@
 ﻿using Gimnasio.Server.Servicios.Jwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gimnasio.Server.Controllers
@@ -16,6 +17,7 @@ namespace Gimnasio.Server.Controllers
             _jwt = jwt;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest req)
         {

@@ -1,4 +1,5 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using System.Net.Http;
@@ -6,7 +7,7 @@ using System.Text.Json;
 
 namespace Gimnasio.Server.Controllers
 {
-
+    [Authorize]
     [Route("codigos-area")]
     [ApiController]
     public class CodigosAreaControllers : ControllerBase

@@ -1,6 +1,7 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using MySqlX.XDevAPI;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("formas-pago")]
     [ApiController]
     public class FormasPagoController : ControllerBase

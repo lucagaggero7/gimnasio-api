@@ -1,6 +1,7 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -8,6 +9,7 @@ using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("ejercicios-por-rutina")]
     [ApiController]
     public class EjerciciosPorRutinaController : ControllerBase
