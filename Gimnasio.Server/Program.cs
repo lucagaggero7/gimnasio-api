@@ -4,9 +4,12 @@ using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
+using Gimnasio.Server.Servicios.Jwt;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 using StackExchange.Redis;
+using System.Text;
 using System.Text.Json.Serialization;
 
 
@@ -112,6 +115,26 @@ if (string.IsNullOrEmpty(connectionString))
 var mySQLConfig = new MySQLConfig(connectionString);
 builder.Services.AddSingleton(mySQLConfig);
 
+//JWT
+
+builder.Services.AddSingleton<JwtService>();
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+    {
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"]);
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+//
+
 SqlMapper.AddTypeHandler(new Fecha());
 SqlMapper.AddTypeHandler(new Hora());
 
@@ -143,6 +166,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseOutputCache();
