@@ -50,8 +50,8 @@ namespace Gimnasio.Server.Datos.Repositorio
             {
                 var db = dbConnection();
 
-                var sql = @"INSERT INTO ejercicios (nombre, series, repeticiones, notas)
-                        VALUES (@nombre, @series, @repeticiones, @notas);
+                var sql = @"INSERT INTO ejercicios (nombre, series, repeticiones, notas, fk_id_tipos_rutina)
+                        VALUES (@nombre, @series, @repeticiones, @notas, @fkidtiposrutina);
                         SELECT LAST_INSERT_ID(); ";
 
                 var id = await db.ExecuteScalarAsync<int>(sql, new
@@ -59,7 +59,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                     nombre = ejercicio.Nombre,
                     series = ejercicio.Series,
                     repeticiones = ejercicio.Repeticiones,
-                    notas = ejercicio.Notas
+                    notas = ejercicio.Notas,
+                    fkidtiposrutina = ejercicio.FkIdTiposRutina
                 });
 
                 ejercicio.Id = id;
@@ -74,7 +75,8 @@ namespace Gimnasio.Server.Datos.Repositorio
                         nombre = @nombre,
                         series = @series,
                         repeticiones = @repeticiones,
-                        notas = @notas
+                        notas = @notas,
+                        fkidtiposrutina = @fkidtiposrutina
                         WHERE id = @id";
 
 
@@ -84,6 +86,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 series = ejercicio.Series,
                 repeticiones = ejercicio.Repeticiones,
                 notas = ejercicio.Notas,
+                fkidtiposrutina = ejercicio.FkIdTiposRutina,
                 id = ejercicio.Id
             });
 
