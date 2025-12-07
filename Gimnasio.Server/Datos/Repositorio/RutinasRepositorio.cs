@@ -32,7 +32,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                         objetivo AS Objetivo,
                         frecuencia_sem AS FrecuenciaSem,
                         fk_id_tipo_rutina AS FkIdTipoRutina,
-                        fk_id_membresia AS FkIdMembresia
+                        fk_id_cliente AS FkIdCliente
                         FROM rutinas";
             return await db.QueryAsync<Rutina>(sql);
         }
@@ -47,31 +47,58 @@ namespace Gimnasio.Server.Datos.Repositorio
                         objetivo AS Objetivo,
                         frecuencia_sem AS FrecuenciaSem,
                         fk_id_tipo_rutina AS FkIdTipoRutina,
-                        fk_id_membresia AS FkIdMembresia
+                        fk_id_cliente AS FkIdCliente
                         FROM rutinas WHERE id = @id";
             return await db.QueryFirstOrDefaultAsync<Rutina>(sql, new { Id = id });
         }
 
-        public async Task<Rutina> Create(Rutina rutina)
+        public async Task<Rutina> Create(Rutina rutina, List<int> ejercicios)
         {
             using var db = DbConnection();
-            var sql = @"INSERT INTO rutinas (nombre, fecha_inicio, duracion, frecuencia_sem, objetivo, fk_id_tipo_rutina, fk_id_membresia)
-                        VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_tipo_rutina, @fk_id_membresia);
-                        SELECT LAST_INSERT_ID(); ";
+            using var transaction = db.BeginTransaction();
 
-            var id = await db.ExecuteScalarAsync<int>(sql, new
+            try
             {
-                nombre = rutina.Nombre,
-                fecha_inicio = rutina.FechaInicio,
-                duracion = rutina.Duracion,
-                frecuencia_sem = rutina.FrecuenciaSem,
-                objetivo = rutina.Objetivo,
-                fk_id_tipo_rutina = rutina.FkIdTipoRutina,
-                fk_id_membresia = rutina.FkIdMembresia
-            });
+                // Crear la rutina
+                var sqlRutina = @"INSERT INTO rutinas 
+                          (nombre, fecha_inicio, duracion, frecuencia_sem, objetivo, fk_id_tipo_rutina, fk_id_cliente)
+                          VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_tipo_rutina, @fk_id_cliente);
+                          SELECT LAST_INSERT_ID();";
 
-            rutina.Id = id;
-            return rutina;
+                var idRutina = await db.ExecuteScalarAsync<int>(sqlRutina, new
+                {
+                    nombre = rutina.Nombre,
+                    fecha_inicio = rutina.FechaInicio,
+                    duracion = rutina.Duracion,
+                    frecuencia_sem = rutina.FrecuenciaSem,
+                    objetivo = rutina.Objetivo,
+                    fk_id_tipo_rutina = rutina.FkIdTipoRutina,
+                    fk_id_cliente = rutina.FkIdCliente
+                }, transaction);
+
+                rutina.Id = idRutina;
+
+                // Insertar ejercicios asociados
+                var sqlEjercicio = @"INSERT INTO rutina_ejercicio (fk_id_rutina, fk_id_ejercicio)
+                             VALUES (@fk_id_rutina, @fk_id_ejercicio)";
+
+                foreach (var e in ejercicios)
+                {
+                    await db.ExecuteAsync(sqlEjercicio, new
+                    {
+                        fk_id_rutina = idRutina,
+                        fk_id_ejercicio = e
+                    }, transaction);
+                }
+
+                transaction.Commit();
+                return rutina;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         public async Task<bool> Update(Rutina rutina)
@@ -95,7 +122,7 @@ namespace Gimnasio.Server.Datos.Repositorio
                 frecuencia_sem = rutina.FrecuenciaSem,
                 objetivo = rutina.Objetivo,
                 fk_id_tipo_rutina = rutina.FkIdTipoRutina,
-                fk_id_membresia = rutina.FkIdMembresia,
+                fk_id_cliente = rutina.FkIdCliente,
                 id = rutina.Id
             });
             return result > 0;

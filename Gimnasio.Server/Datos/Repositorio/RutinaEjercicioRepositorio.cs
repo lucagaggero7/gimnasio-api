@@ -8,38 +8,38 @@ using Gimnasio.Server.Modelos.Entidades;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {
-    public class EjerciciosPorRutinaRepositorio : IEjerciciosPorRutinaRepositorio
+    public class RutinaEjercicioRepositorio : IRutinaEjercicioRepositorio
     {
         private readonly MySQLConfig _connectionString;
 
-        public EjerciciosPorRutinaRepositorio(MySQLConfig connectionString)
+        public RutinaEjercicioRepositorio(MySQLConfig connectionString)
         {
             _connectionString = connectionString;
         }
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
-        public async Task<IEnumerable<EjercicioPorRutina>> GetAll()
+        public async Task<IEnumerable<RutinaEjercicio>> GetAll()
         {
             using var db = DbConnection();
             var sql = @"SELECT id AS Id,
                         fk_id_rutina AS FkIdRutina,
                         fK_id_ejercicio AS FkIdEjercicio
                        FROM ejercicios_por_rutina";
-            return await db.QueryAsync<EjercicioPorRutina>(sql);
+            return await db.QueryAsync<RutinaEjercicio>(sql);
         }
 
-        public async Task<EjercicioPorRutina?> GetById(int id)
+        public async Task<RutinaEjercicio?> GetById(int id)
         {
             using var db = DbConnection();
             var sql = @"SELECT id AS Id,
                         fk_id_rutina AS FkIdRutina,
                         fK_id_ejercicio AS FkIdEjercicio
                        FROM ejercicios_por_rutina WHERE id = @id";
-            return await db.QueryFirstOrDefaultAsync<EjercicioPorRutina>(sql, new { Id = id });
+            return await db.QueryFirstOrDefaultAsync<RutinaEjercicio>(sql, new { Id = id });
         }
 
-        public async Task<EjercicioPorRutina> Create(EjercicioPorRutina ejercicioPorRutina)
+        public async Task<RutinaEjercicio> Create(RutinaEjercicio ejercicioPorRutina)
         {
             using var db = DbConnection();
             var sql = @"INSERT INTO ejercicios_por_rutina (fk_id_rutina, fk_id_ejercicio)
@@ -57,7 +57,7 @@ namespace Gimnasio.Server.Datos.Repositorio
             return ejercicioPorRutina;
         }
 
-        public async Task<bool> Update(EjercicioPorRutina ejercicioPorRutina)
+        public async Task<bool> Update(RutinaEjercicio ejercicioPorRutina)
         {
             using var db = DbConnection();
             var sql = @"UPDATE ejercicios_por_rutina SET

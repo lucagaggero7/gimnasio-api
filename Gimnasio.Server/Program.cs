@@ -176,7 +176,7 @@ builder.Services.AddScoped<IMembresiasRepositorio, MembresiasRepositorio>();
 builder.Services.AddScoped<ITiposMembresiaRepositorio, TiposMembresiaRepositorio>();
 builder.Services.AddScoped<IRutinasRepositorio, RutinasRepositorio>();
 builder.Services.AddScoped<IEvaluacionesRepositorio, EvaluacionesRepositorio>();
-builder.Services.AddScoped<IEjerciciosPorRutinaRepositorio, EjerciciosPorRutinaRepositorio>();
+builder.Services.AddScoped<IRutinaEjercicioRepositorio, RutinaEjercicioRepositorio>();
 builder.Services.AddScoped<ITiposRutinaRepositorio, TiposRutinaRepositorio>();
 
 builder.Services.AddHttpClient<CodigosAreaControllers>();

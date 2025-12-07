@@ -1,4 +1,5 @@
 ﻿using Gimnasio.Server.Datos.Repositorio;
+using Gimnasio.Server.Modelos.DTO;
 using Gimnasio.Server.Modelos.Entidades;
 using Gimnasio.Server.Servicios.Validaciones;
 using Microsoft.AspNetCore.Authorization;
@@ -72,16 +73,22 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 400 si el modelo no es válido.
         /// </returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Rutina rutina)
+        public async Task<IActionResult> Create([FromBody] RutinaCrearDto dto)
         {
-            var validation = ApiValidaciones.ValidarEntidad(rutina, ModelState);
-
-            if (validation != null)
+            // Mapear dto -> entidad Rutina
+            var rutina = new Rutina
             {
-                return validation;
-            }
+                Nombre = dto.Nombre,
+                FechaInicio = dto.FechaInicio,
+                Duracion = dto.Duracion,
+                Objetivo = dto.Objetivo,
+                FrecuenciaSem = dto.FrecuenciaSem,
+                FkIdTipoRutina = dto.FkIdTipoRutina,
+                FkIdCliente = dto.FkIdCliente
+            };
 
-            var created = await _rutinasRepositorio.Create(rutina);
+            // Crear rutina + ejercicios
+            var created = await _rutinasRepositorio.Create(rutina, dto.Ejercicios);
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
 

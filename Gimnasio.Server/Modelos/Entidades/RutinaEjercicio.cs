@@ -8,7 +8,7 @@ namespace Gimnasio.Server.Modelos.Entidades
     /// Representa la relación muchos a muchos entre Rutinas y Ejercicios.
     /// Se serializa en camelCase.
     /// </summary>
-    public class EjercicioPorRutina : IHasId
+    public class RutinaEjercicio : IHasId
     {
         /// <summary>
         /// Identificador único del ejercicio por rutina.

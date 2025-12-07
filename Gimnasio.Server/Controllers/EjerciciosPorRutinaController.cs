@@ -14,12 +14,12 @@ namespace Gimnasio.Server.Controllers
     [ApiController]
     public class EjerciciosPorRutinaController : ControllerBase
     {
-        private readonly IEjerciciosPorRutinaRepositorio _ejerciciosPorRutinaRepositorio;
+        private readonly IRutinaEjercicioRepositorio _ejerciciosPorRutinaRepositorio;
         private readonly IOutputCacheStore outputCacheStore;
 
         private const string cacheKey = "EjerciciosPorRutina";
 
-        public EjerciciosPorRutinaController(IEjerciciosPorRutinaRepositorio ejerciciosPorRutinaRepositorio, IOutputCacheStore outputCacheStore)
+        public EjerciciosPorRutinaController(IRutinaEjercicioRepositorio ejerciciosPorRutinaRepositorio, IOutputCacheStore outputCacheStore)
         {
             _ejerciciosPorRutinaRepositorio = ejerciciosPorRutinaRepositorio;
             this.outputCacheStore = outputCacheStore;
@@ -72,7 +72,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 400 si el modelo no es válido.
         /// </returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] EjercicioPorRutina ejercicioPorRutina)
+        public async Task<IActionResult> Create([FromBody] RutinaEjercicio ejercicioPorRutina)
         {
             var validation = ApiValidaciones.ValidarEntidad(ejercicioPorRutina, ModelState);
 
@@ -99,7 +99,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si el ejercicio por rutina no existe.
         /// </returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] EjercicioPorRutina ejercicioPorRutina)
+        public async Task<IActionResult> Update(int id, [FromBody] RutinaEjercicio ejercicioPorRutina)
         {
             var validation = ApiValidaciones.ValidarEntidadConId(id, ejercicioPorRutina, ModelState);
 

@@ -40,13 +40,13 @@ namespace Gimnasio.Server.Modelos.Entidades
             [StringLength(45, ErrorMessage = "La duración no puede exceder los 45 caracteres")]
             public string Duracion { get; set; } = string.Empty;
 
-            /// <summary>
-            /// Frecuencia semanal de la rutina.
-            /// Obligatorio, máximo 45 caracteres.
-            /// </summary>
-            [Required(ErrorMessage = "La frecuencia semanal es obligatoria")]
-            [StringLength(45, ErrorMessage = "La frecuencia semanal no puede exceder los 45 caracteres")]
-            public string FrecuenciaSem { get; set; } = string.Empty;
+        /// <summary>
+        /// Frecuencia semanal de la rutina.
+        /// Obligatorio, máximo 45 caracteres.
+        /// </summary>
+        [Required(ErrorMessage = "La frecuencia semanal es obligatoria")]
+        [Range(1, 10, ErrorMessage = "La frecuencia semanal debe ser mayor a 0.")]
+        public int FrecuenciaSem { get; set; } 
 
             /// <summary>
             /// Objetivo de la rutina.
@@ -66,12 +66,12 @@ namespace Gimnasio.Server.Modelos.Entidades
             public int FkIdTipoRutina { get; set; }
 
             /// <summary>
-            /// Identificador de clave foranea. Obligatorio
-            /// Tabla Membresia.
+            /// Identificador de clave foranea. No obligatorio
+            /// Tabla Cliente.
             /// </summary>
-            [Required(ErrorMessage = "El ID de la membresia es obligatorio")]
-            [Range(1, int.MaxValue, ErrorMessage = "El ID de la membresia debe ser mayor a 0.")]
-            [ForeignKey("Membresia")]
-            public int FkIdMembresia { get; set; }
+            [Required(ErrorMessage = "El ID del cliente es obligatorio")]
+            [Range(1, int.MaxValue, ErrorMessage = "El ID del cliente debe ser mayor a 0.")]
+            [ForeignKey("Cliente")]
+            public int FkIdCliente { get; set; }
     }
 }

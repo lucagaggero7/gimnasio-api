@@ -26,19 +26,19 @@ namespace Gimnasio.Server.Modelos.Entidades
 
         /// <summary>
         /// Cantidad de series.
-        /// Obligatorio, máximo 50 caracteres.
+        /// Obligatorio, valor minimo 1, máximo 100.
         /// </summary>
         [Required(ErrorMessage = "La/s serie/s son obligatorias.")]
-        [StringLength(50, ErrorMessage = "La/s serie/s no pueden superar los 50 caracteres.")]
-        public string Series { get; set; } = string.Empty;
+        [Range(0, 100, ErrorMessage = "Valor permitidos de serie/s entre 1 y 100.")]
+        public int Series { get; set; }
 
         /// <summary>
         /// Cantidad de repeticiones.
-        /// Obligatorio, máximo 50 caracteres.
+        /// Obligatorio, valor minimo 1, máximo 100.
         /// </summary>
         [Required(ErrorMessage = "La/s repeticion/es son obligatorias.")]
-        [StringLength(50, ErrorMessage = "La/s repeticion/es no pueden superar los 50 caracteres.")]
-        public string Repeticiones { get; set; } = string.Empty;
+        [Range(0, 100, ErrorMessage = "Valor permitidos de repeticion/es entre 1 y 100.")]
+        public int Repeticiones { get; set; }
 
         /// <summary>
         /// Notas complementarias.
