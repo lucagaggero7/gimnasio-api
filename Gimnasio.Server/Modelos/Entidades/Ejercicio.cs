@@ -1,6 +1,5 @@
 using Gimnasio.Server.Modelos.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gimnasio.Server.Modelos.Entidades
 {
@@ -48,13 +47,5 @@ namespace Gimnasio.Server.Modelos.Entidades
         [StringLength(50, ErrorMessage = "La/s nota/s no pueden superar los 50 caracteres.")]
         public string? Notas { get; set; }
 
-        /// <summary>
-        /// Identificador de clave foranea. Obligatorio
-        /// Tabla Tipos de rutina.
-        /// </summary>
-        [Required(ErrorMessage = "El ID del tipo de rutina es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "El ID del tipo de rutina debe ser mayor a 0.")]
-        [ForeignKey("TipoRutina")]
-        public int FkIdTiposRutina { get; set; }
     }
 }
