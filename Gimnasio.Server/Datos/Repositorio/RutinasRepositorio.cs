@@ -102,32 +102,71 @@ namespace Gimnasio.Server.Datos.Repositorio
             }
         }
 
-        public async Task<bool> Update(Rutina rutina)
+        public async Task<bool> Update(Rutina rutina, List<int> ejercicios)
         {
             using var db = DbConnection();
-            var sql = @"UPDATE rutinas SET
+            db.Open();
+
+            using var transaction = db.BeginTransaction();
+
+            try
+            {
+                // 1️⃣ Actualizar los datos de la rutina
+                var sqlRutina = @"UPDATE rutinas SET
                         nombre = @nombre,
                         fecha_inicio = @fecha_inicio,
                         duracion = @duracion,
                         frecuencia_sem = @frecuencia_sem,
                         objetivo = @objetivo,
                         fk_id_tipo_rutina = @fk_id_tipo_rutina,
-                        fk_id_membresia = @fk_id_membresia
+                        fk_id_cliente = @fk_id_cliente
                         WHERE id = @id";
 
-            var result = await db.ExecuteAsync(sql, new
+                var result = await db.ExecuteAsync(sqlRutina, new
+                {
+                    nombre = rutina.Nombre,
+                    fecha_inicio = rutina.FechaInicio,
+                    duracion = rutina.Duracion,
+                    frecuencia_sem = rutina.FrecuenciaSem,
+                    objetivo = rutina.Objetivo,
+                    fk_id_tipo_rutina = rutina.FkIdTipoRutina,
+                    fk_id_cliente = rutina.FkIdCliente,
+                    id = rutina.Id
+                }, transaction);
+
+                if (result == 0)
+                {
+                    transaction.Rollback();
+                    return false; // No existe la rutina
+                }
+
+                // 2️⃣ Borrar ejercicios actuales
+                var sqlDelete = @"DELETE FROM rutina_ejercicio WHERE fk_id_rutina = @idRutina";
+                await db.ExecuteAsync(sqlDelete, new { idRutina = rutina.Id }, transaction);
+
+                // 3️⃣ Insertar los nuevos ejercicios
+                var sqlInsert = @"INSERT INTO rutina_ejercicio (fk_id_rutina, fk_id_ejercicio)
+                          VALUES (@fk_id_rutina, @fk_id_ejercicio)";
+
+                foreach (var e in ejercicios)
+                {
+                    await db.ExecuteAsync(sqlInsert, new
+                    {
+                        fk_id_rutina = rutina.Id,
+                        fk_id_ejercicio = e
+                    }, transaction);
+                }
+
+                transaction.Commit();
+                return true;
+            }
+            catch
             {
-                nombre = rutina.Nombre,
-                fecha_inicio = rutina.FechaInicio,
-                duracion = rutina.Duracion,
-                frecuencia_sem = rutina.FrecuenciaSem,
-                objetivo = rutina.Objetivo,
-                fk_id_tipo_rutina = rutina.FkIdTipoRutina,
-                fk_id_cliente = rutina.FkIdCliente,
-                id = rutina.Id
-            });
-            return result > 0;
+                transaction.Rollback();
+                throw;
+            }
         }
+
 
         public async Task<bool> Delete(int id)
         {

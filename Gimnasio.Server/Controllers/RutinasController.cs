@@ -100,32 +100,37 @@ namespace Gimnasio.Server.Controllers
         /// Actualiza los datos de una rutina existente.
         /// </summary>
         /// <param name="id">Id de la rutina a actualizar (en la URL).</param>
-        /// <param name="rutina">Objeto rutina con los nuevos datos.</param>
+        /// <param name="rutinaEditarDTO">Objeto rutina con los nuevos datos.</param>
         /// <returns>
         /// Respuesta HTTP 200 con un mensaje de éxito,  
         /// HTTP 400 si hay inconsistencias en los datos,  
         /// o HTTP 404 si la rutina no existe.
         /// </returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,[FromBody] Rutina rutina)
+        public async Task<IActionResult> Update(int id, [FromBody] RutinaEditarDTO rutinaEditarDTO)
         {
-            var validation = ApiValidaciones.ValidarEntidadConId(id, rutina, ModelState);
-
-            if (validation != null)
+            // Mapear DTO → entidad
+            var rutina = new Rutina
             {
-                return validation;
-            }
+                Id = id,
+                Nombre = rutinaEditarDTO.Nombre,
+                FechaInicio = rutinaEditarDTO.FechaInicio,
+                Duracion = rutinaEditarDTO.Duracion,
+                Objetivo = rutinaEditarDTO.Objetivo,
+                FrecuenciaSem = rutinaEditarDTO.FrecuenciaSem,
+                FkIdTipoRutina = rutinaEditarDTO.FkIdTipoRutina,
+                FkIdCliente = rutinaEditarDTO.FkIdCliente
+            };
 
-            var filasAfectadas = await _rutinasRepositorio.Update(rutina);
+            var filasAfectadas = await _rutinasRepositorio.Update(rutina, rutinaEditarDTO.Ejercicios);
 
-            if (filasAfectadas == false)
-            {
-                return NotFound(new { mensaje = $"Rutina no encontrada." });
-            }
+            if (!filasAfectadas)
+                return NotFound(new { mensaje = "Rutina no encontrada." });
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("RutinaEjercicio", default);
 
-            return Ok(new { mensaje = $"Rutina actualizada con éxito" });
+            return Ok(new { mensaje = "Rutina actualizada con éxito" });
         }
 
         /// <summary>
