@@ -11,8 +11,8 @@ namespace Gimnasio.Server.Datos.Repositorio
     {
         Task<IEnumerable<RutinaEjercicio>> GetAll();
         Task<RutinaEjercicio?> GetById(int id);
-        Task<RutinaEjercicio> Create(RutinaEjercicio ejercicioPorRutina);
-        Task<bool> Update(RutinaEjercicio ejercicioPorRutina);
+        Task<RutinaEjercicio> Create(RutinaEjercicio rutinaEjercicio);
+        Task<bool> Update(RutinaEjercicio rutinaEjercicio);
         Task<bool> Delete(int id);
     }
 }

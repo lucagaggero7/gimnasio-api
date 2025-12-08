@@ -12,14 +12,14 @@ namespace Gimnasio.Server.Controllers
     [Authorize]
     [Route("ejercicios-por-rutina")]
     [ApiController]
-    public class EjerciciosPorRutinaController : ControllerBase
+    public class RutinaEjercicioController : ControllerBase
     {
         private readonly IRutinaEjercicioRepositorio _ejerciciosPorRutinaRepositorio;
         private readonly IOutputCacheStore outputCacheStore;
 
-        private const string cacheKey = "EjerciciosPorRutina";
+        private const string cacheKey = "RutinaEjercicio";
 
-        public EjerciciosPorRutinaController(IRutinaEjercicioRepositorio ejerciciosPorRutinaRepositorio, IOutputCacheStore outputCacheStore)
+        public RutinaEjercicioController(IRutinaEjercicioRepositorio ejerciciosPorRutinaRepositorio, IOutputCacheStore outputCacheStore)
         {
             _ejerciciosPorRutinaRepositorio = ejerciciosPorRutinaRepositorio;
             this.outputCacheStore = outputCacheStore;
