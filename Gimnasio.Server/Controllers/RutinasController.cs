@@ -67,28 +67,28 @@ namespace Gimnasio.Server.Controllers
         /// <summary>
         /// Registra una nueva rutina en el sistema.
         /// </summary>
-        /// <param name="rutina">Objeto rutina con la información a crear.</param>
+        /// <param name="rutinaCrearDto">Objeto rutina con la información a crear.</param>
         /// <returns>
         /// Respuesta HTTP 201 con la rutina creada,  
         /// o HTTP 400 si el modelo no es válido.
         /// </returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RutinaCrearDto dto)
+        public async Task<IActionResult> Create([FromBody] RutinaCrearDto rutinaCrearDto)
         {
             // Mapear dto -> entidad Rutina
             var rutina = new Rutina
             {
-                Nombre = dto.Nombre,
-                FechaInicio = dto.FechaInicio,
-                Duracion = dto.Duracion,
-                Objetivo = dto.Objetivo,
-                FrecuenciaSem = dto.FrecuenciaSem,
-                FkIdTipoRutina = dto.FkIdTipoRutina,
-                FkIdCliente = dto.FkIdCliente
+                Nombre = rutinaCrearDto.Nombre,
+                FechaInicio = rutinaCrearDto.FechaInicio,
+                Duracion = rutinaCrearDto.Duracion,
+                Objetivo = rutinaCrearDto.Objetivo,
+                FrecuenciaSem = rutinaCrearDto.FrecuenciaSem,
+                FkIdTipoRutina = rutinaCrearDto.FkIdTipoRutina,
+                FkIdCliente = rutinaCrearDto.FkIdCliente
             };
 
             // Crear rutina + ejercicios
-            var created = await _rutinasRepositorio.Create(rutina, dto.Ejercicios);
+            var created = await _rutinasRepositorio.Create(rutina, rutinaCrearDto.Ejercicios);
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
