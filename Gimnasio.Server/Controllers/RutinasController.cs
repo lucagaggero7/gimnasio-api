@@ -91,6 +91,7 @@ namespace Gimnasio.Server.Controllers
             var created = await _rutinasRepositorio.Create(rutina, rutinaCrearDto.Ejercicios);
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("RutinaEjercicio", default);
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
