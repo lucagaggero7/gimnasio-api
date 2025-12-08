@@ -55,6 +55,7 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<Rutina> Create(Rutina rutina, List<int> ejercicios)
         {
             using var db = DbConnection();
+            db.Open();
             using var transaction = db.BeginTransaction();
 
             try
