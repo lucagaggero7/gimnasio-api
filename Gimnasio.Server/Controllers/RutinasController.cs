@@ -57,12 +57,11 @@ namespace Gimnasio.Server.Controllers
             var rutina = await _rutinasRepositorio.GetById(id);
 
             if (rutina == null)
-            {
-                return NotFound(new { mensaje = $"No existe una rutina con ID {id}" });
-            }
+                return NotFound(new { mensaje = "Rutina no encontrada" });
 
             return Ok(rutina);
         }
+
 
         /// <summary>
         /// Registra una nueva rutina en el sistema.

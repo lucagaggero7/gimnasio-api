@@ -9,7 +9,7 @@ namespace Gimnasio.Server.Modelos.Entidades
         /// Se serializa en camelCase.
         /// </summary>
         public class Rutina : IHasId
-    {
+        {
             /// <summary>
             /// Identificador único de la rutina.
             /// Clave primaria en la base de datos.
@@ -72,6 +72,6 @@ namespace Gimnasio.Server.Modelos.Entidades
             [Required(ErrorMessage = "El ID del cliente es obligatorio")]
             [Range(1, int.MaxValue, ErrorMessage = "El ID del cliente debe ser mayor a 0.")]
             [ForeignKey("Cliente")]
-            public int FkIdCliente { get; set; }
-    }
+            public int? FkIdCliente { get; set; }
+        }
 }

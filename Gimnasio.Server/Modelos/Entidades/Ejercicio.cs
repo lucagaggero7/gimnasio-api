@@ -29,7 +29,7 @@ namespace Gimnasio.Server.Modelos.Entidades
         /// Obligatorio, valor minimo 1, máximo 100.
         /// </summary>
         [Required(ErrorMessage = "La/s serie/s son obligatorias.")]
-        [Range(0, 100, ErrorMessage = "Valor permitidos de serie/s entre 1 y 100.")]
+        [Range(1, 100, ErrorMessage = "Valor permitidos de serie/s entre 1 y 100.")]
         public int Series { get; set; }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Gimnasio.Server.Modelos.Entidades
         /// Obligatorio, valor minimo 1, máximo 100.
         /// </summary>
         [Required(ErrorMessage = "La/s repeticion/es son obligatorias.")]
-        [Range(0, 100, ErrorMessage = "Valor permitidos de repeticion/es entre 1 y 100.")]
+        [Range(1, 100, ErrorMessage = "Valor permitidos de repeticion/es entre 1 y 100.")]
         public int Repeticiones { get; set; }
 
         /// <summary>

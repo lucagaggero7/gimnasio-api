@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Gimnasio.Server.Modelos.Entidades;
+using Gimnasio.Server.Modelos.DTO;
 
 namespace Gimnasio.Server.Datos.Repositorio
 {
@@ -22,35 +23,89 @@ namespace Gimnasio.Server.Datos.Repositorio
 
         protected IDbConnection DbConnection() => new MySqlConnection(_connectionString.ConnectionString);
 
-        public async Task<IEnumerable<Rutina>> GetAll()
+        public async Task<IEnumerable<RutinaListaDTO>> GetAll()
         {
             using var db = DbConnection();
-            var sql = @"SELECT id AS Id,
-                        nombre AS Nombre,
-                        fecha_inicio AS FechaInicio,
-                        duracion AS Duracion, 
-                        objetivo AS Objetivo,
-                        frecuencia_sem AS FrecuenciaSem,
-                        fk_id_tipo_rutina AS FkIdTipoRutina,
-                        fk_id_cliente AS FkIdCliente
-                        FROM rutinas";
-            return await db.QueryAsync<Rutina>(sql);
+            db.Open();
+
+            var sqlRutinas = @"SELECT id AS Id,
+                       nombre AS Nombre,
+                       fecha_inicio AS FechaInicio,
+                       duracion AS Duracion,
+                       frecuencia_sem AS FrecuenciaSem,
+                       objetivo AS Objetivo,
+                       fk_id_tipo_rutina AS FkIdTipoRutina,
+                       fk_id_cliente AS FkIdCliente
+                       FROM rutinas";
+
+            var rutinas = (await db.QueryAsync<RutinaListaDTO>(sqlRutinas)).ToList();
+
+            if (!rutinas.Any())
+                return rutinas;
+
+            var ids = rutinas.Select(r => r.Id).ToArray();
+
+            var sqlEjercicios = @"
+            SELECT 
+            re.fk_id_rutina AS RutinaId,
+            e.id AS Id,
+            e.nombre AS Nombre,
+            e.series AS Series,
+            e.repeticiones AS Repeticiones,
+            e.notas AS Notas
+            FROM rutina_ejercicio re
+            INNER JOIN ejercicios e ON e.id = re.fk_id_ejercicio
+            WHERE re.fk_id_rutina IN @ids";
+
+            var ejercicios = await db.QueryAsync<int, Ejercicio, (int RutinaId, Ejercicio Ej)>(
+                sqlEjercicios,
+                map: (rutinaId, ejercicio) => (rutinaId, ejercicio),
+                splitOn: "Id",      // IMPORTANTE → acá empieza el objeto Ejercicio
+                param: new { ids }
+            );
+
+            foreach (var r in rutinas)
+            {
+                r.Ejercicios = ejercicios
+                    .Where(x => x.RutinaId == r.Id)
+                    .Select(x => x.Ej)
+                    .ToList();
+            }
+
+            return rutinas;
         }
 
-        public async Task<Rutina?> GetById(int id)
+        public async Task<RutinaListaDTO?> GetById(int id)
         {
             using var db = DbConnection();
-            var sql = @"SELECT id AS Id,
-                        nombre AS Nombre,
-                        fecha_inicio AS FechaInicio,
-                        duracion AS Duracion, 
-                        objetivo AS Objetivo,
-                        frecuencia_sem AS FrecuenciaSem,
-                        fk_id_tipo_rutina AS FkIdTipoRutina,
-                        fk_id_cliente AS FkIdCliente
-                        FROM rutinas WHERE id = @id";
-            return await db.QueryFirstOrDefaultAsync<Rutina>(sql, new { Id = id });
+            db.Open();
+
+            var sqlRutina = @"SELECT id AS Id,
+                      nombre AS Nombre,
+                      fecha_inicio AS FechaInicio,
+                      duracion AS Duracion,
+                      frecuencia_sem AS FrecuenciaSem,
+                      objetivo AS Objetivo,
+                      fk_id_tipo_rutina AS FkIdTipoRutina,
+                      fk_id_cliente AS FkIdCliente
+                      FROM rutinas
+                      WHERE id = @id";
+
+            var rutina = await db.QueryFirstOrDefaultAsync<RutinaListaDTO>(sqlRutina, new { id });
+
+            if (rutina == null)
+                return null;
+
+            var sqlEjercicios = @"SELECT e.*
+                          FROM rutina_ejercicio re
+                          INNER JOIN ejercicios e ON e.id = re.fk_id_ejercicio
+                          WHERE re.fk_id_rutina = @id";
+
+            rutina.Ejercicios = (await db.QueryAsync<Ejercicio>(sqlEjercicios, new { id })).ToList();
+
+            return rutina;
         }
+
 
         public async Task<Rutina> Create(Rutina rutina, List<int> ejercicios)
         {
@@ -171,9 +226,30 @@ namespace Gimnasio.Server.Datos.Repositorio
         public async Task<bool> Delete(int id)
         {
             using var db = DbConnection();
-            var sql = "DELETE FROM rutinas WHERE id = @id";
-            var result = await db.ExecuteAsync(sql, new { Id = id });
-            return result > 0;
+            db.Open();
+            using var tx = db.BeginTransaction();
+
+            try
+            {
+                // Borrar de la tabla intermedia
+                await db.ExecuteAsync(
+                    "DELETE FROM rutina_ejercicio WHERE fk_id_rutina = @id",
+                    new { id }, tx);
+
+                // Borrar la rutina
+                var rows = await db.ExecuteAsync(
+                    "DELETE FROM rutinas WHERE id = @id",
+                    new { id }, tx);
+
+                tx.Commit();
+                return rows > 0;
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
+            }
         }
+
     }
 }
