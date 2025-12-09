@@ -5,6 +5,7 @@ using Gimnasio.Server.Datos.Repositorio;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Servicios.Jwt;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
@@ -16,21 +17,20 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOutputCache(options =>
-{
-    options.AddPolicy("Default", policy =>
-    {
-        policy.Expire(TimeSpan.FromDays(7));
-    });
-});
-//
+
 var redisConn = builder.Configuration.GetConnectionString("redis");
 
 if (string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddOutputCache(options =>
     {
-        options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
+        options.AddPolicy("Default", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByRouteValue("id");
+            policy.SetVaryByHeader("User-Agent");
+            policy.SetLocking(true);
+        });
     });
 
     Console.WriteLine("Usando OutputCache local.");
@@ -49,8 +49,21 @@ else
         options.ConfigurationOptions = config;
     });
 
+    builder.Services.Configure<OutputCacheOptions>(options =>
+    {
+        options.AddPolicy("Default", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByRouteValue("id");
+            policy.SetVaryByHeader("User-Agent"); 
+            policy.SetLocking(true);
+        });
+    });
+
     Console.WriteLine("Usando OutputCache distribuido.");
 }
+
+
 
 
 // Add services to the container.
@@ -192,10 +205,11 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
 
+app.UseOutputCache();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseOutputCache();
 
 app.MapControllers();
 
