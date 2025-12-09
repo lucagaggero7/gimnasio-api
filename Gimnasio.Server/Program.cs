@@ -2,6 +2,7 @@
 using Gimnasio.Server.Controllers;
 using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
+using Gimnasio.Server.Services.Cache;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Servicios.Jwt;
@@ -19,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var redisConn = builder.Configuration.GetConnectionString("redis");
 
+
 if (string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddOutputCache(options =>
@@ -30,6 +32,9 @@ if (string.IsNullOrWhiteSpace(redisConn))
             policy.SetVaryByHeader("User-Agent");
             policy.SetLocking(true);
         });
+
+        options.AddPolicy("Authenticated", builder =>
+            builder.AddPolicy<AuthenticatedCachePolicy>().Expire(TimeSpan.FromDays(7)));
     });
 
     Console.WriteLine("Usando OutputCache local.");
@@ -58,12 +63,19 @@ else
             policy.SetVaryByHeader("User-Agent");
             policy.SetLocking(true);
         });
+
+        options.AddPolicy("Authenticated", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByRouteValue("id");
+            policy.SetVaryByHeader("User-Agent");
+            policy.SetLocking(true);
+            policy.VaryByValue((context) => new KeyValuePair<string, string>("auth", "shared"));
+        });
     });
 
     Console.WriteLine("Usando OutputCache distribuido con Redis.");
 }
-
-
 
 // Add services to the container.
 
