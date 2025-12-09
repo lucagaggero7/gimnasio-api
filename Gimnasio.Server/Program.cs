@@ -23,7 +23,7 @@ builder.Services.AddOutputCache(options =>
         policy.Expire(TimeSpan.FromDays(7));
     });
 });
-
+//
 var redisConn = builder.Configuration.GetConnectionString("redis");
 
 if (string.IsNullOrWhiteSpace(redisConn))
