@@ -39,6 +39,7 @@ namespace Gimnasio.Server.Controllers
         /// </returns>
         [HttpGet]
         [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 604800)]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _clienteRepositorio.GetAll());
