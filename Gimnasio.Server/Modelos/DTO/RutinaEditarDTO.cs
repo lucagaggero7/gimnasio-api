@@ -29,6 +29,7 @@ namespace Gimnasio.Server.Modelos.DTO
         [ForeignKey("TipoRutina")]
         public int FkIdTipoRutina { get; set; }
 
+        [Required(ErrorMessage = "El ID del cliente es obligatorio")]
         [Range(0, int.MaxValue, ErrorMessage = "El ID del cliente debe ser 0 o mas.")]
         [ForeignKey("Cliente")]
         public int? FkIdCliente { get; set; }
