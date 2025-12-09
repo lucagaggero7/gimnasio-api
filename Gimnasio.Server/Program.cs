@@ -19,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 var redisConn = builder.Configuration.GetConnectionString("redis");
-
 if (string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddOutputCache(options =>
@@ -37,6 +36,17 @@ if (string.IsNullOrWhiteSpace(redisConn))
 }
 else
 {
+    builder.Services.AddOutputCache(options =>
+    {
+        options.AddPolicy("Default", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByRouteValue("id");
+            policy.SetVaryByHeader("User-Agent");
+            policy.SetLocking(true);
+        });
+    });
+
     builder.Services.AddStackExchangeRedisOutputCache(options =>
     {
         var config = ConfigurationOptions.Parse(redisConn);
@@ -49,18 +59,7 @@ else
         options.ConfigurationOptions = config;
     });
 
-    builder.Services.Configure<OutputCacheOptions>(options =>
-    {
-        options.AddPolicy("Default", policy =>
-        {
-            policy.Expire(TimeSpan.FromDays(7));
-            policy.SetVaryByRouteValue("id");
-            policy.SetVaryByHeader("User-Agent"); 
-            policy.SetLocking(true);
-        });
-    });
-
-    Console.WriteLine("Usando OutputCache distribuido.");
+    Console.WriteLine("Usando OutputCache distribuido con Redis.");
 }
 
 
