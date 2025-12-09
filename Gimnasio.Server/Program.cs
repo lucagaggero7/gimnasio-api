@@ -17,8 +17,8 @@ using System.Text.Json.Serialization;
 //
 var builder = WebApplication.CreateBuilder(args);
 
-
 var redisConn = builder.Configuration.GetConnectionString("redis");
+
 if (string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddOutputCache(options =>
@@ -36,7 +36,20 @@ if (string.IsNullOrWhiteSpace(redisConn))
 }
 else
 {
-    builder.Services.AddOutputCache(options =>
+    builder.Services.AddStackExchangeRedisOutputCache(options =>
+    {
+        var config = ConfigurationOptions.Parse(redisConn);
+        config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
+        config.AbortOnConnectFail = false;
+        config.CommandMap = CommandMap.Create(
+            new HashSet<string> { "INFO", "CONFIG", "CLUSTER", "PING", "ECHO", "CLIENT" },
+            available: false
+        );
+        config.SocketManager = SocketManager.Shared;
+        options.ConfigurationOptions = config;
+    });
+
+    builder.Services.Configure<OutputCacheOptions>(options =>
     {
         options.AddPolicy("Default", policy =>
         {
@@ -47,21 +60,8 @@ else
         });
     });
 
-    builder.Services.AddStackExchangeRedisOutputCache(options =>
-    {
-        var config = ConfigurationOptions.Parse(redisConn);
-        config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
-        config.CommandMap = CommandMap.Create(
-            new HashSet<string> { "INFO", "CONFIG", "CLUSTER", "PING", "ECHO", "CLIENT" },
-            available: false
-        );
-        config.SocketManager = SocketManager.Shared;
-        options.ConfigurationOptions = config;
-    });
-
     Console.WriteLine("Usando OutputCache distribuido con Redis.");
 }
-
 
 
 
