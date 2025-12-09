@@ -70,8 +70,8 @@ namespace Gimnasio.Server.Modelos.Entidades
             /// Tabla Cliente.
             /// </summary>
             [Required(ErrorMessage = "El ID del cliente es obligatorio")]
-            [Range(1, int.MaxValue, ErrorMessage = "El ID del cliente debe ser mayor a 0.")]
+            [Range(0, int.MaxValue, ErrorMessage = "El ID del cliente debe ser 0 o mas.")]
             [ForeignKey("Cliente")]
-            public int? FkIdCliente { get; set; }
+            public int FkIdCliente { get; set; }
         }
 }

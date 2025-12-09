@@ -60,7 +60,7 @@ namespace Gimnasio.Server.Datos.Repositorio
             var ejercicios = await db.QueryAsync<int, Ejercicio, (int RutinaId, Ejercicio Ej)>(
                 sqlEjercicios,
                 map: (rutinaId, ejercicio) => (rutinaId, ejercicio),
-                splitOn: "Id",      // IMPORTANTE → acá empieza el objeto Ejercicio
+                splitOn: "Id",     
                 param: new { ids }
             );
 
