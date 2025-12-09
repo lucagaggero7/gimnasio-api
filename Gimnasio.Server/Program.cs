@@ -212,34 +212,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
-
-//PROBAR REDIS EN CONSOLA
-var redisConnStr = builder.Configuration.GetConnectionString("redis");
-
-try
-{
-    var conn = ConnectionMultiplexer.Connect(redisConnStr);
-    var db = conn.GetDatabase();
-
-    Console.WriteLine(
-        $"Redis endpoints: {string.Join(", ", conn.GetEndPoints().Select(e => e.ToString()))}, connected: {conn.IsConnected}"
-    );
-
-    var testKey = "test_outputcache_conn";
-    var setOk = db.StringSet(testKey, DateTime.UtcNow.ToString("o"));
-    var val = db.StringGet(testKey);
-
-    Console.WriteLine($"SET ok={setOk}, GET={val}");
-}
-catch (Exception ex)
-{
-    Console.WriteLine("Redis connection failed: " + ex);
-}
-
-//
-
-
 app.Run();
 
 
