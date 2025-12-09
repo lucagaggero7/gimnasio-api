@@ -213,7 +213,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-//
+
 //PROBAR REDIS EN CONSOLA
 var redisConnStr = builder.Configuration.GetConnectionString("redis");
 
