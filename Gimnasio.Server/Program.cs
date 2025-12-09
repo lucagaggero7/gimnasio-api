@@ -18,31 +18,35 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var redisConn = builder.Configuration.GetConnectionString("redis");
 
-
-if (string.IsNullOrWhiteSpace(redisConn))
+builder.Services.AddOutputCache(options =>
 {
-    builder.Services.AddOutputCache(options =>
+    options.AddPolicy("Default", policy =>
     {
-        options.AddPolicy("Default", policy =>
-        {
-            policy.Expire(TimeSpan.FromDays(7));
-            policy.SetVaryByRouteValue("id");
-            policy.SetVaryByHeader("User-Agent");
-            policy.SetLocking(true);
-        });
-
-        options.AddPolicy("Authenticated", builder =>
-            builder.AddPolicy<AuthenticatedCachePolicy>().Expire(TimeSpan.FromDays(7)));
+        policy.Expire(TimeSpan.FromDays(7));
+        policy.SetVaryByRouteValue("id");
+        policy.SetVaryByHeader("User-Agent");
+        policy.SetLocking(true);
     });
 
-    Console.WriteLine("Usando OutputCache local.");
-}
-else
+    options.AddPolicy("Authenticated", policy =>
+    {
+        policy.Expire(TimeSpan.FromDays(7));
+        policy.SetVaryByRouteValue("id");
+        policy.SetVaryByHeader("User-Agent");
+        policy.SetLocking(true);
+        // ejemplo de VaryByValue usando delegates si lo necesitás
+        policy.VaryByValue(context => new KeyValuePair<string, string>("auth", "shared"));
+    });
+});
+
+// 2) Registrar Redis provider (solo configuración de Redis)
+var redisConn = builder.Configuration.GetConnectionString("redis");
+if (!string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddStackExchangeRedisOutputCache(options =>
     {
+        // options es RedisOutputCacheOptions: sólo propiedades de redis
         var config = ConfigurationOptions.Parse(redisConn);
         config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
         config.AbortOnConnectFail = false;
@@ -51,30 +55,18 @@ else
             available: false
         );
         config.SocketManager = SocketManager.Shared;
+
         options.ConfigurationOptions = config;
-    });
-
-    builder.Services.Configure<OutputCacheOptions>(options =>
-    {
-        options.AddPolicy("Default", policy =>
-        {
-            policy.Expire(TimeSpan.FromDays(7));
-            policy.SetVaryByRouteValue("id");
-            policy.SetVaryByHeader("User-Agent");
-            policy.SetLocking(true);
-        });
-
-        options.AddPolicy("Authenticated", policy =>
-        {
-            policy.Expire(TimeSpan.FromDays(7));
-            policy.SetVaryByRouteValue("id");
-            policy.SetVaryByHeader("User-Agent");
-            policy.SetLocking(true);
-            policy.VaryByValue((context) => new KeyValuePair<string, string>("auth", "shared"));
-        });
+        // opciones específicas de Redis si te interesa:
+        // options.InstanceName = "mi-app:";
+        // options.ConnectionMultiplexerFactory = ...
     });
 
     Console.WriteLine("Usando OutputCache distribuido con Redis.");
+}
+else
+{
+    Console.WriteLine("Usando OutputCache local.");
 }
 
 // Add services to the container.
