@@ -7,7 +7,6 @@ using System.Text.Json;
 
 namespace Gimnasio.Server.Controllers
 {
-    [Authorize]
     [Route("codigos-area")]
     [ApiController]
     public class CodigosAreaControllers : ControllerBase
