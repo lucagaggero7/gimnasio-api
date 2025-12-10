@@ -9,6 +9,7 @@ using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("tipos-rutina")]
     [ApiController]
     public class TiposRutinaController : ControllerBase

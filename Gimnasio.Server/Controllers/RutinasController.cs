@@ -10,6 +10,7 @@ using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("rutinas")]
     [ApiController]
     public class RutinasController : ControllerBase

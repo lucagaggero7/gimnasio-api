@@ -9,6 +9,7 @@ using MySqlX.XDevAPI;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("pagos")] 
     [ApiController]
     public class PagosController : ControllerBase

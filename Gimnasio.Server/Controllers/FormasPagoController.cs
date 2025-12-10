@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gimnasio.Server.Controllers
 {
+    [Authorize]
     [Route("formas-pago")]
     [ApiController]
     public class FormasPagoController : ControllerBase
