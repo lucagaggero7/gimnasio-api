@@ -34,7 +34,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                        duracion AS Duracion,
                        frecuencia_sem AS FrecuenciaSem,
                        objetivo AS Objetivo,
-                       fk_id_tipo_rutina AS FkIdTipoRutina,
                        fk_id_cliente AS FkIdCliente
                        FROM rutinas";
 
@@ -86,7 +85,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                       duracion AS Duracion,
                       frecuencia_sem AS FrecuenciaSem,
                       objetivo AS Objetivo,
-                      fk_id_tipo_rutina AS FkIdTipoRutina,
                       fk_id_cliente AS FkIdCliente
                       FROM rutinas
                       WHERE id = @id";
@@ -117,8 +115,8 @@ namespace Gimnasio.Server.Datos.Repositorio
             {
                 // Crear la rutina
                 var sqlRutina = @"INSERT INTO rutinas 
-                          (nombre, fecha_inicio, duracion, frecuencia_sem, objetivo, fk_id_tipo_rutina, fk_id_cliente)
-                          VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_tipo_rutina, @fk_id_cliente);
+                          (nombre, fecha_inicio, duracion, frecuencia_sem, objetivo, fk_id_cliente)
+                          VALUES (@nombre, @fecha_inicio, @duracion, @frecuencia_sem, @objetivo, @fk_id_cliente);
                           SELECT LAST_INSERT_ID();";
 
                 var idRutina = await db.ExecuteScalarAsync<int>(sqlRutina, new
@@ -128,7 +126,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                     duracion = rutina.Duracion,
                     frecuencia_sem = rutina.FrecuenciaSem,
                     objetivo = rutina.Objetivo,
-                    fk_id_tipo_rutina = rutina.FkIdTipoRutina,
                     fk_id_cliente = rutina.FkIdCliente
                 }, transaction);
 
@@ -173,7 +170,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                         duracion = @duracion,
                         frecuencia_sem = @frecuencia_sem,
                         objetivo = @objetivo,
-                        fk_id_tipo_rutina = @fk_id_tipo_rutina,
                         fk_id_cliente = @fk_id_cliente
                         WHERE id = @id";
 
@@ -184,7 +180,6 @@ namespace Gimnasio.Server.Datos.Repositorio
                     duracion = rutina.Duracion,
                     frecuencia_sem = rutina.FrecuenciaSem,
                     objetivo = rutina.Objetivo,
-                    fk_id_tipo_rutina = rutina.FkIdTipoRutina,
                     fk_id_cliente = rutina.FkIdCliente,
                     id = rutina.Id
                 }, transaction);

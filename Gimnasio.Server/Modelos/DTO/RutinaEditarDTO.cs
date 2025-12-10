@@ -24,11 +24,6 @@ namespace Gimnasio.Server.Modelos.DTO
         [StringLength(45, ErrorMessage = "El objetivo no puede exceder los 45 caracteres")]
         public string Objetivo { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El ID del tipo de rutina es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "El ID del tipo de rutina debe ser mayor a 0.")]
-        [ForeignKey("TipoRutina")]
-        public int FkIdTipoRutina { get; set; }
-
         [Range(0, int.MaxValue, ErrorMessage = "El ID del cliente debe ser 0 o mas.")]
         [ForeignKey("Cliente")]
         public int? FkIdCliente { get; set; }

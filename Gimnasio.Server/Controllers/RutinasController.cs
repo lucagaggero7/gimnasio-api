@@ -81,7 +81,6 @@ namespace Gimnasio.Server.Controllers
                 Duracion = rutinaCrearDto.Duracion,
                 Objetivo = rutinaCrearDto.Objetivo,
                 FrecuenciaSem = rutinaCrearDto.FrecuenciaSem,
-                FkIdTipoRutina = rutinaCrearDto.FkIdTipoRutina,
                 FkIdCliente = rutinaCrearDto.FkIdCliente
             };
 
@@ -116,7 +115,6 @@ namespace Gimnasio.Server.Controllers
                 Duracion = rutinaEditarDTO.Duracion,
                 Objetivo = rutinaEditarDTO.Objetivo,
                 FrecuenciaSem = rutinaEditarDTO.FrecuenciaSem,
-                FkIdTipoRutina = rutinaEditarDTO.FkIdTipoRutina,
                 FkIdCliente = rutinaEditarDTO.FkIdCliente
             };
 
@@ -150,6 +148,7 @@ namespace Gimnasio.Server.Controllers
             }
 
             await outputCacheStore.EvictByTagAsync(cacheKey, default);
+            await outputCacheStore.EvictByTagAsync("RutinaEjercicio", default);
 
             return Ok(new { mensaje = "Rutina eliminada con éxito" });
         }

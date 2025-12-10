@@ -57,15 +57,6 @@ namespace Gimnasio.Server.Modelos.Entidades
             public string Objetivo { get; set; } = string.Empty;
 
             /// <summary>
-            /// Identificador de clave foranea. Obligatorio
-            /// Tabla tipo de rutina.
-            /// </summary>
-            [Required(ErrorMessage = "El ID del tipo de rutina es obligatorio")]
-            [Range(1, int.MaxValue, ErrorMessage = "El ID del tipo de rutina debe ser mayor a 0.")]
-            [ForeignKey("TipoRutina")]
-            public int FkIdTipoRutina { get; set; }
-
-            /// <summary>
             /// Identificador de clave foranea. No obligatorio
             /// Tabla Cliente.
             /// </summary>
