@@ -24,16 +24,18 @@ if (string.IsNullOrWhiteSpace(redisConn))
     {
         options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
 
+        // Política para endpoints SIN autenticación
         options.AddPolicy("Default", policy =>
         {
             policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByHeader("Authorization"); // IMPORTANTE: También aquí
         });
 
+        // Política para endpoints CON autenticación
         options.AddPolicy("Authenticated", policy =>
         {
             policy.Expire(TimeSpan.FromDays(7));
             policy.SetVaryByHeader("Authorization");
-            policy.SetVaryByQuery("*"); // Variar por query strings también
         });
     });
 
@@ -57,16 +59,18 @@ else
     {
         options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
 
+        // Política para endpoints SIN autenticación
         options.AddPolicy("Default", policy =>
         {
             policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByHeader("Authorization"); // IMPORTANTE: También aquí
         });
 
+        // Política para endpoints CON autenticación
         options.AddPolicy("Authenticated", policy =>
         {
             policy.Expire(TimeSpan.FromDays(7));
             policy.SetVaryByHeader("Authorization");
-            policy.SetVaryByQuery("*");
         });
     });
 
