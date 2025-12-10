@@ -32,11 +32,15 @@ builder.Services.AddOutputCache(options =>
     options.AddPolicy("Authenticated", policy =>
     {
         policy.Expire(TimeSpan.FromDays(7));
-        policy.SetVaryByRouteValue("id");
-        policy.SetVaryByHeader("User-Agent");
         policy.SetLocking(true);
-        // ejemplo de VaryByValue usando delegates si lo necesitás
-        policy.VaryByValue(context => new KeyValuePair<string, string>("auth", "shared"));
+
+        // Variaciones válidas
+        policy.SetVaryByHeader("User-Agent");
+        policy.SetVaryByRouteValue("id");
+
+        // Clave fija compartida (REQUIRED para cachear autenticados)
+        policy.VaryByValue(ctx =>
+            new KeyValuePair<string, string>("auth", "shared"));
     });
 });
 
