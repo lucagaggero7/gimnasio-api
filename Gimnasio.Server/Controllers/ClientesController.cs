@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace Gimnasio.Server.Controllers
 {
-    [Authorize]
     [Route("clientes")]
     [ApiController]
     public class ClientesController : ControllerBase
