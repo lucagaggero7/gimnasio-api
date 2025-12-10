@@ -38,7 +38,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes.
         /// </returns>
         [HttpGet]
-        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        [OutputCache(PolicyName = "Authenticated", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _clienteRepositorio.GetAll());
@@ -55,7 +55,7 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes DTO.
         /// </returns>
         [HttpGet("mostrar")]
-        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        [OutputCache(PolicyName = "Authenticated", Tags = [cacheKey])]
         public async Task<IActionResult> GetFkDTO()
         {
             var clientes = await _clienteRepositorio.GetFkDTO();
@@ -71,7 +71,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existe un cliente con ese Id.
         /// </returns>
         [HttpGet("{id}")]
-        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
+        [OutputCache(PolicyName = "Authenticated", Tags = [cacheKey])]
         public async Task<IActionResult> GetById(int id)
         {
             var cliente = await _clienteRepositorio.GetById(id);
@@ -93,7 +93,7 @@ namespace Gimnasio.Server.Controllers
         /// o HTTP 404 si no existen membresias que pertenezcan a ese cliente.
         /// </returns>
         [HttpGet("{id}/membresias")]
-        [OutputCache(PolicyName = "Default", Tags = [cacheKey2])]
+        [OutputCache(PolicyName = "Authenticated", Tags = [cacheKey2])]
         public async Task<IActionResult> GetByCliente(int id)
         {
             var membresias = await _membresiaRepositorio.GetByClienteId(id);

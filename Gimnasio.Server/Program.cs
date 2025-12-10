@@ -2,6 +2,7 @@
 using Gimnasio.Server.Controllers;
 using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
+using Gimnasio.Server.Services.Cache;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Servicios.Jwt;
@@ -21,6 +22,14 @@ builder.Services.AddOutputCache(options =>
     options.AddPolicy("Default", policy =>
     {
         policy.Expire(TimeSpan.FromDays(7));
+    });
+
+    // Nueva política para endpoints autenticados
+    options.AddPolicy("Authenticated", policy =>
+    {
+        policy.Expire(TimeSpan.FromDays(7));
+        policy.SetVaryByHeader("Authorization"); // Variar por token JWT
+        policy.AddPolicy<AuthenticatedCachePolicy>();
     });
 });
 
