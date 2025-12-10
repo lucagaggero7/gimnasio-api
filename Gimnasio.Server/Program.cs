@@ -20,7 +20,6 @@ var redisConn = builder.Configuration.GetConnectionString("redis");
 
 if (string.IsNullOrWhiteSpace(redisConn))
 {
-    // Caché en memoria local
     builder.Services.AddOutputCache(options =>
     {
         options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
@@ -34,21 +33,14 @@ if (string.IsNullOrWhiteSpace(redisConn))
         {
             policy.Expire(TimeSpan.FromDays(7));
             policy.SetVaryByHeader("Authorization");
+            policy.SetVaryByQuery("*"); // Variar por query strings también
         });
-
-        // CRÍTICO: Configurar política base para permitir cacheo con Authorization
-        options.AddBasePolicy(policy =>
-        {
-            policy.With(c => c.HttpContext.Request.Headers.ContainsKey("Authorization"));
-            policy.SetVaryByHeader("Authorization");
-        }, excludeDefaultPolicy: false);
     });
 
     Console.WriteLine("Usando OutputCache local.");
 }
 else
 {
-    // Caché distribuido con Redis
     builder.Services.AddStackExchangeRedisOutputCache(options =>
     {
         var config = ConfigurationOptions.Parse(redisConn);
@@ -74,14 +66,8 @@ else
         {
             policy.Expire(TimeSpan.FromDays(7));
             policy.SetVaryByHeader("Authorization");
+            policy.SetVaryByQuery("*");
         });
-
-        // CRÍTICO: Configurar política base para permitir cacheo con Authorization
-        options.AddBasePolicy(policy =>
-        {
-            policy.With(c => c.HttpContext.Request.Headers.ContainsKey("Authorization"));
-            policy.SetVaryByHeader("Authorization");
-        }, excludeDefaultPolicy: false);
     });
 
     Console.WriteLine("Usando OutputCache distribuido con Redis.");
