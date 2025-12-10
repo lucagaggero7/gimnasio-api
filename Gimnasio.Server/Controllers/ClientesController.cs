@@ -16,29 +16,16 @@ namespace Gimnasio.Server.Controllers
         private readonly IClientesRepositorio _clienteRepositorio;
         private readonly IMembresiasRepositorio _membresiaRepositorio;
         private readonly IOutputCacheStore outputCacheStore;
-        private readonly ILogger<ClientesController> _logger;
 
         private const string cacheKey = "Clientes";
         private const string cacheKey2 = "Membresias";
 
-        public ClientesController(ILogger<ClientesController> logger, IClientesRepositorio clienteRepositorio, IMembresiasRepositorio membresiaRepositorio, IOutputCacheStore outputCacheStore)
+        public ClientesController(IClientesRepositorio clienteRepositorio, IMembresiasRepositorio membresiaRepositorio, IOutputCacheStore outputCacheStore)
         {
 
             _clienteRepositorio = clienteRepositorio;
             _membresiaRepositorio = membresiaRepositorio;
             this.outputCacheStore = outputCacheStore;
-            _logger = logger;
-        }
-
-        // ENDPOINT DE PRUEBA 
-        [AllowAnonymous]
-        [HttpGet("test-cache")]
-        [OutputCache(PolicyName = "Authenticated")]
-        public IActionResult TestCache()
-        {
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            _logger.LogInformation($"TestCache ejecutado a las: {timestamp}");
-            return Ok(new { mensaje = "Cache test", timestamp });
         }
 
         /// <summary>
@@ -51,18 +38,11 @@ namespace Gimnasio.Server.Controllers
         /// Respuesta HTTP 200 con la lista de clientes.
         /// </returns>
         [HttpGet]
-        [OutputCache(PolicyName = "Authenticated", Tags = [cacheKey])]
+        [OutputCache(PolicyName = "Default", Tags = [cacheKey])]
         public async Task<IActionResult> GetAll()
         {
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            _logger.LogInformation($"GetAll ejecutado a las: {timestamp}");
+            return Ok(await _clienteRepositorio.GetAll());
 
-            var result = await _clienteRepositorio.GetAll();
-
-            // Agregar header personalizado para debugging
-            Response.Headers.Append("X-Timestamp", timestamp);
-
-            return Ok(new { timestamp, data = result });
         }
 
         /// <summary>

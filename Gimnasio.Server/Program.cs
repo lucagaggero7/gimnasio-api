@@ -2,11 +2,9 @@
 using Gimnasio.Server.Controllers;
 using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
-using Gimnasio.Server.Services.Cache;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Servicios.Jwt;
-using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
@@ -18,60 +16,42 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddOutputCache(options =>
 {
     options.AddPolicy("Default", policy =>
     {
         policy.Expire(TimeSpan.FromDays(7));
-        policy.SetVaryByRouteValue("id");
-        policy.SetVaryByHeader("User-Agent");
-        policy.SetLocking(true);
-    });
-
-    options.AddPolicy("Authenticated", policy =>
-    {
-        policy.Expire(TimeSpan.FromDays(7));
-        policy.SetLocking(true);
-
-        // Variaciones válidas
-        policy.SetVaryByHeader("User-Agent");
-        policy.SetVaryByRouteValue("id");
-
-        // Clave fija compartida (REQUIRED para cachear autenticados)
-        policy.VaryByValue(ctx =>
-            new KeyValuePair<string, string>("auth", "shared"));
     });
 });
 
-// 2) Registrar Redis provider (solo configuración de Redis)
 var redisConn = builder.Configuration.GetConnectionString("redis");
-if (!string.IsNullOrWhiteSpace(redisConn))
+
+if (string.IsNullOrWhiteSpace(redisConn))
+{
+    builder.Services.AddOutputCache(options =>
+    {
+        options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
+    });
+
+    Console.WriteLine("Usando OutputCache local.");
+}
+else
 {
     builder.Services.AddStackExchangeRedisOutputCache(options =>
     {
-        // options es RedisOutputCacheOptions: sólo propiedades de redis
         var config = ConfigurationOptions.Parse(redisConn);
         config.ReconnectRetryPolicy = new ExponentialRetry(1000, 30000);
-        config.AbortOnConnectFail = false;
         config.CommandMap = CommandMap.Create(
             new HashSet<string> { "INFO", "CONFIG", "CLUSTER", "PING", "ECHO", "CLIENT" },
             available: false
         );
         config.SocketManager = SocketManager.Shared;
-
         options.ConfigurationOptions = config;
-        // opciones específicas de Redis si te interesa:
-        // options.InstanceName = "mi-app:";
-        // options.ConnectionMultiplexerFactory = ...
     });
 
-    Console.WriteLine("Usando OutputCache distribuido con Redis.");
+    Console.WriteLine("Usando OutputCache distribuido.");
 }
-else
-{
-    Console.WriteLine("Usando OutputCache local.");
-}
+
 
 // Add services to the container.
 
@@ -212,11 +192,10 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
 
-app.UseOutputCache();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseOutputCache();
 
 app.MapControllers();
 
