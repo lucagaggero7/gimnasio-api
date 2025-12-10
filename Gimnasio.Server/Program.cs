@@ -2,7 +2,6 @@
 using Gimnasio.Server.Controllers;
 using Gimnasio.Server.Datos;
 using Gimnasio.Server.Datos.Repositorio;
-using Gimnasio.Server.Services.Cache;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Servicios.Jwt;
@@ -15,9 +14,6 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Registrar la política personalizada
-builder.Services.AddSingleton<IOutputCachePolicy, AuthOutputCachePolicy>();
 
 // Configurar Redis o caché local
 var redisConn = builder.Configuration.GetConnectionString("redis");
@@ -39,6 +35,13 @@ if (string.IsNullOrWhiteSpace(redisConn))
             policy.Expire(TimeSpan.FromDays(7));
             policy.SetVaryByHeader("Authorization");
         });
+
+        // CRÍTICO: Configurar política base para permitir cacheo con Authorization
+        options.AddBasePolicy(policy =>
+        {
+            policy.With(c => c.HttpContext.Request.Headers.ContainsKey("Authorization"));
+            policy.SetVaryByHeader("Authorization");
+        }, excludeDefaultPolicy: false);
     });
 
     Console.WriteLine("Usando OutputCache local.");
@@ -72,6 +75,13 @@ else
             policy.Expire(TimeSpan.FromDays(7));
             policy.SetVaryByHeader("Authorization");
         });
+
+        // CRÍTICO: Configurar política base para permitir cacheo con Authorization
+        options.AddBasePolicy(policy =>
+        {
+            policy.With(c => c.HttpContext.Request.Headers.ContainsKey("Authorization"));
+            policy.SetVaryByHeader("Authorization");
+        }, excludeDefaultPolicy: false);
     });
 
     Console.WriteLine("Usando OutputCache distribuido con Redis.");
