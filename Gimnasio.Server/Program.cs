@@ -6,6 +6,7 @@ using Gimnasio.Server.Services.Cache;
 using Gimnasio.Server.Services.Dapper.ConvertirJson;
 using Gimnasio.Server.Services.Dapper.ManejadorTipos;
 using Gimnasio.Server.Servicios.Jwt;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
@@ -13,39 +14,38 @@ using StackExchange.Redis;
 using System.Text;
 using System.Text.Json.Serialization;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOutputCache(options =>
-{
-    options.AddPolicy("Default", policy =>
-    {
-        policy.Expire(TimeSpan.FromDays(7));
-    });
+// Registrar la política personalizada
+builder.Services.AddSingleton<IOutputCachePolicy, AuthOutputCachePolicy>();
 
-    // Nueva política para endpoints autenticados
-    options.AddPolicy("Authenticated", policy =>
-    {
-        policy.Expire(TimeSpan.FromDays(7));
-        policy.SetVaryByHeader("Authorization"); // Variar por token JWT
-        policy.AddPolicy<AuthenticatedCachePolicy>();
-    });
-});
-
+// Configurar Redis o caché local
 var redisConn = builder.Configuration.GetConnectionString("redis");
 
 if (string.IsNullOrWhiteSpace(redisConn))
 {
+    // Caché en memoria local
     builder.Services.AddOutputCache(options =>
     {
         options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
+
+        options.AddPolicy("Default", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+        });
+
+        options.AddPolicy("Authenticated", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByHeader("Authorization");
+        });
     });
 
     Console.WriteLine("Usando OutputCache local.");
 }
 else
 {
+    // Caché distribuido con Redis
     builder.Services.AddStackExchangeRedisOutputCache(options =>
     {
         var config = ConfigurationOptions.Parse(redisConn);
@@ -58,9 +58,24 @@ else
         options.ConfigurationOptions = config;
     });
 
-    Console.WriteLine("Usando OutputCache distribuido.");
-}
+    builder.Services.AddOutputCache(options =>
+    {
+        options.DefaultExpirationTimeSpan = TimeSpan.FromDays(7);
 
+        options.AddPolicy("Default", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+        });
+
+        options.AddPolicy("Authenticated", policy =>
+        {
+            policy.Expire(TimeSpan.FromDays(7));
+            policy.SetVaryByHeader("Authorization");
+        });
+    });
+
+    Console.WriteLine("Usando OutputCache distribuido con Redis.");
+}
 
 // Add services to the container.
 
@@ -77,7 +92,6 @@ builder.Services.AddCors(options =>
 
 Console.WriteLine("Orígenes permitidos: " + string.Join(", ", origenesPermitidos));
 
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -85,8 +99,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new HoraJson());
     });
 
-
-//builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -104,7 +116,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    var xmlFile = "Gimnasio.Server.xml"; 
+    var xmlFile = "Gimnasio.Server.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 
@@ -119,20 +131,19 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-{
     {
-        new OpenApiSecurityScheme
         {
-            Reference = new OpenApiReference
+            new OpenApiSecurityScheme
             {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-            }
-        },
-        Array.Empty<string>()
-    }
-});
-
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 //Testing
@@ -151,7 +162,6 @@ var mySQLConfig = new MySQLConfig(connectionString);
 builder.Services.AddSingleton(mySQLConfig);
 
 //JWT
-
 builder.Services.AddSingleton<JwtService>();
 
 builder.Services.AddAuthentication("Bearer")
@@ -168,14 +178,9 @@ builder.Services.AddAuthentication("Bearer")
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
-//
 
 SqlMapper.AddTypeHandler(new Fecha());
 SqlMapper.AddTypeHandler(new Hora());
-
-//Dev
-//builder.Services.AddSingleton(new MySqlConnection(builder.Configuration.GetConnectionString("MYSqlConnection")
-//));
 
 builder.Services.AddScoped<IClientesRepositorio, ClientesRepositorio>();
 builder.Services.AddScoped<IEjerciciosRepositorio, EjerciciosRepositorio>();
@@ -193,7 +198,6 @@ builder.Services.AddHttpClient<CodigosAreaControllers>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -209,5 +213,3 @@ app.UseOutputCache();
 app.MapControllers();
 
 app.Run();
-
-
